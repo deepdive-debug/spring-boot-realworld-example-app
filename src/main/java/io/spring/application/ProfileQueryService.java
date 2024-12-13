@@ -21,14 +21,14 @@ public class ProfileQueryService {
       return Optional.empty();
     } else {
       ProfileData profileData =
-          ProfileData.of(
-              userData.id(),
-              userData.username(),
-              userData.bio(),
-              userData.image(),
+          new ProfileData(
+              userData.getId(),
+              userData.getUsername(),
+              userData.getBio(),
+              userData.getImage(),
               currentUser != null
                   && userRelationshipQueryService.isUserFollowing(
-                      currentUser.getId(), userData.id()));
+                      currentUser.getId(), userData.getId()));
       return Optional.of(profileData);
     }
   }

@@ -45,7 +45,7 @@ public class ProfileDatafetcher {
   public Profile getCommentAuthor(DataFetchingEnvironment dataFetchingEnvironment) {
     Comment comment = dataFetchingEnvironment.getSource();
     Map<String, CommentData> map = dataFetchingEnvironment.getLocalContext();
-    return queryProfile(map.get(comment.getId()).profileData().getUsername());
+    return queryProfile(map.get(comment.getId()).getProfileData().getUsername());
   }
 
   @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Profile)

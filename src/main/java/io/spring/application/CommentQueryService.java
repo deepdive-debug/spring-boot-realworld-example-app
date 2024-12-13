@@ -26,10 +26,10 @@ public class CommentQueryService {
       return Optional.empty();
     } else {
       commentData
-          .profileData()
+          .getProfileData()
           .updateFollowing(
               userRelationshipQueryService.isUserFollowing(
-                  user.getId(), commentData.profileData().getId()));
+                  user.getId(), commentData.getProfileData().getId()));
     }
     return Optional.ofNullable(commentData);
   }
@@ -41,12 +41,12 @@ public class CommentQueryService {
           userRelationshipQueryService.followingAuthors(
               user.getId(),
               comments.stream()
-                  .map(commentData -> commentData.profileData().getId())
+                  .map(commentData -> commentData.getProfileData().getId())
                   .collect(Collectors.toList()));
       comments.forEach(
           commentData -> {
-            if (followingAuthors.contains(commentData.profileData().getId())) {
-              commentData.profileData().updateFollowing(true);
+            if (followingAuthors.contains(commentData.getProfileData().getId())) {
+              commentData.getProfileData().updateFollowing(true);
             }
           });
     }
@@ -64,12 +64,12 @@ public class CommentQueryService {
           userRelationshipQueryService.followingAuthors(
               user.getId(),
               comments.stream()
-                  .map(commentData -> commentData.profileData().getId())
+                  .map(commentData -> commentData.getProfileData().getId())
                   .collect(Collectors.toList()));
       comments.forEach(
           commentData -> {
-            if (followingAuthors.contains(commentData.profileData().getId())) {
-              commentData.profileData().updateFollowing(true);
+            if (followingAuthors.contains(commentData.getProfileData().getId())) {
+              commentData.getProfileData().updateFollowing(true);
             }
           });
     }

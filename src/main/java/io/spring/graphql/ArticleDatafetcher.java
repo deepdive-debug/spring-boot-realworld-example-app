@@ -325,7 +325,7 @@ public class ArticleDatafetcher {
     User current = SecurityUtil.getCurrentUser().orElse(null);
     ArticleData articleData =
         articleQueryService
-            .findById(comment.articleId(), current)
+            .findById(comment.getArticleId(), current)
             .orElseThrow(ResourceNotFoundException::new);
     Article articleResult = buildArticleResult(articleData);
     return DataFetcherResult.<Article>newResult()

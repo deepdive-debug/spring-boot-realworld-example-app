@@ -3,10 +3,12 @@ package io.spring.application.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.spring.application.DateTimeCursor;
 import java.util.List;
-import lombok.Getter;
+import lombok.*;
 import org.joda.time.DateTime;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArticleData implements io.spring.application.Node {
   private String id;
   private String slug;
