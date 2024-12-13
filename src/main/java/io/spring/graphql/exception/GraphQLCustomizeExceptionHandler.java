@@ -91,10 +91,10 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
     }
     Map<String, List<String>> errorMap = new HashMap<>();
     for (FieldErrorResource fieldErrorResource : errors) {
-      if (!errorMap.containsKey(fieldErrorResource.getField())) {
-        errorMap.put(fieldErrorResource.getField(), new ArrayList<>());
+      if (!errorMap.containsKey(fieldErrorResource.field())) {
+        errorMap.put(fieldErrorResource.field(), new ArrayList<>());
       }
-      errorMap.get(fieldErrorResource.getField()).add(fieldErrorResource.getMessage());
+      errorMap.get(fieldErrorResource.field()).add(fieldErrorResource.message());
     }
     List<ErrorItem> errorItems =
         errorMap.entrySet().stream()
@@ -116,10 +116,10 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
   private static Map<String, Object> errorsToMap(List<FieldErrorResource> errors) {
     Map<String, Object> json = new HashMap<>();
     for (FieldErrorResource fieldErrorResource : errors) {
-      if (!json.containsKey(fieldErrorResource.getField())) {
-        json.put(fieldErrorResource.getField(), new ArrayList<>());
+      if (!json.containsKey(fieldErrorResource.field())) {
+        json.put(fieldErrorResource.field(), new ArrayList<>());
       }
-      ((List) json.get(fieldErrorResource.getField())).add(fieldErrorResource.getMessage());
+      ((List) json.get(fieldErrorResource.field())).add(fieldErrorResource.message());
     }
     return json;
   }

@@ -1,20 +1,8 @@
 package io.spring.application.data;
 
-import lombok.Getter;
-
-@Getter
-public class UserWithToken {
-  private String email;
-  private String username;
-  private String bio;
-  private String image;
-  private String token;
-
-  public UserWithToken(UserData userData, String token) {
-    this.email = userData.getEmail();
-    this.username = userData.getUsername();
-    this.bio = userData.getBio();
-    this.image = userData.getImage();
-    this.token = token;
+public record UserWithToken(String email, String username, String bio, String image, String token) {
+  public static UserWithToken of(UserData userData, String token) {
+    return new UserWithToken(
+        userData.email(), userData.username(), userData.bio(), userData.image(), token);
   }
 }

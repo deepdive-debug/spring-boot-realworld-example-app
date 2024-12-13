@@ -41,7 +41,7 @@ public class CommentDatafetcher {
         .localContext(
             new HashMap<String, Object>() {
               {
-                put(comment.getId(), comment);
+                put(comment.id(), comment);
               }
             })
         .build();
@@ -95,7 +95,7 @@ public class CommentDatafetcher {
     return DataFetcherResult.<CommentsConnection>newResult()
         .data(result)
         .localContext(
-            comments.getData().stream().collect(Collectors.toMap(CommentData::getId, c -> c)))
+            comments.getData().stream().collect(Collectors.toMap(CommentData::id, c -> c)))
         .build();
   }
 
@@ -113,10 +113,10 @@ public class CommentDatafetcher {
 
   private Comment buildCommentResult(CommentData comment) {
     return Comment.newBuilder()
-        .id(comment.getId())
-        .body(comment.getBody())
-        .updatedAt(ISODateTimeFormat.dateTime().withZoneUTC().print(comment.getCreatedAt()))
-        .createdAt(ISODateTimeFormat.dateTime().withZoneUTC().print(comment.getCreatedAt()))
+        .id(comment.id())
+        .body(comment.body())
+        .updatedAt(ISODateTimeFormat.dateTime().withZoneUTC().print(comment.createdAt()))
+        .createdAt(ISODateTimeFormat.dateTime().withZoneUTC().print(comment.createdAt()))
         .build();
   }
 }

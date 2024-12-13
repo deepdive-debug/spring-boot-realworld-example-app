@@ -140,7 +140,7 @@ public class ArticleQueryService {
     articles.forEach(
         articleData -> {
           if (followingAuthors.contains(articleData.getProfileData().getId())) {
-            articleData.getProfileData().setFollowing(true);
+            articleData.getProfileData().updateFollowing(true);
           }
         });
   }
@@ -152,10 +152,10 @@ public class ArticleQueryService {
     Map<String, Integer> countMap = new HashMap<>();
     favoritesCounts.forEach(
         item -> {
-          countMap.put(item.getId(), item.getCount());
+          countMap.put(item.id(), item.count());
         });
     articles.forEach(
-        articleData -> articleData.setFavoritesCount(countMap.get(articleData.getId())));
+        articleData -> articleData.updateFavoritesCount(countMap.get(articleData.getId())));
   }
 
   private void setIsFavorite(List<ArticleData> articles, User currentUser) {
@@ -167,17 +167,17 @@ public class ArticleQueryService {
     articles.forEach(
         articleData -> {
           if (favoritedArticles.contains(articleData.getId())) {
-            articleData.setFavorited(true);
+            articleData.updateFavorited(true);
           }
         });
   }
 
   private void fillExtraInfo(String id, User user, ArticleData articleData) {
-    articleData.setFavorited(articleFavoritesReadService.isUserFavorite(user.getId(), id));
-    articleData.setFavoritesCount(articleFavoritesReadService.articleFavoriteCount(id));
+    articleData.updateFavorited(articleFavoritesReadService.isUserFavorite(user.getId(), id));
+    articleData.updateFavoritesCount(articleFavoritesReadService.articleFavoriteCount(id));
     articleData
         .getProfileData()
-        .setFollowing(
+        .updateFollowing(
             userRelationshipQueryService.isUserFollowing(
                 user.getId(), articleData.getProfileData().getId()));
   }

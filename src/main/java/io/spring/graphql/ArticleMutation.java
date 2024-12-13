@@ -37,12 +37,11 @@ public class ArticleMutation {
       @InputArgument("input") CreateArticleInput input) {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
     NewArticleParam newArticleParam =
-        NewArticleParam.builder()
-            .title(input.getTitle())
-            .description(input.getDescription())
-            .body(input.getBody())
-            .tagList(input.getTagList() == null ? Collections.emptyList() : input.getTagList())
-            .build();
+        NewArticleParam.of(
+            input.getTitle(),
+            input.getDescription(),
+            input.getBody(),
+            input.getTagList() == null ? Collections.emptyList() : input.getTagList());
     Article article = articleCommandService.createArticle(newArticleParam, user);
     return DataFetcherResult.<ArticlePayload>newResult()
         .data(ArticlePayload.newBuilder().build())
