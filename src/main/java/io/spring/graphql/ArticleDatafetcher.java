@@ -47,7 +47,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
@@ -93,7 +93,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     Profile profile = dfe.getSource();
@@ -143,7 +143,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
@@ -197,7 +197,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
@@ -253,7 +253,7 @@ public class ArticleDatafetcher {
       @InputArgument("withTag") String withTag,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);

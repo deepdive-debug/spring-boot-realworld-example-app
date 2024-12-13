@@ -56,7 +56,7 @@ public class CommentDatafetcher {
       DgsDataFetchingEnvironment dfe) {
 
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
