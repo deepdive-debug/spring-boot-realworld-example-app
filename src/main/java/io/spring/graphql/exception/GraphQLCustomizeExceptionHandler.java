@@ -37,39 +37,42 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
   }
 
   @Override
-  public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(DataFetcherExceptionHandlerParameters handlerParameters) {
+  public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(
+      DataFetcherExceptionHandlerParameters handlerParameters) {
     if (handlerParameters.getException() instanceof InvalidAuthenticationException) {
       GraphQLError graphqlError =
-              TypedGraphQLError.newBuilder()
-                      .errorType(ErrorType.UNAUTHENTICATED)
-                      .message(handlerParameters.getException().getMessage())
-                      .path(handlerParameters.getPath())
-                      .build();
-      return CompletableFuture.completedFuture(DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
+          TypedGraphQLError.newBuilder()
+              .errorType(ErrorType.UNAUTHENTICATED)
+              .message(handlerParameters.getException().getMessage())
+              .path(handlerParameters.getPath())
+              .build();
+      return CompletableFuture.completedFuture(
+          DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else if (handlerParameters.getException() instanceof ConstraintViolationException) {
       List<FieldErrorResource> errors = new ArrayList<>();
       for (ConstraintViolation<?> violation :
-              ((ConstraintViolationException) handlerParameters.getException())
-                      .getConstraintViolations()) {
+          ((ConstraintViolationException) handlerParameters.getException())
+              .getConstraintViolations()) {
         FieldErrorResource fieldErrorResource =
-                new FieldErrorResource(
-                        violation.getRootBeanClass().getName(),
-                        getParam(violation.getPropertyPath().toString()),
-                        violation
-                                .getConstraintDescriptor()
-                                .getAnnotation()
-                                .annotationType()
-                                .getSimpleName(),
-                        violation.getMessage());
+            new FieldErrorResource(
+                violation.getRootBeanClass().getName(),
+                getParam(violation.getPropertyPath().toString()),
+                violation
+                    .getConstraintDescriptor()
+                    .getAnnotation()
+                    .annotationType()
+                    .getSimpleName(),
+                violation.getMessage());
         errors.add(fieldErrorResource);
       }
       GraphQLError graphqlError =
-              TypedGraphQLError.newBadRequestBuilder()
-                      .message(handlerParameters.getException().getMessage())
-                      .path(handlerParameters.getPath())
-                      .extensions(errorsToMap(errors))
-                      .build();
-      return CompletableFuture.completedFuture(DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
+          TypedGraphQLError.newBadRequestBuilder()
+              .message(handlerParameters.getException().getMessage())
+              .path(handlerParameters.getPath())
+              .extensions(errorsToMap(errors))
+              .build();
+      return CompletableFuture.completedFuture(
+          DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else {
       return defaultHandler.handleException(handlerParameters);
     }
