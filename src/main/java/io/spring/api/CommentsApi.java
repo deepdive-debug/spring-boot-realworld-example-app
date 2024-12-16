@@ -17,10 +17,9 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +43,7 @@ public class CommentsApi {
       @Valid @RequestBody NewCommentParam newCommentParam) {
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-    Comment comment = new Comment(newCommentParam.getBody(), user.getId(), article.getId());
+    Comment comment = new Comment(newCommentParam.body(), user.getId(), article.getId());
     commentRepository.save(comment);
     return ResponseEntity.status(201)
         .body(commentResponse(commentQueryService.findById(comment.getId(), user).get()));
@@ -64,7 +63,7 @@ public class CommentsApi {
         });
   }
 
-  @RequestMapping(path = "{id}", method = RequestMethod.DELETE)
+  @DeleteMapping(path = "/{id}")
   public ResponseEntity deleteComment(
       @PathVariable("slug") String slug,
       @PathVariable("id") String commentId,
@@ -93,10 +92,5 @@ public class CommentsApi {
   }
 }
 
-@Getter
-@NoArgsConstructor
 @JsonRootName("comment")
-class NewCommentParam {
-  @NotBlank(message = "can't be empty")
-  private String body;
-}
+record NewCommentParam(@NotBlank(message = "can't be empty") String body) {}

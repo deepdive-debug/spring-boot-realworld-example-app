@@ -33,8 +33,7 @@ public class CurrentUserApi {
       @AuthenticationPrincipal User currentUser,
       @RequestHeader(value = "Authorization") String authorization) {
     UserData userData = userQueryService.findById(currentUser.getId()).get();
-    return ResponseEntity.ok(
-        userResponse(new UserWithToken(userData, authorization.split(" ")[1])));
+    return ResponseEntity.ok(userResponse(UserWithToken.of(userData, authorization.split(" ")[1])));
   }
 
   @PutMapping
@@ -45,7 +44,7 @@ public class CurrentUserApi {
 
     userService.updateUser(new UpdateUserCommand(currentUser, updateUserParam));
     UserData userData = userQueryService.findById(currentUser.getId()).get();
-    return ResponseEntity.ok(userResponse(new UserWithToken(userData, token.split(" ")[1])));
+    return ResponseEntity.ok(userResponse(UserWithToken.of(userData, token.split(" ")[1])));
   }
 
   private Map<String, Object> userResponse(UserWithToken userWithToken) {

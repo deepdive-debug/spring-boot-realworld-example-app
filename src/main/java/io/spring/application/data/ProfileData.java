@@ -1,11 +1,9 @@
 package io.spring.application.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileData {
@@ -14,4 +12,8 @@ public class ProfileData {
   private String bio;
   private String image;
   private boolean following;
+
+  public void updateFollowing(boolean following) {
+    this.following = following;
+  }
 }
