@@ -1,7 +1,5 @@
 package io.spring.api;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.application.UserQueryService;

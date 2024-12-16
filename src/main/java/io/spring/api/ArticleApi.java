@@ -39,9 +39,9 @@ public class ArticleApi {
         .findBySlug(slug, user)
         .map(articleData -> ResponseEntity.ok(articleResponse(articleData)))
         .orElseThrow(ResourceNotFoundException::new);
-  } 
+  }
 
-  @PutMapping 
+  @PutMapping
   public ResponseEntity<?> updateArticle(
       @PathVariable("slug") String slug,
       @AuthenticationPrincipal User user,
