@@ -23,11 +23,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UsersApi {
   private UserRepository userRepository;
@@ -36,7 +38,7 @@ public class UsersApi {
   private JwtService jwtService;
   private UserService userService;
 
-  @RequestMapping(path = "/users", method = POST)
+  @PostMapping
   public ResponseEntity createUser(@Valid @RequestBody RegisterParam registerParam) {
     User user = userService.createUser(registerParam);
     UserData userData = userQueryService.findById(user.getId()).get();
@@ -44,7 +46,7 @@ public class UsersApi {
         .body(userResponse(new UserWithToken(userData, jwtService.toToken(user))));
   }
 
-  @RequestMapping(path = "/users/login", method = POST)
+  @PostMapping(path = "/login")
   public ResponseEntity userLogin(@Valid @RequestBody LoginParam loginParam) {
     Optional<User> optional = userRepository.findByEmail(loginParam.getEmail());
     if (optional.isPresent()

@@ -37,7 +37,7 @@ public class ArticlesApi {
         });
   }
 
-  @GetMapping(path = "feed")
+  @GetMapping(path = "/feed")
   public ResponseEntity getFeed(
       @RequestParam(value = "offset", defaultValue = "0") int offset,
       @RequestParam(value = "limit", defaultValue = "20") int limit,

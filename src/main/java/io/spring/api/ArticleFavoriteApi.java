@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "articles/{slug}/favorite")
+@RequestMapping(path = "/articles/{slug}/favorite")
 @AllArgsConstructor
 public class ArticleFavoriteApi {
   private ArticleFavoriteRepository articleFavoriteRepository;

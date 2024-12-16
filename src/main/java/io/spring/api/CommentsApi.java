@@ -64,7 +64,7 @@ public class CommentsApi {
         });
   }
 
-  @RequestMapping(path = "{id}", method = RequestMethod.DELETE)
+  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
   public ResponseEntity deleteComment(
       @PathVariable("slug") String slug,
       @PathVariable("id") String commentId,
