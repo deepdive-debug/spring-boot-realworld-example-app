@@ -2,9 +2,9 @@ package io.spring.application.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.spring.application.DateTimeCursor;
+import java.time.Instant;
 import java.util.List;
 import lombok.*;
-import org.joda.time.DateTime;
 
 @Getter
 @NoArgsConstructor
@@ -17,8 +17,8 @@ public class ArticleData implements io.spring.application.Node {
   private String body;
   private boolean favorited;
   private int favoritesCount;
-  private DateTime createdAt;
-  private DateTime updatedAt;
+  private Instant createdAt;
+  private Instant updatedAt;
   private List<String> tagList;
 
   @JsonProperty("author")

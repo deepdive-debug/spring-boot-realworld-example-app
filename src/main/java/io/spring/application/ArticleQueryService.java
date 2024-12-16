@@ -9,6 +9,7 @@ import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.ArticleFavoritesReadService;
 import io.spring.infrastructure.mybatis.readservice.ArticleReadService;
 import io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import lombok.AllArgsConstructor;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,7 +55,7 @@ public class ArticleQueryService {
       String tag,
       String author,
       String favoritedBy,
-      CursorPageParameter<DateTime> page,
+      CursorPageParameter<Instant> page,
       User currentUser) {
     List<String> articleIds =
         articleReadService.findArticlesWithCursor(tag, author, favoritedBy, page);
@@ -78,7 +78,7 @@ public class ArticleQueryService {
   }
 
   public CursorPager<ArticleData> findUserFeedWithCursor(
-      User user, CursorPageParameter<DateTime> page) {
+      User user, CursorPageParameter<Instant> page) {
     List<String> followdUsers = userRelationshipQueryService.followedUsers(user.getId());
     if (followdUsers.size() == 0) {
       return new CursorPager<>(new ArrayList<>(), page.getDirection(), false);
