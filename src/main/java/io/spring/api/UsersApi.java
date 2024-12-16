@@ -19,8 +19,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,17 +39,17 @@ public class UsersApi {
     User user = userService.createUser(registerParam);
     UserData userData = userQueryService.findById(user.getId()).get();
     return ResponseEntity.status(201)
-        .body(userResponse(new UserWithToken(userData, jwtService.toToken(user))));
+        .body(userResponse(UserWithToken.of(userData, jwtService.toToken(user))));
   }
 
   @RequestMapping(path = "/users/login", method = POST)
   public ResponseEntity userLogin(@Valid @RequestBody LoginParam loginParam) {
-    Optional<User> optional = userRepository.findByEmail(loginParam.getEmail());
+    Optional<User> optional = userRepository.findByEmail(loginParam.email());
     if (optional.isPresent()
-        && passwordEncoder.matches(loginParam.getPassword(), optional.get().getPassword())) {
+        && passwordEncoder.matches(loginParam.password(), optional.get().getPassword())) {
       UserData userData = userQueryService.findById(optional.get().getId()).get();
       return ResponseEntity.ok(
-          userResponse(new UserWithToken(userData, jwtService.toToken(optional.get()))));
+          userResponse(UserWithToken.of(userData, jwtService.toToken(optional.get()))));
     } else {
       throw new InvalidAuthenticationException();
     }
@@ -66,14 +64,7 @@ public class UsersApi {
   }
 }
 
-@Getter
 @JsonRootName("user")
-@NoArgsConstructor
-class LoginParam {
-  @NotBlank(message = "can't be empty")
-  @Email(message = "should be an email")
-  private String email;
-
-  @NotBlank(message = "can't be empty")
-  private String password;
-}
+record LoginParam(
+    @NotBlank(message = "can't be empty") @Email(message = "should be an email") String email,
+    @NotBlank(message = "can't be empty") String password) {}
