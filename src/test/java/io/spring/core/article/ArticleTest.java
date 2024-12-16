@@ -28,8 +28,8 @@ public class ArticleTest {
 
   @Test
   public void should_handle_other_language() {
-    Article article = new Article("中文：标题", "desc", "body", Arrays.asList("java"), "123");
-    assertThat(article.getSlug(), is("中文-标题"));
+    Article article = new Article("한글 제목", "desc", "body", Arrays.asList("java"), "123");
+    assertThat(article.getSlug(), is("한글-제목"));
   }
 
   @Test
