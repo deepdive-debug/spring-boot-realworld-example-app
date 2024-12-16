@@ -76,13 +76,12 @@ public class UserMutation {
     }
     io.spring.core.user.User currentUser = (io.spring.core.user.User) authentication.getPrincipal();
     UpdateUserParam param =
-        UpdateUserParam.builder()
-            .username(updateUserInput.getUsername())
-            .email(updateUserInput.getEmail())
-            .bio(updateUserInput.getBio())
-            .password(updateUserInput.getPassword())
-            .image(updateUserInput.getImage())
-            .build();
+        new UpdateUserParam(
+            updateUserInput.getUsername(),
+            updateUserInput.getEmail(),
+            updateUserInput.getBio(),
+            updateUserInput.getPassword(),
+            updateUserInput.getImage());
 
     userService.updateUser(new UpdateUserCommand(currentUser, param));
     return DataFetcherResult.<UserPayload>newResult()

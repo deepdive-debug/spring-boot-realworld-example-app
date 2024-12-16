@@ -3,12 +3,12 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id "com.netflix.dgs.codegen" version "5.0.6"
-    id "com.diffplug.spotless" version "6.2.1"
+    id "com.diffplug.spotless" version "6.22.0"
 }
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = '17'
+targetCompatibility = '17'
 
 spotless {
     java {
@@ -71,4 +71,8 @@ tasks.named('clean') {
 tasks.named('generateJava') {
     schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
     packageName = 'io.spring.graphql' // The package name to use to generate sources
+}
+
+tasks.named('spotlessJava') {
+    dependsOn 'compileJava', 'generateJava', 'processResources'
 }

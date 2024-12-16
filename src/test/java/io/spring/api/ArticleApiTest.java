@@ -19,13 +19,13 @@ import io.spring.application.data.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.user.User;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
   @Test
   public void should_read_article_success() throws Exception {
     String slug = "test-new-article";
-    DateTime time = new DateTime();
+    Instant time = Instant.now();
     Article article =
         new Article(
             "Test New Article",
@@ -74,7 +74,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .statusCode(200)
         .body("article.slug", equalTo(slug))
         .body("article.body", equalTo(articleData.getBody()))
-        .body("article.createdAt", equalTo(ISODateTimeFormat.dateTime().withZoneUTC().print(time)));
+        .body("article.createdAt", equalTo(DateTimeFormatter.ISO_INSTANT.format(time)));
   }
 
   @Test
@@ -131,7 +131,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         new Article(
             title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
 
-    DateTime time = new DateTime();
+    Instant time = Instant.now();
     ArticleData articleData =
         new ArticleData(
             article.getId(),

@@ -19,9 +19,10 @@ import io.spring.infrastructure.DbTestBase;
 import io.spring.infrastructure.repository.MyBatisArticleFavoriteRepository;
 import io.spring.infrastructure.repository.MyBatisArticleRepository;
 import io.spring.infrastructure.repository.MyBatisUserRepository;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Optional;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ public class ArticleQueryServiceTest extends DbTestBase {
     userRepository.save(user);
     article =
         new Article(
-            "test", "desc", "body", Arrays.asList("java", "spring"), user.getId(), new DateTime());
+            "test", "desc", "body", Arrays.asList("java", "spring"), user.getId(), Instant.now());
     articleRepository.save(article);
   }
 
@@ -92,19 +93,19 @@ public class ArticleQueryServiceTest extends DbTestBase {
             "body",
             Arrays.asList("test"),
             user.getId(),
-            new DateTime().minusHours(1));
+            Instant.now().minus(1, ChronoUnit.HOURS));
     articleRepository.save(anotherArticle);
 
     ArticleDataList recentArticles =
         queryService.findRecentArticles(null, null, null, new Page(), user);
-    Assertions.assertEquals(recentArticles.getCount(), 2);
-    Assertions.assertEquals(recentArticles.getArticleDatas().size(), 2);
-    Assertions.assertEquals(recentArticles.getArticleDatas().get(0).getId(), article.getId());
+    Assertions.assertEquals(recentArticles.count(), 2);
+    Assertions.assertEquals(recentArticles.articleDatas().size(), 2);
+    Assertions.assertEquals(recentArticles.articleDatas().get(0).getId(), article.getId());
 
     ArticleDataList nodata =
         queryService.findRecentArticles(null, null, null, new Page(2, 10), user);
-    Assertions.assertEquals(nodata.getCount(), 2);
-    Assertions.assertEquals(nodata.getArticleDatas().size(), 0);
+    Assertions.assertEquals(nodata.count(), 2);
+    Assertions.assertEquals(nodata.articleDatas().size(), 0);
   }
 
   @Test
@@ -116,7 +117,7 @@ public class ArticleQueryServiceTest extends DbTestBase {
             "body",
             Arrays.asList("test"),
             user.getId(),
-            new DateTime().minusHours(1));
+            Instant.now().minus(1, ChronoUnit.HOURS));
     articleRepository.save(anotherArticle);
 
     CursorPager<ArticleData> recentArticles =
@@ -130,7 +131,7 @@ public class ArticleQueryServiceTest extends DbTestBase {
             null,
             null,
             null,
-            new CursorPageParameter<DateTime>(
+            new CursorPageParameter<Instant>(
                 DateTimeCursor.parse(recentArticles.getEndCursor().toString()), 20, Direction.NEXT),
             user);
     Assertions.assertEquals(nodata.getData().size(), 0);
@@ -153,8 +154,8 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
     ArticleDataList recentArticles =
         queryService.findRecentArticles(null, user.getUsername(), null, new Page(), user);
-    Assertions.assertEquals(recentArticles.getArticleDatas().size(), 1);
-    Assertions.assertEquals(recentArticles.getCount(), 1);
+    Assertions.assertEquals(recentArticles.articleDatas().size(), 1);
+    Assertions.assertEquals(recentArticles.count(), 1);
   }
 
   @Test
@@ -172,9 +173,9 @@ public class ArticleQueryServiceTest extends DbTestBase {
     ArticleDataList recentArticles =
         queryService.findRecentArticles(
             null, null, anotherUser.getUsername(), new Page(), anotherUser);
-    Assertions.assertEquals(recentArticles.getArticleDatas().size(), 1);
-    Assertions.assertEquals(recentArticles.getCount(), 1);
-    ArticleData articleData = recentArticles.getArticleDatas().get(0);
+    Assertions.assertEquals(recentArticles.articleDatas().size(), 1);
+    Assertions.assertEquals(recentArticles.count(), 1);
+    ArticleData articleData = recentArticles.articleDatas().get(0);
     Assertions.assertEquals(articleData.getId(), article.getId());
     Assertions.assertEquals(articleData.getFavoritesCount(), 1);
     Assertions.assertTrue(articleData.isFavorited());
@@ -188,12 +189,12 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
     ArticleDataList recentArticles =
         queryService.findRecentArticles("spring", null, null, new Page(), user);
-    Assertions.assertEquals(recentArticles.getArticleDatas().size(), 1);
-    Assertions.assertEquals(recentArticles.getCount(), 1);
-    Assertions.assertEquals(recentArticles.getArticleDatas().get(0).getId(), article.getId());
+    Assertions.assertEquals(recentArticles.articleDatas().size(), 1);
+    Assertions.assertEquals(recentArticles.count(), 1);
+    Assertions.assertEquals(recentArticles.articleDatas().get(0).getId(), article.getId());
 
     ArticleDataList notag = queryService.findRecentArticles("notag", null, null, new Page(), user);
-    Assertions.assertEquals(notag.getCount(), 0);
+    Assertions.assertEquals(notag.count(), 0);
   }
 
   @Test
@@ -206,8 +207,8 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
     ArticleDataList recentArticles =
         queryService.findRecentArticles(null, null, null, new Page(), anotherUser);
-    Assertions.assertEquals(recentArticles.getCount(), 1);
-    ArticleData articleData = recentArticles.getArticleDatas().get(0);
+    Assertions.assertEquals(recentArticles.count(), 1);
+    ArticleData articleData = recentArticles.articleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
 
@@ -220,11 +221,11 @@ public class ArticleQueryServiceTest extends DbTestBase {
     userRepository.saveRelation(followRelation);
 
     ArticleDataList userFeed = queryService.findUserFeed(user, new Page());
-    Assertions.assertEquals(userFeed.getCount(), 0);
+    Assertions.assertEquals(userFeed.count(), 0);
 
     ArticleDataList anotherUserFeed = queryService.findUserFeed(anotherUser, new Page());
-    Assertions.assertEquals(anotherUserFeed.getCount(), 1);
-    ArticleData articleData = anotherUserFeed.getArticleDatas().get(0);
+    Assertions.assertEquals(anotherUserFeed.count(), 1);
+    ArticleData articleData = anotherUserFeed.articleDatas().get(0);
     Assertions.assertTrue(articleData.getProfileData().isFollowing());
   }
 }
