@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -28,7 +29,15 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
       new DefaultDataFetcherExceptionHandler();
 
   @Override
+  @Deprecated(since = "17.0.0")
+  @SuppressWarnings("deprecation")
   public DataFetcherExceptionHandlerResult onException(
+      DataFetcherExceptionHandlerParameters handlerParameters) {
+    return defaultHandler.onException(handlerParameters);
+  }
+
+  @Override
+  public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(
       DataFetcherExceptionHandlerParameters handlerParameters) {
     if (handlerParameters.getException() instanceof InvalidAuthenticationException) {
       GraphQLError graphqlError =
@@ -37,7 +46,8 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
               .message(handlerParameters.getException().getMessage())
               .path(handlerParameters.getPath())
               .build();
-      return DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build();
+      return CompletableFuture.completedFuture(
+          DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else if (handlerParameters.getException() instanceof ConstraintViolationException) {
       List<FieldErrorResource> errors = new ArrayList<>();
       for (ConstraintViolation<?> violation :
@@ -61,9 +71,10 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
               .path(handlerParameters.getPath())
               .extensions(errorsToMap(errors))
               .build();
-      return DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build();
+      return CompletableFuture.completedFuture(
+          DataFetcherExceptionHandlerResult.newResult().error(graphqlError).build());
     } else {
-      return defaultHandler.onException(handlerParameters);
+      return defaultHandler.handleException(handlerParameters);
     }
   }
 
@@ -80,10 +91,10 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
     }
     Map<String, List<String>> errorMap = new HashMap<>();
     for (FieldErrorResource fieldErrorResource : errors) {
-      if (!errorMap.containsKey(fieldErrorResource.getField())) {
-        errorMap.put(fieldErrorResource.getField(), new ArrayList<>());
+      if (!errorMap.containsKey(fieldErrorResource.field())) {
+        errorMap.put(fieldErrorResource.field(), new ArrayList<>());
       }
-      errorMap.get(fieldErrorResource.getField()).add(fieldErrorResource.getMessage());
+      errorMap.get(fieldErrorResource.field()).add(fieldErrorResource.message());
     }
     List<ErrorItem> errorItems =
         errorMap.entrySet().stream()
@@ -101,13 +112,14 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
     }
   }
 
+  @SuppressWarnings("unchecked")
   private static Map<String, Object> errorsToMap(List<FieldErrorResource> errors) {
     Map<String, Object> json = new HashMap<>();
     for (FieldErrorResource fieldErrorResource : errors) {
-      if (!json.containsKey(fieldErrorResource.getField())) {
-        json.put(fieldErrorResource.getField(), new ArrayList<>());
+      if (!json.containsKey(fieldErrorResource.field())) {
+        json.put(fieldErrorResource.field(), new ArrayList<>());
       }
-      ((List) json.get(fieldErrorResource.getField())).add(fieldErrorResource.getMessage());
+      ((List) json.get(fieldErrorResource.field())).add(fieldErrorResource.message());
     }
     return json;
   }

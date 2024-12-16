@@ -18,10 +18,10 @@ public class ArticleCommandService {
   public Article createArticle(@Valid NewArticleParam newArticleParam, User creator) {
     Article article =
         new Article(
-            newArticleParam.getTitle(),
-            newArticleParam.getDescription(),
-            newArticleParam.getBody(),
-            newArticleParam.getTagList(),
+            newArticleParam.title(),
+            newArticleParam.description(),
+            newArticleParam.body(),
+            newArticleParam.tagList(),
             creator.getId());
     articleRepository.save(article);
     return article;
@@ -29,9 +29,7 @@ public class ArticleCommandService {
 
   public Article updateArticle(Article article, @Valid UpdateArticleParam updateArticleParam) {
     article.update(
-        updateArticleParam.getTitle(),
-        updateArticleParam.getDescription(),
-        updateArticleParam.getBody());
+        updateArticleParam.title(), updateArticleParam.description(), updateArticleParam.body());
     articleRepository.save(article);
     return article;
   }

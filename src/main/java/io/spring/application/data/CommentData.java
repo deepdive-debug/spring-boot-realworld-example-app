@@ -4,20 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.spring.application.DateTimeCursor;
 import io.spring.application.Node;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentData implements Node {
   private String id;
   private String body;
   @JsonIgnore private String articleId;
-  private DateTime createdAt;
-  private DateTime updatedAt;
+  private Instant createdAt;
+  private Instant updatedAt;
 
   @JsonProperty("author")
   private ProfileData profileData;
