@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "profiles/{username}")
+@RequestMapping(path = "/profiles/{username}")
 @AllArgsConstructor
 public class ProfileApi {
   private ProfileQueryService profileQueryService;
@@ -34,7 +34,7 @@ public class ProfileApi {
         .orElseThrow(ResourceNotFoundException::new);
   }
 
-  @PostMapping(path = "follow")
+  @PostMapping(path = "/follow")
   public ResponseEntity follow(
       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
     return userRepository
@@ -48,7 +48,7 @@ public class ProfileApi {
         .orElseThrow(ResourceNotFoundException::new);
   }
 
-  @DeleteMapping(path = "follow")
+  @DeleteMapping(path = "/follow")
   public ResponseEntity unfollow(
       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
     Optional<User> userOptional = userRepository.findByUsername(username);
