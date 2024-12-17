@@ -1,7 +1,7 @@
 package io.spring.application;
 
-import io.spring.api.user.response.UserData;
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.user.response.UserData;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -16,5 +16,4 @@ public class UserQueryService {
     return Optional.ofNullable(userReadService.findById(id))
         .orElseThrow(ResourceNotFoundException::new);
   }
-
 }

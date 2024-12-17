@@ -1,8 +1,6 @@
-package io.spring.api.user.request;
+package io.spring.application.user;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
-import io.spring.application.user.DuplicatedEmailConstraint;
-import io.spring.application.user.DuplicatedUsernameConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

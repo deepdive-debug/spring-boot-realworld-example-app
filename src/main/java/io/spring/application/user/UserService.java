@@ -7,7 +7,7 @@ import io.spring.api.user.request.UpdateUserParam;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,12 +68,13 @@ public class UserService {
   }
 
   public FollowRelation findRelation(String userId, String targetId) {
-	  Object ResourceNotFoundException;
-	  return userRepository.findRelation(userId, targetId).orElseThrow(ResourceNotFoundException::new);
+    Object ResourceNotFoundException;
+    return userRepository
+        .findRelation(userId, targetId)
+        .orElseThrow(ResourceNotFoundException::new);
   }
 
   public void removeRelation(FollowRelation relation) {
     userRepository.removeRelation(relation);
   }
-
 }

@@ -2,16 +2,16 @@ package io.spring.api.user;
 
 import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.api.user.request.LoginParam;
-import io.spring.application.UserQueryService;
+import io.spring.api.user.request.RegisterParam;
 import io.spring.api.user.response.UserData;
 import io.spring.api.user.response.UserWithToken;
-import io.spring.api.user.request.RegisterParam;
+import io.spring.application.UserQueryService;
 import io.spring.application.user.UserService;
 import io.spring.core.user.User;
 import io.spring.infrastructure.service.JwtService;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,8 +42,7 @@ public class UsersApi {
     User user = userService.findByEmail(loginParam.email());
     if (passwordEncoder.matches(loginParam.password(), user.getPassword())) {
       UserData userData = userQueryService.findById(user.getId());
-      return ResponseEntity.ok(
-          userResponse(UserWithToken.of(userData, jwtService.toToken(user))));
+      return ResponseEntity.ok(userResponse(UserWithToken.of(userData, jwtService.toToken(user))));
     } else {
       throw new InvalidAuthenticationException();
     }

@@ -1,9 +1,8 @@
 package io.spring.api.article.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
-
 import io.spring.api.data.ArticleData;
+import java.util.List;
 
 public record ArticleDataList(
     @JsonProperty("articles") List<ArticleData> articleDatas,

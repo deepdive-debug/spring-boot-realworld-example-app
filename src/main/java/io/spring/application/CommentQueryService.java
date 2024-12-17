@@ -93,7 +93,9 @@ public class CommentQueryService {
   }
 
   public Comment findCommentById(String articleId, String commentId) {
-    return commentRepository.findById(articleId, commentId).orElseThrow(ResourceNotFoundException::new);
+    return commentRepository
+        .findById(articleId, commentId)
+        .orElseThrow(ResourceNotFoundException::new);
   }
 
   public void remove(Comment comment) {

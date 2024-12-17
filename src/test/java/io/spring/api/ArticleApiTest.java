@@ -12,11 +12,11 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.TestHelper;
 import io.spring.api.article.ArticleApi;
+import io.spring.api.data.ArticleData;
 import io.spring.api.security.WebSecurityConfig;
+import io.spring.api.user.response.ProfileData;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.api.data.ArticleData;
-import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
 import java.time.Instant;
@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,22 +98,21 @@ public class ArticleApiTest extends TestWithCurrentUser {
     ArticleData updatedArticleData =
         TestHelper.getArticleDataFromArticleAndUser(updatedArticle, user);
 
-    when(articleQueryService.findBySlug(eq(originalArticle.getSlug())))
-        .thenReturn(originalArticle);
+    when(articleQueryService.findBySlug(eq(originalArticle.getSlug()))).thenReturn(originalArticle);
     when(articleCommandService.updateArticle(eq(originalArticle), any()))
         .thenReturn(updatedArticle);
     when(articleQueryService.findBySlug(eq(updatedArticle.getSlug()), eq(user)))
         .thenReturn(Optional.of(updatedArticleData));
 
-      given()
-          .contentType("application/json")
-          .header("Authorization", "Token " + token)
-          .body(updateParam)
-          .when()
-          .put("/articles/{slug}", originalArticle.getSlug())
-          .then()
-          .statusCode(200)
-          .body("article.slug", equalTo(updatedArticleData.getSlug()));
+    given()
+        .contentType("application/json")
+        .header("Authorization", "Token " + token)
+        .body(updateParam)
+        .when()
+        .put("/articles/{slug}", originalArticle.getSlug())
+        .then()
+        .statusCode(200)
+        .body("article.slug", equalTo(updatedArticleData.getSlug()));
   }
 
   @Test
@@ -151,7 +149,8 @@ public class ArticleApiTest extends TestWithCurrentUser {
                 false));
 
     when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
-    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user))).thenReturn(Optional.of(articleData));
+    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user)))
+        .thenReturn(Optional.of(articleData));
 
     given()
         .contentType("application/json")

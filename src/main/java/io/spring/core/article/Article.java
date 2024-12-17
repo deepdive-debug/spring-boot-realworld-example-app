@@ -7,7 +7,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -29,8 +28,15 @@ public class Article {
   private Instant updatedAt;
 
   @Builder(access = AccessLevel.PRIVATE)
-  private Article(String id, String userId, String title, String description, String body, List<Tag> tags,
-      Instant createdAt, Instant updatedAt) {
+  private Article(
+      String id,
+      String userId,
+      String title,
+      String description,
+      String body,
+      List<Tag> tags,
+      Instant createdAt,
+      Instant updatedAt) {
     this.userId = userId;
     this.id = UUID.randomUUID().toString();
     this.slug = toSlug(title);
@@ -42,7 +48,8 @@ public class Article {
     this.updatedAt = createdAt;
   }
 
-  public static Article of(String title, String description, String body, List<String> tagList, String userId) {
+  public static Article of(
+      String title, String description, String body, List<String> tagList, String userId) {
     return Article.builder()
         .title(title)
         .description(description)
@@ -53,7 +60,13 @@ public class Article {
         .build();
   }
 
-  public static Article of(String title, String description, String body, List<String> tagList, String userId, Instant createdAt) {
+  public static Article of(
+      String title,
+      String description,
+      String body,
+      List<String> tagList,
+      String userId,
+      Instant createdAt) {
     return Article.builder()
         .title(title)
         .description(description)

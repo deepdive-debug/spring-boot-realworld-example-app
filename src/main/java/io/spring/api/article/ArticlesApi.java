@@ -1,13 +1,13 @@
 package io.spring.api.article;
 
+import io.spring.api.article.request.NewArticleParam;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.Page;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.api.article.request.NewArticleParam;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
+import jakarta.validation.Valid;
 import java.util.HashMap;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

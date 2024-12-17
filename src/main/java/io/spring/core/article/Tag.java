@@ -1,7 +1,6 @@
 package io.spring.core.article;
 
 import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,9 +21,6 @@ public class Tag {
   }
 
   public static Tag of(String name) {
-    return Tag.builder()
-        .id(UUID.randomUUID().toString())
-        .name(name)
-        .build();
+    return Tag.builder().id(UUID.randomUUID().toString()).name(name).build();
   }
 }

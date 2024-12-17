@@ -1,7 +1,7 @@
 package io.spring.api.article;
 
-import io.spring.application.ArticleQueryService;
 import io.spring.api.data.ArticleData;
+import io.spring.application.ArticleQueryService;
 import io.spring.core.article.Article;
 import io.spring.core.favorite.ArticleFavorite;
 import io.spring.core.user.User;
@@ -24,7 +24,7 @@ public class ArticleFavoriteApi {
   @PostMapping
   public ResponseEntity favoriteArticle(
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
-      Article article = articleQueryService.findBySlug(slug);
+    Article article = articleQueryService.findBySlug(slug);
     ArticleFavorite articleFavorite = ArticleFavorite.of(article.getId(), user.getId());
     articleQueryService.saveArticleFavorite(articleFavorite);
     return responseArticleData(articleQueryService.findBySlug(slug, user).get());
@@ -33,10 +33,11 @@ public class ArticleFavoriteApi {
   @DeleteMapping
   public ResponseEntity unfavoriteArticle(
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
-      Article article = articleQueryService.findBySlug(slug);
-      ArticleFavorite favorite = articleQueryService.findArticleFavorite(article.getId(), user.getId());
-      articleQueryService.removeArticleFavorite(favorite);
-      return responseArticleData(articleQueryService.findBySlug(slug, user).get());
+    Article article = articleQueryService.findBySlug(slug);
+    ArticleFavorite favorite =
+        articleQueryService.findArticleFavorite(article.getId(), user.getId());
+    articleQueryService.removeArticleFavorite(favorite);
+    return responseArticleData(articleQueryService.findBySlug(slug, user).get());
   }
 
   private ResponseEntity<HashMap<String, Object>> responseArticleData(

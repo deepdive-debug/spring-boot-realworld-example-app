@@ -2,7 +2,6 @@ package io.spring.core.comment;
 
 import java.time.Instant;
 import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

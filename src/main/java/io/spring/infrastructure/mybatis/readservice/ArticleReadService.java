@@ -1,8 +1,8 @@
 package io.spring.infrastructure.mybatis.readservice;
 
+import io.spring.api.data.ArticleData;
 import io.spring.application.CursorPageParameter;
 import io.spring.application.Page;
-import io.spring.api.data.ArticleData;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

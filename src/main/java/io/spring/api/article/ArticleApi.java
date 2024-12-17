@@ -1,17 +1,17 @@
 package io.spring.api.article;
 
+import io.spring.api.article.request.UpdateArticleParam;
+import io.spring.api.data.ArticleData;
 import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.api.article.request.UpdateArticleParam;
-import io.spring.api.data.ArticleData;
 import io.spring.core.article.Article;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,26 +45,26 @@ public class ArticleApi {
       @AuthenticationPrincipal User user,
       @Valid @RequestBody UpdateArticleParam updateArticleParam) {
 
-      Article article = articleQueryService.findBySlug(slug);
-      if (!AuthorizationService.canWriteArticle(user, article)) {
-          throw new NoAuthorizationException();
-      }
-      Article updatedArticle =
-          articleCommandService.updateArticle(article, updateArticleParam);
-      return ResponseEntity.ok(
-          articleResponse(articleQueryService.findBySlug(updatedArticle.getSlug(), user).orElseThrow()));
+    Article article = articleQueryService.findBySlug(slug);
+    if (!AuthorizationService.canWriteArticle(user, article)) {
+      throw new NoAuthorizationException();
+    }
+    Article updatedArticle = articleCommandService.updateArticle(article, updateArticleParam);
+    return ResponseEntity.ok(
+        articleResponse(
+            articleQueryService.findBySlug(updatedArticle.getSlug(), user).orElseThrow()));
   }
 
   @DeleteMapping
   public ResponseEntity deleteArticle(
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
 
-      Article article = articleQueryService.findBySlug(slug);
-      if (!AuthorizationService.canWriteArticle(user, article)) {
-          throw new NoAuthorizationException();
-      }
-      articleQueryService.removeArticle(article);
-      return ResponseEntity.noContent().build();
+    Article article = articleQueryService.findBySlug(slug);
+    if (!AuthorizationService.canWriteArticle(user, article)) {
+      throw new NoAuthorizationException();
+    }
+    articleQueryService.removeArticle(article);
+    return ResponseEntity.noContent().build();
   }
 
   private Map<String, Object> articleResponse(ArticleData articleData) {
