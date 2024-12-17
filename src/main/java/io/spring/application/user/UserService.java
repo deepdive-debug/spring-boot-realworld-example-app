@@ -1,8 +1,10 @@
 package io.spring.application.user;
 
+import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.api.user.request.RegisterParam;
 import io.spring.api.user.request.UpdateUserCommand;
 import io.spring.api.user.request.UpdateUserParam;
+import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import javax.validation.Valid;
@@ -31,7 +33,7 @@ public class UserService {
 
   public User createUser(@Valid RegisterParam registerParam) {
     User user =
-        new User(
+        User.of(
             registerParam.email(),
             registerParam.username(),
             passwordEncoder.encode(registerParam.password()),
@@ -52,4 +54,26 @@ public class UserService {
         updateUserParam.image());
     userRepository.save(user);
   }
+
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public User findByUsername(String username) {
+    return userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void saveRelation(FollowRelation followRelation) {
+    userRepository.saveRelation(followRelation);
+  }
+
+  public FollowRelation findRelation(String userId, String targetId) {
+	  Object ResourceNotFoundException;
+	  return userRepository.findRelation(userId, targetId).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void removeRelation(FollowRelation relation) {
+    userRepository.removeRelation(relation);
+  }
+
 }

@@ -49,7 +49,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
 
   @Test
   public void should_get_current_user_with_token() throws Exception {
-    when(userQueryService.findById(any())).thenReturn(Optional.of(userData));
+    when(userQueryService.findById(any())).thenReturn(userData);
 
     given()
         .header("Authorization", "Token " + token)
@@ -107,7 +107,7 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
     when(userRepository.findByUsername(eq(newUsername))).thenReturn(Optional.empty());
     when(userRepository.findByEmail(eq(newEmail))).thenReturn(Optional.empty());
 
-    when(userQueryService.findById(eq(user.getId()))).thenReturn(Optional.of(userData));
+    when(userQueryService.findById(eq(user.getId()))).thenReturn(userData);
 
     given()
         .contentType("application/json")
@@ -128,10 +128,10 @@ public class CurrentUserApiTest extends TestWithCurrentUser {
     Map<String, Object> param = prepareUpdateParam(newEmail, newBio, newUsername);
 
     when(userRepository.findByEmail(eq(newEmail)))
-        .thenReturn(Optional.of(new User(newEmail, "username", "123", "", "")));
+        .thenReturn(Optional.of(User.of(newEmail, "username", "123", "", "")));
     when(userRepository.findByUsername(eq(newUsername))).thenReturn(Optional.empty());
 
-    when(userQueryService.findById(eq(user.getId()))).thenReturn(Optional.of(userData));
+    when(userQueryService.findById(eq(user.getId()))).thenReturn(userData);
 
     given()
         .contentType("application/json")

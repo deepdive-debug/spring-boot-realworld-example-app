@@ -19,8 +19,8 @@ public class ProfileQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_fetch_profile_success() {
-    User currentUser = new User("a@test.com", "a", "123", "", "");
-    User profileUser = new User("p@test.com", "p", "123", "", "");
+    User currentUser = User.of("a@test.com", "a", "123", "", "");
+    User profileUser = User.of("p@test.com", "p", "123", "", "");
     userRepository.save(profileUser);
 
     Optional<ProfileData> optional =

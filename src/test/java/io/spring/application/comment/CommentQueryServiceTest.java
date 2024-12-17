@@ -41,13 +41,13 @@ public class CommentQueryServiceTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    user = new User("aisensiy@test.com", "aisensiy", "123", "", "");
+    user = User.of("aisensiy@test.com", "aisensiy", "123", "", "");
     userRepository.save(user);
   }
 
   @Test
   public void should_read_comment_success() {
-    Comment comment = new Comment("content", user.getId(), "123");
+    Comment comment = Comment.of("content", user.getId(), "123");
     commentRepository.save(comment);
 
     Optional<CommentData> optional = commentQueryService.findById(comment.getId(), user);
@@ -58,16 +58,16 @@ public class CommentQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_read_comments_of_article() {
-    Article article = new Article("title", "desc", "body", Arrays.asList("java"), user.getId());
+    Article article = Article.of("title", "desc", "body", Arrays.asList("java"), user.getId());
     articleRepository.save(article);
 
-    User user2 = new User("user2@email.com", "user2", "123", "", "");
+    User user2 = User.of("user2@email.com", "user2", "123", "", "");
     userRepository.save(user2);
-    userRepository.saveRelation(new FollowRelation(user.getId(), user2.getId()));
+    userRepository.saveRelation(FollowRelation.of(user.getId(), user2.getId()));
 
-    Comment comment1 = new Comment("content1", user.getId(), article.getId());
+    Comment comment1 = Comment.of("content1", user.getId(), article.getId());
     commentRepository.save(comment1);
-    Comment comment2 = new Comment("content2", user2.getId(), article.getId());
+    Comment comment2 = Comment.of("content2", user2.getId(), article.getId());
     commentRepository.save(comment2);
 
     List<CommentData> comments = commentQueryService.findByArticleId(article.getId(), user);

@@ -29,7 +29,7 @@ public class RelationMutation {
         .findByUsername(username)
         .map(
             target -> {
-              FollowRelation followRelation = new FollowRelation(user.getId(), target.getId());
+              FollowRelation followRelation = FollowRelation.of(user.getId(), target.getId());
               userRepository.saveRelation(followRelation);
               Profile profile = buildProfile(username, user);
               return ProfilePayload.newBuilder().profile(profile).build();

@@ -11,13 +11,12 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.api.comment.CommentsApi;
 import io.spring.api.security.WebSecurityConfig;
+import io.spring.application.ArticleQueryService;
 import io.spring.application.CommentQueryService;
 import io.spring.api.data.CommentData;
 import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
 import io.spring.core.comment.Comment;
-import io.spring.core.comment.CommentRepository;
 import io.spring.core.user.User;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,9 +34,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import({WebSecurityConfig.class, JacksonCustomizations.class})
 public class CommentsApiTest extends TestWithCurrentUser {
 
-  @MockBean private ArticleRepository articleRepository;
+  @MockBean private ArticleQueryService articleQueryService;
 
-  @MockBean private CommentRepository commentRepository;
   @MockBean private CommentQueryService commentQueryService;
 
   private Article article;
@@ -49,9 +47,9 @@ public class CommentsApiTest extends TestWithCurrentUser {
   public void setUp() throws Exception {
     RestAssuredMockMvc.mockMvc(mvc);
     super.setUp();
-    article = new Article("title", "desc", "body", Arrays.asList("test", "java"), user.getId());
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
-    comment = new Comment("comment", user.getId(), article.getId());
+    article = Article.of("title", "desc", "body", Arrays.asList("test", "java"), user.getId());
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
+    comment = Comment.of("comment", user.getId(), article.getId());
     commentData =
         new CommentData(
             comment.getId(),
@@ -131,8 +129,8 @@ public class CommentsApiTest extends TestWithCurrentUser {
 
   @Test
   public void should_delete_comment_success() throws Exception {
-    when(commentRepository.findById(eq(article.getId()), eq(comment.getId())))
-        .thenReturn(Optional.of(comment));
+    when(commentQueryService.findCommentById(eq(article.getId()), eq(comment.getId())))
+        .thenReturn(comment);
 
     given()
         .header("Authorization", "Token " + token)
@@ -145,15 +143,15 @@ public class CommentsApiTest extends TestWithCurrentUser {
   @Test
   public void should_get_403_if_not_author_of_article_or_author_of_comment_when_delete_comment()
       throws Exception {
-    User anotherUser = new User("other@example.com", "other", "123", "", "");
+    User anotherUser = User.of("other@example.com", "other", "123", "", "");
     when(userRepository.findByUsername(eq(anotherUser.getUsername())))
         .thenReturn(Optional.of(anotherUser));
     when(jwtService.getSubFromToken(any())).thenReturn(Optional.of(anotherUser.getId()));
     when(userRepository.findById(eq(anotherUser.getId())))
         .thenReturn(Optional.ofNullable(anotherUser));
 
-    when(commentRepository.findById(eq(article.getId()), eq(comment.getId())))
-        .thenReturn(Optional.of(comment));
+    when(commentQueryService.findCommentById(eq(article.getId()), eq(comment.getId())))
+        .thenReturn(comment);
     String token = jwtService.toToken(anotherUser);
     when(userRepository.findById(eq(anotherUser.getId()))).thenReturn(Optional.of(anotherUser));
     given()

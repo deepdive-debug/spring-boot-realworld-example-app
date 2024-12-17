@@ -34,7 +34,7 @@ public class CommentMutation {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-    Comment comment = new Comment(body, user.getId(), article.getId());
+    Comment comment = Comment.of(body, user.getId(), article.getId());
     commentRepository.save(comment);
     CommentData commentData =
         commentQueryService

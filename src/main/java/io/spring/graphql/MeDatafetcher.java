@@ -35,7 +35,7 @@ public class MeDatafetcher {
     }
     io.spring.core.user.User user = (io.spring.core.user.User) authentication.getPrincipal();
     UserData userData =
-        userQueryService.findById(user.getId()).orElseThrow(ResourceNotFoundException::new);
+        userQueryService.findById(user.getId());
     UserWithToken userWithToken = UserWithToken.of(userData, authorization.split(" ")[1]);
     User result =
         User.newBuilder()

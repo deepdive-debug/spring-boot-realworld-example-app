@@ -15,10 +15,8 @@ import io.spring.application.ArticleQueryService;
 import io.spring.api.data.ArticleData;
 import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
 import io.spring.core.article.Tag;
 import io.spring.core.favorite.ArticleFavorite;
-import io.spring.core.favorite.ArticleFavoriteRepository;
 import io.spring.core.user.User;
 import java.util.Arrays;
 import java.util.Optional;
@@ -36,10 +34,6 @@ import org.springframework.test.web.servlet.MockMvc;
 public class ArticleFavoriteApiTest extends TestWithCurrentUser {
   @Autowired private MockMvc mvc;
 
-  @MockBean private ArticleFavoriteRepository articleFavoriteRepository;
-
-  @MockBean private ArticleRepository articleRepository;
-
   @MockBean private ArticleQueryService articleQueryService;
 
   private Article article;
@@ -48,9 +42,9 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
   public void setUp() throws Exception {
     super.setUp();
     RestAssuredMockMvc.mockMvc(mvc);
-    User anotherUser = new User("other@test.com", "other", "123", "", "");
-    article = new Article("title", "desc", "body", Arrays.asList("java"), anotherUser.getId());
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
+    User anotherUser = User.of("other@test.com", "other", "123", "", "");
+    article = Article.of("title", "desc", "body", Arrays.asList("java"), anotherUser.getId());
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
     ArticleData articleData =
         new ArticleData(
             article.getId(),
@@ -84,13 +78,13 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
         .statusCode(200)
         .body("article.id", equalTo(article.getId()));
 
-    verify(articleFavoriteRepository).save(any());
+    verify(articleQueryService).saveArticleFavorite(any());
   }
 
   @Test
   public void should_unfavorite_an_article_success() throws Exception {
-    when(articleFavoriteRepository.find(eq(article.getId()), eq(user.getId())))
-        .thenReturn(Optional.of(new ArticleFavorite(article.getId(), user.getId())));
+    when(articleQueryService.findArticleFavorite(eq(article.getId()), eq(user.getId())))
+        .thenReturn(ArticleFavorite.of(article.getId(), user.getId()));
     given()
         .header("Authorization", "Token " + token)
         .when()
@@ -99,6 +93,6 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(200)
         .body("article.id", equalTo(article.getId()));
-    verify(articleFavoriteRepository).remove(new ArticleFavorite(article.getId(), user.getId()));
+    verify(articleQueryService).removeArticleFavorite(ArticleFavorite.of(article.getId(), user.getId()));
   }
 }
