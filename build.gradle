@@ -1,8 +1,10 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.3'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
-    id "com.netflix.dgs.codegen" version "5.0.6"
+
+    //graphQL
+//    id "com.netflix.dgs.codegen" version "5.0.6"
     id "com.diffplug.spotless" version "6.22.0"
 }
 
@@ -35,8 +37,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-    implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:4.9.21'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    //graphQL
+//    implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:4.9.21'
+
     implementation 'org.flywaydb:flyway-core'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
@@ -44,7 +49,8 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
 
     // swagger
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+//    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -68,10 +74,11 @@ tasks.named('clean') {
     }
 }
 
-tasks.named('generateJava') {
-    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
-    packageName = 'io.spring.graphql' // The package name to use to generate sources
-}
+//graphQL
+//tasks.named('generateJava') {
+//    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
+//    packageName = 'io.spring.graphql' // The package name to use to generate sources
+//}
 
 tasks.named('spotlessJava') {
     dependsOn 'compileJava', 'generateJava', 'processResources'
