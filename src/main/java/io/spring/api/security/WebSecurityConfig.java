@@ -22,54 +22,65 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Bean
-    public JwtTokenFilter jwtTokenFilter() {
-        return new JwtTokenFilter();
-    }
+  @Bean
+  public JwtTokenFilter jwtTokenFilter() {
+    return new JwtTokenFilter();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        // Swagger 경로 허용
-                        .requestMatchers(
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
-                        // 기존 경로 설정
-                        .requestMatchers("/graphiql").permitAll()
-                        .requestMatchers("/graphql").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/articles/feed").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags").permitAll()
-                        .anyRequest().authenticated()
-                );
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .exceptionHandling(
+            exception ->
+                exception.authenticationEntryPoint(
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth
+                    // Swagger 경로 허용
+                    .requestMatchers(
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**")
+                    .permitAll()
+                    // 기존 경로 설정
+                    .requestMatchers("/graphiql")
+                    .permitAll()
+                    .requestMatchers("/graphql")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles/feed")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.POST, "/users", "/users/login")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated());
 
-        http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+    http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    return http.build();
+  }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(asList("*"));
-        configuration.setAllowedMethods(asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowCredentials(false);
-        configuration.setAllowedHeaders(asList("Authorization", "Cache-Control", "Content-Type"));
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    final CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(asList("*"));
+    configuration.setAllowedMethods(asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+    configuration.setAllowCredentials(false);
+    configuration.setAllowedHeaders(asList("Authorization", "Cache-Control", "Content-Type"));
 
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 }

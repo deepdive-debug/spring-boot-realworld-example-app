@@ -2,12 +2,12 @@ package io.spring.application.user;
 
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Valid;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;

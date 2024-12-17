@@ -10,9 +10,9 @@ import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,9 +39,9 @@ public class ArticleApi {
         .findBySlug(slug, user)
         .map(articleData -> ResponseEntity.ok(articleResponse(articleData)))
         .orElseThrow(ResourceNotFoundException::new);
-  } 
+  }
 
-  @PutMapping 
+  @PutMapping
   public ResponseEntity<?> updateArticle(
       @PathVariable("slug") String slug,
       @AuthenticationPrincipal User user,

@@ -11,11 +11,11 @@ import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

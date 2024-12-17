@@ -1,7 +1,5 @@
 package io.spring.api;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.application.UserQueryService;
@@ -12,12 +10,12 @@ import io.spring.application.user.UserService;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
