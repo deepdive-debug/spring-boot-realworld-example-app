@@ -10,11 +10,12 @@ import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
+import io.spring.api.article.ArticlesApi;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.ProfileData;
+import io.spring.api.data.ArticleData;
+import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import java.time.Instant;
 import java.util.HashMap;
@@ -69,12 +70,13 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
 
     when(articleCommandService.createArticle(any(), any()))
-        .thenReturn(new Article(title, description, body, tagList, user.getId()));
+        .thenReturn(Article.of(title, description, body, tagList, user.getId()));
 
     when(articleQueryService.findBySlug(eq(Article.toSlug(title)), any()))
         .thenReturn(Optional.empty());
 
-    when(articleQueryService.findById(any(), any())).thenReturn(Optional.of(articleData));
+    when(articleQueryService.findById(any(), any()))
+        .thenReturn(Optional.of(articleData));
 
     given()
         .contentType("application/json")
@@ -137,8 +139,7 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             asList(tagList),
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
 
-    when(articleQueryService.findBySlug(eq(Article.toSlug(title)), any()))
-        .thenReturn(Optional.of(articleData));
+    when(articleQueryService.findBySlug(eq(Article.toSlug(title)), any())).thenReturn(Optional.of(articleData));
 
     when(articleQueryService.findById(any(), any())).thenReturn(Optional.of(articleData));
 

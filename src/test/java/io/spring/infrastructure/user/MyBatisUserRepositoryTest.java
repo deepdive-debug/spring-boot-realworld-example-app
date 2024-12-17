@@ -19,7 +19,7 @@ public class MyBatisUserRepositoryTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    user = new User("aisensiy@163.com", "aisensiy", "123", "", "default");
+    user = User.of("aisensiy@163.com", "aisensiy", "123", "", "default");
   }
 
   @Test
@@ -51,20 +51,20 @@ public class MyBatisUserRepositoryTest extends DbTestBase {
 
   @Test
   public void should_create_new_user_follow_success() {
-    User other = new User("other@example.com", "other", "123", "", "");
+    User other = User.of("other@example.com", "other", "123", "", "");
     userRepository.save(other);
 
-    FollowRelation followRelation = new FollowRelation(user.getId(), other.getId());
+    FollowRelation followRelation = FollowRelation.of(user.getId(), other.getId());
     userRepository.saveRelation(followRelation);
     Assertions.assertTrue(userRepository.findRelation(user.getId(), other.getId()).isPresent());
   }
 
   @Test
   public void should_unfollow_user_success() {
-    User other = new User("other@example.com", "other", "123", "", "");
+    User other = User.of("other@example.com", "other", "123", "", "");
     userRepository.save(other);
 
-    FollowRelation followRelation = new FollowRelation(user.getId(), other.getId());
+    FollowRelation followRelation = FollowRelation.of(user.getId(), other.getId());
     userRepository.saveRelation(followRelation);
 
     userRepository.removeRelation(followRelation);

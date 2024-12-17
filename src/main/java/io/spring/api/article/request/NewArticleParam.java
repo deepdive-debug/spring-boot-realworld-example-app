@@ -1,8 +1,10 @@
-package io.spring.application.article;
+package io.spring.api.article.request;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
+
+import io.spring.application.article.DuplicatedArticleConstraint;
 
 @JsonRootName("article")
 public record NewArticleParam(

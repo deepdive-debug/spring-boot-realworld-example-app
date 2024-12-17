@@ -1,3 +1,4 @@
+
 package io.spring.application.user;
 
 import com.fasterxml.jackson.annotation.JsonRootName;

@@ -6,8 +6,8 @@ import io.spring.application.CursorPager;
 import io.spring.application.CursorPager.Direction;
 import io.spring.application.DateTimeCursor;
 import io.spring.application.Page;
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.ArticleDataList;
+import io.spring.api.data.ArticleData;
+import io.spring.api.article.response.ArticleDataList;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.favorite.ArticleFavorite;
@@ -49,10 +49,10 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    user = new User("aisensiy@gmail.com", "aisensiy", "123", "", "");
+    user = User.of("aisensiy@gmail.com", "aisensiy", "123", "", "");
     userRepository.save(user);
     article =
-        new Article(
+        Article.of(
             "test", "desc", "body", Arrays.asList("java", "spring"), user.getId(), Instant.now());
     articleRepository.save(article);
   }
@@ -72,9 +72,9 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_get_article_with_right_favorite_and_favorite_count() {
-    User anotherUser = new User("other@test.com", "other", "123", "", "");
+    User anotherUser = User.of("other@test.com", "other", "123", "", "");
     userRepository.save(anotherUser);
-    articleFavoriteRepository.save(new ArticleFavorite(article.getId(), anotherUser.getId()));
+    articleFavoriteRepository.save(ArticleFavorite.of(article.getId(), anotherUser.getId()));
 
     Optional<ArticleData> optional = queryService.findById(article.getId(), anotherUser);
     Assertions.assertTrue(optional.isPresent());
@@ -87,8 +87,8 @@ public class ArticleQueryServiceTest extends DbTestBase {
   @Test
   public void should_get_default_article_list() {
     Article anotherArticle =
-        new Article(
-            "new article",
+        Article.of(
+            "Article.of",
             "desc",
             "body",
             Arrays.asList("test"),
@@ -111,8 +111,8 @@ public class ArticleQueryServiceTest extends DbTestBase {
   @Test
   public void should_get_default_article_list_by_cursor() {
     Article anotherArticle =
-        new Article(
-            "new article",
+        Article.of(
+            "Article.of",
             "desc",
             "body",
             Arrays.asList("test"),
@@ -145,11 +145,11 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_query_article_by_author() {
-    User anotherUser = new User("other@email.com", "other", "123", "", "");
+    User anotherUser = User.of("other@email.com", "other", "123", "", "");
     userRepository.save(anotherUser);
 
     Article anotherArticle =
-        new Article("new article", "desc", "body", Arrays.asList("test"), anotherUser.getId());
+        Article.of("Article.of", "desc", "body", Arrays.asList("test"), anotherUser.getId());
     articleRepository.save(anotherArticle);
 
     ArticleDataList recentArticles =
@@ -160,14 +160,14 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_query_article_by_favorite() {
-    User anotherUser = new User("other@email.com", "other", "123", "", "");
+    User anotherUser = User.of("other@email.com", "other", "123", "", "");
     userRepository.save(anotherUser);
 
     Article anotherArticle =
-        new Article("new article", "desc", "body", Arrays.asList("test"), anotherUser.getId());
+        Article.of("Article.of", "desc", "body", Arrays.asList("test"), anotherUser.getId());
     articleRepository.save(anotherArticle);
 
-    ArticleFavorite articleFavorite = new ArticleFavorite(article.getId(), anotherUser.getId());
+    ArticleFavorite articleFavorite = ArticleFavorite.of(article.getId(), anotherUser.getId());
     articleFavoriteRepository.save(articleFavorite);
 
     ArticleDataList recentArticles =
@@ -184,7 +184,7 @@ public class ArticleQueryServiceTest extends DbTestBase {
   @Test
   public void should_query_article_by_tag() {
     Article anotherArticle =
-        new Article("new article", "desc", "body", Arrays.asList("test"), user.getId());
+        Article.of("Article.of", "desc", "body", Arrays.asList("test"), user.getId());
     articleRepository.save(anotherArticle);
 
     ArticleDataList recentArticles =
@@ -199,10 +199,10 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_show_following_if_user_followed_author() {
-    User anotherUser = new User("other@email.com", "other", "123", "", "");
+    User anotherUser = User.of("other@email.com", "other", "123", "", "");
     userRepository.save(anotherUser);
 
-    FollowRelation followRelation = new FollowRelation(anotherUser.getId(), user.getId());
+    FollowRelation followRelation = FollowRelation.of(anotherUser.getId(), user.getId());
     userRepository.saveRelation(followRelation);
 
     ArticleDataList recentArticles =
@@ -214,10 +214,10 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_get_user_feed() {
-    User anotherUser = new User("other@email.com", "other", "123", "", "");
+    User anotherUser = User.of("other@email.com", "other", "123", "", "");
     userRepository.save(anotherUser);
 
-    FollowRelation followRelation = new FollowRelation(anotherUser.getId(), user.getId());
+    FollowRelation followRelation = FollowRelation.of(anotherUser.getId(), user.getId());
     userRepository.saveRelation(followRelation);
 
     ArticleDataList userFeed = queryService.findUserFeed(user, new Page());

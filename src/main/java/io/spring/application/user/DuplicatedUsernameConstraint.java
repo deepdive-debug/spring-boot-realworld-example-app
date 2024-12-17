@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Constraint(validatedBy = DuplicatedUsernameValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-@interface DuplicatedUsernameConstraint {
+public @interface DuplicatedUsernameConstraint {
   String message() default "duplicated username";
 
   Class<?>[] groups() default {};
