@@ -4,8 +4,4 @@ import io.spring.application.user.UpdateUserConstraint;
 import io.spring.core.user.User;
 
 @UpdateUserConstraint
-public record UpdateUserCommand(
-    User targetUser,
-    UpdateUserParam param
-) {}
-
+public record UpdateUserCommand(User targetUser, UpdateUserParam param) {}

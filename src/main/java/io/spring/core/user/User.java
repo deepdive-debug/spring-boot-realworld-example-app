@@ -2,7 +2,6 @@ package io.spring.core.user;
 
 import io.spring.Util;
 import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,7 +21,8 @@ public class User {
   private String image;
 
   @Builder(access = AccessLevel.PRIVATE)
-  private User(String id, String email, String username, String password, String bio, String image) {
+  private User(
+      String id, String email, String username, String password, String bio, String image) {
     this.id = id;
     this.email = email;
     this.username = username;

@@ -10,10 +10,10 @@ import static org.mockito.Mockito.when;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.api.article.ArticleFavoriteApi;
-import io.spring.api.security.WebSecurityConfig;
-import io.spring.application.ArticleQueryService;
 import io.spring.api.data.ArticleData;
+import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.response.ProfileData;
+import io.spring.application.ArticleQueryService;
 import io.spring.core.article.Article;
 import io.spring.core.article.Tag;
 import io.spring.core.favorite.ArticleFavorite;
@@ -93,6 +93,7 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(200)
         .body("article.id", equalTo(article.getId()));
-    verify(articleQueryService).removeArticleFavorite(ArticleFavorite.of(article.getId(), user.getId()));
+    verify(articleQueryService)
+        .removeArticleFavorite(ArticleFavorite.of(article.getId(), user.getId()));
   }
 }

@@ -21,10 +21,6 @@ public class ArticleFavorite {
   }
 
   public static ArticleFavorite of(String articleId, String userId) {
-    return ArticleFavorite
-        .builder()
-        .articleId(articleId)
-        .userId(userId)
-        .build();
+    return ArticleFavorite.builder().articleId(articleId).userId(userId).build();
   }
 }

@@ -20,10 +20,6 @@ public class FollowRelation {
   }
 
   public static FollowRelation of(String userId, String targetId) {
-    return FollowRelation
-        .builder()
-        .userId(userId)
-        .targetId(targetId)
-        .build();
+    return FollowRelation.builder().userId(userId).targetId(targetId).build();
   }
 }

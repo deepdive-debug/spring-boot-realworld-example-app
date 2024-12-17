@@ -1,4 +1,3 @@
-
 package io.spring.infrastructure;
 
 import org.springframework.context.annotation.Bean;

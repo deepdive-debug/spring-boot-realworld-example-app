@@ -68,12 +68,13 @@ public class UserService {
   }
 
   public FollowRelation findRelation(String userId, String targetId) {
-	  Object ResourceNotFoundException;
-	  return userRepository.findRelation(userId, targetId).orElseThrow(ResourceNotFoundException::new);
+    Object ResourceNotFoundException;
+    return userRepository
+        .findRelation(userId, targetId)
+        .orElseThrow(ResourceNotFoundException::new);
   }
 
   public void removeRelation(FollowRelation relation) {
     userRepository.removeRelation(relation);
   }
-
 }

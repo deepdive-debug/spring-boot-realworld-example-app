@@ -203,11 +203,12 @@ public class ArticleQueryService {
   }
 
   public ArticleFavorite findArticleFavorite(String articleId, String userId) {
-    return articleFavoriteRepository.find(articleId, userId).orElseThrow(ResourceNotFoundException::new);
+    return articleFavoriteRepository
+        .find(articleId, userId)
+        .orElseThrow(ResourceNotFoundException::new);
   }
 
   public void removeArticleFavorite(ArticleFavorite favorite) {
     articleFavoriteRepository.remove(favorite);
   }
-
 }
