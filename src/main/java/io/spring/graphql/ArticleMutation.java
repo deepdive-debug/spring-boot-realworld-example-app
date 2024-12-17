@@ -13,7 +13,7 @@ import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.favorite.ArticleFavorite;
 import io.spring.core.favorite.ArticleFavoriteRepository;
-import io.spring.core.service.AuthorizationService;
+import io.spring.application.service.AuthorizationService;
 import io.spring.core.user.User;
 import io.spring.graphql.DgsConstants.MUTATION;
 import io.spring.graphql.exception.AuthenticationException;
@@ -73,7 +73,7 @@ public class ArticleMutation {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-    ArticleFavorite articleFavorite = new ArticleFavorite(article.getId(), user.getId());
+    ArticleFavorite articleFavorite = ArticleFavorite.of(article.getId(), user.getId());
     articleFavoriteRepository.save(articleFavorite);
     return DataFetcherResult.<ArticlePayload>newResult()
         .data(ArticlePayload.newBuilder().build())

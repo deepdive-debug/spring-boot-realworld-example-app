@@ -31,7 +31,7 @@ public class ArticleFavoriteApi {
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-    ArticleFavorite articleFavorite = new ArticleFavorite(article.getId(), user.getId());
+    ArticleFavorite articleFavorite = ArticleFavorite.of(article.getId(), user.getId());
     articleFavoriteRepository.save(articleFavorite);
     return responseArticleData(articleQueryService.findBySlug(slug, user).get());
   }

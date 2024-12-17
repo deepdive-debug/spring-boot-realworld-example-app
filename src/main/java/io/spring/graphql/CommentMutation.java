@@ -12,7 +12,7 @@ import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
-import io.spring.core.service.AuthorizationService;
+import io.spring.application.service.AuthorizationService;
 import io.spring.core.user.User;
 import io.spring.graphql.DgsConstants.MUTATION;
 import io.spring.graphql.exception.AuthenticationException;
@@ -34,7 +34,7 @@ public class CommentMutation {
     User user = SecurityUtil.getCurrentUser().orElseThrow(AuthenticationException::new);
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-    Comment comment = new Comment(body, user.getId(), article.getId());
+    Comment comment = Comment.of(body, user.getId(), article.getId());
     commentRepository.save(comment);
     CommentData commentData =
         commentQueryService

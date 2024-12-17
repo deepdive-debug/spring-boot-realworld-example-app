@@ -8,7 +8,7 @@ import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.UserQueryService;
 import io.spring.application.data.UserData;
 import io.spring.application.data.UserWithToken;
-import io.spring.core.service.JwtService;
+import io.spring.application.service.JwtService;
 import io.spring.graphql.DgsConstants.QUERY;
 import io.spring.graphql.DgsConstants.USERPAYLOAD;
 import io.spring.graphql.types.User;

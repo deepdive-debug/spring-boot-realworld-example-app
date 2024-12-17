@@ -1,19 +1,30 @@
 package io.spring.core.article;
 
 import java.util.UUID;
-import lombok.Data;
+
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@Data
+@Getter
 @EqualsAndHashCode(of = "name")
 public class Tag {
   private String id;
   private String name;
 
-  public Tag(String name) {
-    this.id = UUID.randomUUID().toString();
+  @Builder(access = AccessLevel.PRIVATE)
+  private Tag(String id, String name) {
+    this.id = id;
     this.name = name;
+  }
+
+  public static Tag of(String name) {
+    return Tag.builder()
+        .id(UUID.randomUUID().toString())
+        .name(name)
+        .build();
   }
 }

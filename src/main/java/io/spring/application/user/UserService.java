@@ -33,7 +33,7 @@ public class UserService {
 
   public User createUser(@Valid RegisterParam registerParam) {
     User user =
-        new User(
+        User.of(
             registerParam.email(),
             registerParam.username(),
             passwordEncoder.encode(registerParam.password()),

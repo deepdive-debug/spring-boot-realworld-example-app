@@ -7,6 +7,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,27 +28,29 @@ public class Article {
   private Instant createdAt;
   private Instant updatedAt;
 
-  public Article(
-      String title, String description, String body, List<String> tagList, String userId) {
-    this(title, description, body, tagList, userId, Instant.now());
-  }
-
-  public Article(
-      String title,
-      String description,
-      String body,
-      List<String> tagList,
-      String userId,
-      Instant createdAt) {
+  @Builder(access = AccessLevel.PRIVATE)
+  private Article(String userId, String title, String description, String body, List<Tag> tags,
+      Instant createdAt, Instant updatedAt) {
+    this.userId = userId;
     this.id = UUID.randomUUID().toString();
     this.slug = toSlug(title);
     this.title = title;
     this.description = description;
     this.body = body;
-    this.tags = new HashSet<>(tagList).stream().map(Tag::new).collect(toList());
-    this.userId = userId;
+    this.tags = tags;
     this.createdAt = createdAt;
     this.updatedAt = createdAt;
+  }
+
+  public static Article of(String title, String description, String body, List<String> tagList, String userId) {
+    return Article.builder()
+        .title(title)
+        .description(description)
+        .body(body)
+        .tags(new HashSet<>(tagList).stream().map(Tag::of).collect(toList()))
+        .userId(userId)
+        .createdAt(Instant.now())
+        .build();
   }
 
   public void update(String title, String description, String body) {

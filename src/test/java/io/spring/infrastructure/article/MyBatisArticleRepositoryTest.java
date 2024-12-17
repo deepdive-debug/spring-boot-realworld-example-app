@@ -37,8 +37,8 @@ public class MyBatisArticleRepositoryTest extends DbTestBase {
     Optional<Article> optional = articleRepository.findById(article.getId());
     Assertions.assertTrue(optional.isPresent());
     Assertions.assertEquals(optional.get(), article);
-    Assertions.assertTrue(optional.get().getTags().contains(new Tag("java")));
-    Assertions.assertTrue(optional.get().getTags().contains(new Tag("spring")));
+    Assertions.assertTrue(optional.get().getTags().contains(Tag.of("java")));
+    Assertions.assertTrue(optional.get().getTags().contains(Tag.of("spring")));
   }
 
   @Test

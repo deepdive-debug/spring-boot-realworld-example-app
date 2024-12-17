@@ -8,8 +8,8 @@ import io.spring.application.data.CommentData;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.comment.Comment;
+import io.spring.application.service.AuthorizationService;
 import io.spring.core.comment.CommentRepository;
-import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,7 +42,7 @@ public class CommentsApi {
       @Valid @RequestBody NewCommentParam newCommentParam) {
     Article article =
         articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-    Comment comment = new Comment(newCommentParam.body(), user.getId(), article.getId());
+    Comment comment = Comment.of(newCommentParam.body(), user.getId(), article.getId());
     commentRepository.save(comment);
     return ResponseEntity.status(201)
         .body(commentResponse(commentQueryService.findById(comment.getId(), user).get()));
