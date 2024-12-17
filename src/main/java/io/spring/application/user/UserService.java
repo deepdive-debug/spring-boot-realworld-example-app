@@ -39,8 +39,8 @@ public class UserService {
   }
 
   public void updateUser(@Valid UpdateUserCommand command) {
-    User user = command.getTargetUser();
-    UpdateUserParam updateUserParam = command.getParam();
+    User user = command.targetUser();
+    UpdateUserParam updateUserParam = command.param();
     user.update(
         updateUserParam.email(),
         updateUserParam.username(),
