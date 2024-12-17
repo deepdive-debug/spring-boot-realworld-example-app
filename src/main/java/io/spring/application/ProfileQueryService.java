@@ -1,7 +1,7 @@
 package io.spring.application;
 
-import io.spring.application.data.ProfileData;
-import io.spring.application.data.UserData;
+import io.spring.api.user.response.ProfileData;
+import io.spring.api.user.response.UserData;
 import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;
 import io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService;

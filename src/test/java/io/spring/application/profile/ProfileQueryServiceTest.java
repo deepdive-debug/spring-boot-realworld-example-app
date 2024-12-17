@@ -1,7 +1,7 @@
 package io.spring.application.profile;
 
 import io.spring.application.ProfileQueryService;
-import io.spring.application.data.ProfileData;
+import io.spring.api.user.response.ProfileData;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.DbTestBase;
@@ -19,8 +19,8 @@ public class ProfileQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_fetch_profile_success() {
-    User currentUser = new User("a@test.com", "a", "123", "", "");
-    User profileUser = new User("p@test.com", "p", "123", "", "");
+    User currentUser = User.of("a@test.com", "a", "123", "", "");
+    User profileUser = User.of("p@test.com", "p", "123", "", "");
     userRepository.save(profileUser);
 
     Optional<ProfileData> optional =

@@ -1,6 +1,6 @@
 package io.spring.infrastructure.mybatis.readservice;
 
-import io.spring.application.data.ArticleFavoriteCount;
+import io.spring.api.article.response.ArticleFavoriteCount;
 import io.spring.core.user.User;
 import java.util.List;
 import java.util.Set;

@@ -26,9 +26,9 @@ public class MyBatisArticleRepositoryTest extends DbTestBase {
 
   @BeforeEach
   public void setUp() {
-    User user = new User("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
+    User user = User.of("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
     userRepository.save(user);
-    article = new Article("test", "desc", "body", Arrays.asList("java", "spring"), user.getId());
+    article = Article.of("test", "desc", "body", Arrays.asList("java", "spring"), user.getId());
   }
 
   @Test
@@ -37,8 +37,8 @@ public class MyBatisArticleRepositoryTest extends DbTestBase {
     Optional<Article> optional = articleRepository.findById(article.getId());
     Assertions.assertTrue(optional.isPresent());
     Assertions.assertEquals(optional.get(), article);
-    Assertions.assertTrue(optional.get().getTags().contains(new Tag("java")));
-    Assertions.assertTrue(optional.get().getTags().contains(new Tag("spring")));
+    Assertions.assertTrue(optional.get().getTags().contains(Tag.of("java")));
+    Assertions.assertTrue(optional.get().getTags().contains(Tag.of("spring")));
   }
 
   @Test

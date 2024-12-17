@@ -16,7 +16,7 @@ public class MyBatisCommentRepositoryTest extends DbTestBase {
 
   @Test
   public void should_create_and_fetch_comment_success() {
-    Comment comment = new Comment("content", "123", "456");
+    Comment comment = Comment.of("content", "123", "456");
     commentRepository.save(comment);
 
     Optional<Comment> optional = commentRepository.findById("456", comment.getId());

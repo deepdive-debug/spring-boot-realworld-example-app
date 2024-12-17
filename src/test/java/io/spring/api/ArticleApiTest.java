@@ -11,13 +11,13 @@ import static org.mockito.Mockito.when;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.TestHelper;
+import io.spring.api.article.ArticleApi;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.ProfileData;
+import io.spring.api.data.ArticleData;
+import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
 import io.spring.core.user.User;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,6 @@ public class ArticleApiTest extends TestWithCurrentUser {
 
   @MockBean private ArticleQueryService articleQueryService;
 
-  @MockBean private ArticleRepository articleRepository;
-
   @MockBean ArticleCommandService articleCommandService;
 
   @Override
@@ -57,7 +56,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String slug = "test-new-article";
     Instant time = Instant.now();
     Article article =
-        new Article(
+        Article.of(
             "Test New Article",
             "Desc",
             "Body",
@@ -88,10 +87,10 @@ public class ArticleApiTest extends TestWithCurrentUser {
     List<String> tagList = Arrays.asList("java", "spring", "jpg");
 
     Article originalArticle =
-        new Article("old title", "old description", "old body", tagList, user.getId());
+        Article.of("old title", "old description", "old body", tagList, user.getId());
 
     Article updatedArticle =
-        new Article("new title", "new description", "new body", tagList, user.getId());
+        Article.of("new title", "new description", "new body", tagList, user.getId());
 
     Map<String, Object> updateParam =
         prepareUpdateParam(
@@ -100,22 +99,22 @@ public class ArticleApiTest extends TestWithCurrentUser {
     ArticleData updatedArticleData =
         TestHelper.getArticleDataFromArticleAndUser(updatedArticle, user);
 
-    when(articleRepository.findBySlug(eq(originalArticle.getSlug())))
-        .thenReturn(Optional.of(originalArticle));
+    when(articleQueryService.findBySlug(eq(originalArticle.getSlug())))
+        .thenReturn(originalArticle);
     when(articleCommandService.updateArticle(eq(originalArticle), any()))
         .thenReturn(updatedArticle);
     when(articleQueryService.findBySlug(eq(updatedArticle.getSlug()), eq(user)))
         .thenReturn(Optional.of(updatedArticleData));
 
-    given()
-        .contentType("application/json")
-        .header("Authorization", "Token " + token)
-        .body(updateParam)
-        .when()
-        .put("/articles/{slug}", originalArticle.getSlug())
-        .then()
-        .statusCode(200)
-        .body("article.slug", equalTo(updatedArticleData.getSlug()));
+      given()
+          .contentType("application/json")
+          .header("Authorization", "Token " + token)
+          .body(updateParam)
+          .when()
+          .put("/articles/{slug}", originalArticle.getSlug())
+          .then()
+          .statusCode(200)
+          .body("article.slug", equalTo(updatedArticleData.getSlug()));
   }
 
   @Test
@@ -125,10 +124,10 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String description = "new description";
     Map<String, Object> updateParam = prepareUpdateParam(title, body, description);
 
-    User anotherUser = new User("test@test.com", "test", "123123", "", "");
+    User anotherUser = User.of("test@test.com", "test", "123123", "", "");
 
     Article article =
-        new Article(
+        Article.of(
             title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
 
     Instant time = Instant.now();
@@ -151,9 +150,8 @@ public class ArticleApiTest extends TestWithCurrentUser {
                 anotherUser.getImage(),
                 false));
 
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
-    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user)))
-        .thenReturn(Optional.of(articleData));
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
+    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user))).thenReturn(Optional.of(articleData));
 
     given()
         .contentType("application/json")
@@ -172,8 +170,8 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String description = "description";
 
     Article article =
-        new Article(title, description, body, Arrays.asList("java", "spring", "jpg"), user.getId());
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
+        Article.of(title, description, body, Arrays.asList("java", "spring", "jpg"), user.getId());
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
 
     given()
         .header("Authorization", "Token " + token)
@@ -182,7 +180,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(204);
 
-    verify(articleRepository).remove(eq(article));
+    verify(articleQueryService).removeArticle(eq(article));
   }
 
   @Test
@@ -191,13 +189,13 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String body = "new body";
     String description = "new description";
 
-    User anotherUser = new User("test@test.com", "test", "123123", "", "");
+    User anotherUser = User.of("test@test.com", "test", "123123", "", "");
 
     Article article =
-        new Article(
+        Article.of(
             title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
 
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
     given()
         .header("Authorization", "Token " + token)
         .when()

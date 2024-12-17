@@ -1,6 +1,5 @@
 package io.spring.infrastructure.service;
 
-import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +18,7 @@ public class DefaultJwtServiceTest {
 
   @Test
   public void should_generate_and_parse_token() {
-    User user = new User("email@email.com", "username", "123", "", "");
+    User user = User.of("email@email.com", "username", "123", "", "");
     String token = jwtService.toToken(user);
     Assertions.assertNotNull(token);
     Optional<String> optional = jwtService.getSubFromToken(token);

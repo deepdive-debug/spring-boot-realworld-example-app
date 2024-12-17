@@ -1,6 +1,9 @@
 package io.spring.application;
 
-import io.spring.application.data.CommentData;
+import io.spring.api.data.CommentData;
+import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.core.comment.Comment;
+import io.spring.core.comment.CommentRepository;
 import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.CommentReadService;
 import io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class CommentQueryService {
   private CommentReadService commentReadService;
   private UserRelationshipQueryService userRelationshipQueryService;
+  private CommentRepository commentRepository;
 
   public Optional<CommentData> findById(String id, User user) {
     CommentData commentData = commentReadService.findById(id);
@@ -81,5 +85,18 @@ public class CommentQueryService {
       Collections.reverse(comments);
     }
     return new CursorPager<>(comments, page.getDirection(), hasExtra);
+  }
+
+  // 추가
+  public void save(Comment comment) {
+    commentRepository.save(comment);
+  }
+
+  public Comment findCommentById(String articleId, String commentId) {
+    return commentRepository.findById(articleId, commentId).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void remove(Comment comment) {
+    commentRepository.remove(comment);
   }
 }
