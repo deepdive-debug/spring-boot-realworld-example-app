@@ -19,7 +19,7 @@ public class TagsQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_get_all_tags() {
-    articleRepository.save(new Article("test", "test", "test", Arrays.asList("java"), "123"));
+    articleRepository.save(Article.of("test", "test", "test", Arrays.asList("java"), "123"));
     Assertions.assertTrue(tagsQueryService.allTags().contains("java"));
   }
 }

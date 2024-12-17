@@ -64,7 +64,7 @@ public class UsersApiTest {
     String username = "johnjacob";
 
     when(jwtService.toToken(any())).thenReturn("123");
-    User user = new User(email, username, "123", "", defaultAvatar);
+    User user = User.of(email, username, "123", "", defaultAvatar);
     UserData userData = new UserData(user.getId(), email, username, "", defaultAvatar);
     when(userReadService.findById(any())).thenReturn(userData);
 
@@ -134,7 +134,7 @@ public class UsersApiTest {
     String username = "johnjacob";
 
     when(userRepository.findByUsername(eq(username)))
-        .thenReturn(Optional.of(new User(email, username, "123", "bio", "")));
+        .thenReturn(Optional.of(User.of(email, username, "123", "bio", "")));
     when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
 
     Map<String, Object> param = prepareRegisterParameter(email, username);
@@ -156,7 +156,7 @@ public class UsersApiTest {
     String username = "johnjacob2";
 
     when(userRepository.findByEmail(eq(email)))
-        .thenReturn(Optional.of(new User(email, username, "123", "bio", "")));
+        .thenReturn(Optional.of(User.of(email, username, "123", "bio", "")));
 
     when(userRepository.findByUsername(eq(username))).thenReturn(Optional.empty());
 
@@ -195,7 +195,7 @@ public class UsersApiTest {
     String username = "johnjacob2";
     String password = "123";
 
-    User user = new User(email, username, passwordEncoder.encode(password), "", defaultAvatar);
+    User user = User.of(email, username, passwordEncoder.encode(password), "", defaultAvatar);
     UserData userData = new UserData("123", email, username, "", defaultAvatar);
 
     when(userRepository.findByEmail(eq(email))).thenReturn(Optional.of(user));
@@ -238,7 +238,7 @@ public class UsersApiTest {
     String username = "johnjacob2";
     String password = "123";
 
-    User user = new User(email, username, password, "", defaultAvatar);
+    User user = User.of(email, username, password, "", defaultAvatar);
     UserData userData = new UserData(user.getId(), email, username, "", defaultAvatar);
 
     when(userRepository.findByEmail(eq(email))).thenReturn(Optional.of(user));

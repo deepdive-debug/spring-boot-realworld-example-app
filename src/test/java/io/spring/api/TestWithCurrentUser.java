@@ -31,7 +31,7 @@ abstract class TestWithCurrentUser {
     username = "johnjacob";
     defaultAvatar = "https://static.productionready.io/images/smiley-cyrus.jpg";
 
-    user = new User(email, username, "123", "", defaultAvatar);
+    user = User.of(email, username, "123", "", defaultAvatar);
     when(userRepository.findByUsername(eq(username))).thenReturn(Optional.of(user));
     when(userRepository.findById(eq(user.getId()))).thenReturn(Optional.of(user));
 

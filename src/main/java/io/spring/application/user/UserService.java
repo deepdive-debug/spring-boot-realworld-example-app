@@ -1,9 +1,14 @@
 package io.spring.application.user;
 
+import io.spring.api.exception.InvalidAuthenticationException;
+import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Optional;
+
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -54,6 +59,23 @@ public class UserService {
         updateUserParam.image());
     userRepository.save(user);
   }
+
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public User findByUsername(String username) {
+    return userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void saveRelation(FollowRelation followRelation) {
+    userRepository.saveRelation(followRelation);
+  }
+
+  public FollowRelation findRelation(String userId, String targetId) {
+	  return userRepository.findRelation(userId, targetId).orElseThrow(ResourceNotFoundException::new);
+  }
+
 }
 
 @Constraint(validatedBy = UpdateUserValidator.class)

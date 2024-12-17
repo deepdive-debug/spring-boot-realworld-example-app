@@ -57,8 +57,8 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String slug = "test-new-article";
     Instant time = Instant.now();
     Article article =
-        new Article(
-            "Test New Article",
+        Article.of(
+            "Test Article.of",
             "Desc",
             "Body",
             Arrays.asList("java", "spring", "jpg"),
@@ -88,10 +88,10 @@ public class ArticleApiTest extends TestWithCurrentUser {
     List<String> tagList = Arrays.asList("java", "spring", "jpg");
 
     Article originalArticle =
-        new Article("old title", "old description", "old body", tagList, user.getId());
+        Article.of("old title", "old description", "old body", tagList, user.getId());
 
     Article updatedArticle =
-        new Article("new title", "new description", "new body", tagList, user.getId());
+        Article.of("new title", "new description", "new body", tagList, user.getId());
 
     Map<String, Object> updateParam =
         prepareUpdateParam(
@@ -125,10 +125,10 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String description = "new description";
     Map<String, Object> updateParam = prepareUpdateParam(title, body, description);
 
-    User anotherUser = new User("test@test.com", "test", "123123", "", "");
+    User anotherUser = User.of("test@test.com", "test", "123123", "", "");
 
     Article article =
-        new Article(
+        Article.of(
             title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
 
     Instant time = Instant.now();
@@ -172,7 +172,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String description = "description";
 
     Article article =
-        new Article(title, description, body, Arrays.asList("java", "spring", "jpg"), user.getId());
+        Article.of(title, description, body, Arrays.asList("java", "spring", "jpg"), user.getId());
     when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
 
     given()
@@ -191,10 +191,10 @@ public class ArticleApiTest extends TestWithCurrentUser {
     String body = "new body";
     String description = "new description";
 
-    User anotherUser = new User("test@test.com", "test", "123123", "", "");
+    User anotherUser = User.of("test@test.com", "test", "123123", "", "");
 
     Article article =
-        new Article(
+        Article.of(
             title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
 
     when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));

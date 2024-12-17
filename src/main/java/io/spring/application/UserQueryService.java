@@ -1,5 +1,6 @@
 package io.spring.application;
 
+import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.data.UserData;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;
 import java.util.Optional;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 public class UserQueryService {
   private UserReadService userReadService;
 
-  public Optional<UserData> findById(String id) {
-    return Optional.ofNullable(userReadService.findById(id));
+  public UserData findById(String id) {
+    return Optional.ofNullable(userReadService.findById(id))
+        .orElseThrow(ResourceNotFoundException::new);
   }
+
 }

@@ -37,7 +37,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
   public void setUp() throws Exception {
     super.setUp();
     RestAssuredMockMvc.mockMvc(mvc);
-    anotherUser = new User("username@test.com", "username", "123", "", "");
+    anotherUser = User.of("username@test.com", "username", "123", "", "");
     profileData =
         new ProfileData(
             anotherUser.getId(),
@@ -72,12 +72,12 @@ public class ProfileApiTest extends TestWithCurrentUser {
         .prettyPeek()
         .then()
         .statusCode(200);
-    verify(userRepository).saveRelation(new FollowRelation(user.getId(), anotherUser.getId()));
+    verify(userRepository).saveRelation(FollowRelation.of(user.getId(), anotherUser.getId()));
   }
 
   @Test
   public void should_unfollow_user_success() throws Exception {
-    FollowRelation followRelation = new FollowRelation(user.getId(), anotherUser.getId());
+    FollowRelation followRelation = FollowRelation.of(user.getId(), anotherUser.getId());
     when(userRepository.findRelation(eq(user.getId()), eq(anotherUser.getId())))
         .thenReturn(Optional.of(followRelation));
     when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(user)))

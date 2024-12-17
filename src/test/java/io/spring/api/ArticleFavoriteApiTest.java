@@ -47,8 +47,8 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
   public void setUp() throws Exception {
     super.setUp();
     RestAssuredMockMvc.mockMvc(mvc);
-    User anotherUser = new User("other@test.com", "other", "123", "", "");
-    article = new Article("title", "desc", "body", Arrays.asList("java"), anotherUser.getId());
+    User anotherUser = User.of("other@test.com", "other", "123", "", "");
+    article = Article.of("title", "desc", "body", Arrays.asList("java"), anotherUser.getId());
     when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
     ArticleData articleData =
         new ArticleData(
@@ -89,7 +89,7 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
   @Test
   public void should_unfavorite_an_article_success() throws Exception {
     when(articleFavoriteRepository.find(eq(article.getId()), eq(user.getId())))
-        .thenReturn(Optional.of(new ArticleFavorite(article.getId(), user.getId())));
+        .thenReturn(Optional.of(ArticleFavorite.of(article.getId(), user.getId())));
     given()
         .header("Authorization", "Token " + token)
         .when()
@@ -98,6 +98,6 @@ public class ArticleFavoriteApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(200)
         .body("article.id", equalTo(article.getId()));
-    verify(articleFavoriteRepository).remove(new ArticleFavorite(article.getId(), user.getId()));
+    verify(articleFavoriteRepository).remove(ArticleFavorite.of(article.getId(), user.getId()));
   }
 }

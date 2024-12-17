@@ -69,7 +69,7 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
 
     when(articleCommandService.createArticle(any(), any()))
-        .thenReturn(new Article(title, description, body, tagList, user.getId()));
+        .thenReturn(Article.of(title, description, body, tagList, user.getId()));
 
     when(articleQueryService.findBySlug(eq(Article.toSlug(title)), any()))
         .thenReturn(Optional.empty());

@@ -18,7 +18,7 @@ public class MyBatisArticleFavoriteRepositoryTest extends DbTestBase {
 
   @Test
   public void should_save_and_fetch_articleFavorite_success() {
-    ArticleFavorite articleFavorite = new ArticleFavorite("123", "456");
+    ArticleFavorite articleFavorite = ArticleFavorite.of("123", "456");
     articleFavoriteRepository.save(articleFavorite);
     Assertions.assertNotNull(
         articleFavoriteMapper.find(articleFavorite.getArticleId(), articleFavorite.getUserId()));
@@ -26,7 +26,7 @@ public class MyBatisArticleFavoriteRepositoryTest extends DbTestBase {
 
   @Test
   public void should_remove_favorite_success() {
-    ArticleFavorite articleFavorite = new ArticleFavorite("123", "456");
+    ArticleFavorite articleFavorite = ArticleFavorite.of("123", "456");
     articleFavoriteRepository.save(articleFavorite);
     articleFavoriteRepository.remove(articleFavorite);
     Assertions.assertFalse(articleFavoriteRepository.find("123", "456").isPresent());

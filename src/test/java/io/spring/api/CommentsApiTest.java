@@ -48,9 +48,9 @@ public class CommentsApiTest extends TestWithCurrentUser {
   public void setUp() throws Exception {
     RestAssuredMockMvc.mockMvc(mvc);
     super.setUp();
-    article = new Article("title", "desc", "body", Arrays.asList("test", "java"), user.getId());
+    article = Article.of("title", "desc", "body", Arrays.asList("test", "java"), user.getId());
     when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
-    comment = new Comment("comment", user.getId(), article.getId());
+    comment = Comment.of("comment", user.getId(), article.getId());
     commentData =
         new CommentData(
             comment.getId(),
@@ -144,7 +144,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
   @Test
   public void should_get_403_if_not_author_of_article_or_author_of_comment_when_delete_comment()
       throws Exception {
-    User anotherUser = new User("other@example.com", "other", "123", "", "");
+    User anotherUser = User.of("other@example.com", "other", "123", "", "");
     when(userRepository.findByUsername(eq(anotherUser.getUsername())))
         .thenReturn(Optional.of(anotherUser));
     when(jwtService.getSubFromToken(any())).thenReturn(Optional.of(anotherUser.getId()));

@@ -25,13 +25,13 @@ public class ArticleRepositoryTransactionTest {
 
   @Test
   public void transactional_test() {
-    User user = new User("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
+    User user = User.of("aisensiy@gmail.com", "aisensiy", "123", "bio", "default");
     userRepository.save(user);
     Article article =
-        new Article("test", "desc", "body", Arrays.asList("java", "spring"), user.getId());
+        Article.of("test", "desc", "body", Arrays.asList("java", "spring"), user.getId());
     articleRepository.save(article);
     Article anotherArticle =
-        new Article("test", "desc", "body", Arrays.asList("java", "spring", "other"), user.getId());
+        Article.of("test", "desc", "body", Arrays.asList("java", "spring", "other"), user.getId());
     try {
       articleRepository.save(anotherArticle);
     } catch (Exception e) {

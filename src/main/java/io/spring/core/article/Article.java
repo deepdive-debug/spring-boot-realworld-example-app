@@ -53,6 +53,17 @@ public class Article {
         .build();
   }
 
+  public static Article of(String title, String description, String body, List<String> tagList, String userId, Instant createdAt) {
+    return Article.builder()
+        .title(title)
+        .description(description)
+        .body(body)
+        .tags(new HashSet<>(tagList).stream().map(Tag::of).collect(toList()))
+        .userId(userId)
+        .createdAt(createdAt)
+        .build();
+  }
+
   public void update(String title, String description, String body) {
     if (!Util.isEmpty(title)) {
       this.title = title;

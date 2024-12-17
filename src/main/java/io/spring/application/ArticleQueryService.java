@@ -2,9 +2,14 @@ package io.spring.application;
 
 import static java.util.stream.Collectors.toList;
 
+import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.data.ArticleData;
 import io.spring.application.data.ArticleDataList;
 import io.spring.application.data.ArticleFavoriteCount;
+import io.spring.core.article.Article;
+import io.spring.core.article.ArticleRepository;
+import io.spring.core.favorite.ArticleFavorite;
+import io.spring.core.favorite.ArticleFavoriteRepository;
 import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.ArticleFavoritesReadService;
 import io.spring.infrastructure.mybatis.readservice.ArticleReadService;
@@ -26,6 +31,29 @@ public class ArticleQueryService {
   private ArticleReadService articleReadService;
   private UserRelationshipQueryService userRelationshipQueryService;
   private ArticleFavoritesReadService articleFavoritesReadService;
+  private ArticleRepository articleRepository;
+  private ArticleFavoriteRepository articleFavoriteRepository;
+
+  // 추가
+  public Article findBySlug(String slug) {
+    return articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void removeArticle(Article article) {
+    articleRepository.remove(article);
+  }
+
+  public void saveArticleFavorite(ArticleFavorite articleFavorite) {
+    articleFavoriteRepository.save(articleFavorite);
+  }
+
+  public ArticleFavorite findArticleFavorite(String articleId, String userId) {
+    return articleFavoriteRepository.find(articleId, userId).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void removeArticleFavorite(ArticleFavorite favorite) {
+    articleFavoriteRepository.remove(favorite);
+  }
 
   public Optional<ArticleData> findById(String id, User user) {
     ArticleData articleData = articleReadService.findById(id);
