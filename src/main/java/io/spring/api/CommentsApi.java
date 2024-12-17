@@ -7,7 +7,7 @@ import io.spring.application.CommentQueryService;
 import io.spring.application.data.CommentData;
 import io.spring.core.article.Article;
 import io.spring.core.comment.Comment;
-import io.spring.application.service.AuthorizationService;
+import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import java.util.HashMap;
 import java.util.List;

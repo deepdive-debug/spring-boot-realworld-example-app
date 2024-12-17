@@ -13,7 +13,7 @@ import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.UserQueryService;
 import io.spring.application.data.UserData;
 import io.spring.application.user.UserService;
-import io.spring.application.service.JwtService;
+import io.spring.infrastructure.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;

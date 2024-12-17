@@ -1,6 +1,5 @@
 package io.spring.infrastructure.service;
 
-import io.spring.application.service.JwtService;
 import io.spring.core.user.User;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;

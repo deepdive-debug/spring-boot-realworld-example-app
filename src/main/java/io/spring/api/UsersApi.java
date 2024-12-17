@@ -7,7 +7,7 @@ import io.spring.application.data.UserData;
 import io.spring.application.data.UserWithToken;
 import io.spring.application.user.RegisterParam;
 import io.spring.application.user.UserService;
-import io.spring.application.service.JwtService;
+import io.spring.infrastructure.service.JwtService;
 import io.spring.core.user.User;
 
 import java.util.HashMap;

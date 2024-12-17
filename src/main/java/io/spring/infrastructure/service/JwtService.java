@@ -1,4 +1,4 @@
-package io.spring.application.service;
+package io.spring.infrastructure.service;
 
 import io.spring.core.user.User;
 import java.util.Optional;

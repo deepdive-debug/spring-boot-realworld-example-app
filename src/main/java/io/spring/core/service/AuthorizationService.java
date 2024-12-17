@@ -1,4 +1,4 @@
-package io.spring.application.service;
+package io.spring.core.service;
 
 import io.spring.core.article.Article;
 import io.spring.core.comment.Comment;
