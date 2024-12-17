@@ -9,10 +9,11 @@ import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
+import io.spring.api.comment.CommentsApi;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.CommentQueryService;
-import io.spring.application.data.CommentData;
-import io.spring.application.data.ProfileData;
+import io.spring.api.data.CommentData;
+import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.comment.Comment;

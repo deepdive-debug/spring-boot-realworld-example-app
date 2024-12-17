@@ -1,10 +1,10 @@
-package io.spring.api;
+package io.spring.api.user;
 
 import io.spring.application.UserQueryService;
-import io.spring.application.data.UserData;
-import io.spring.application.data.UserWithToken;
-import io.spring.application.user.UpdateUserCommand;
-import io.spring.application.user.UpdateUserParam;
+import io.spring.api.user.response.UserData;
+import io.spring.api.user.response.UserWithToken;
+import io.spring.api.user.request.UpdateUserCommand;
+import io.spring.api.user.request.UpdateUserParam;
 import io.spring.application.user.UserService;
 import io.spring.core.user.User;
 import java.util.HashMap;

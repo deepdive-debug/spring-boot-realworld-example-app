@@ -1,6 +1,6 @@
 package io.spring.application;
 
-import io.spring.application.data.UserData;
+import io.spring.api.user.response.UserData;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;
 import java.util.Optional;
 import lombok.AllArgsConstructor;

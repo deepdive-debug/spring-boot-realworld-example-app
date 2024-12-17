@@ -1,5 +1,7 @@
 package io.spring.application.article;
 
+import io.spring.api.article.request.NewArticleParam;
+import io.spring.api.article.request.UpdateArticleParam;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.user.User;

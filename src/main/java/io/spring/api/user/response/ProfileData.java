@@ -1,4 +1,4 @@
-package io.spring.application.data;
+package io.spring.api.user.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
