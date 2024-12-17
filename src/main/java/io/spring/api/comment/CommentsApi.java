@@ -1,6 +1,8 @@
-package io.spring.api;
+package io.spring.api.comment;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
+
+import io.spring.api.comment.request.NewCommentParam;
 import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.CommentQueryService;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -91,6 +92,3 @@ public class CommentsApi {
     };
   }
 }
-
-@JsonRootName("comment")
-record NewCommentParam(@NotBlank(message = "can't be empty") String body) {}
