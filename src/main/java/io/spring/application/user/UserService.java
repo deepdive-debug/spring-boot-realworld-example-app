@@ -1,5 +1,8 @@
 package io.spring.application.user;
 
+import io.spring.api.user.request.RegisterParam;
+import io.spring.api.user.request.UpdateUserCommand;
+import io.spring.api.user.request.UpdateUserParam;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import javax.validation.Valid;

@@ -1,13 +1,12 @@
-package io.spring.api;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+package io.spring.api.user;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import io.spring.api.exception.InvalidAuthenticationException;
+import io.spring.api.user.request.LoginParam;
 import io.spring.application.UserQueryService;
-import io.spring.application.data.UserData;
-import io.spring.application.data.UserWithToken;
-import io.spring.application.user.RegisterParam;
+import io.spring.api.user.response.UserData;
+import io.spring.api.user.response.UserWithToken;
+import io.spring.api.user.request.RegisterParam;
 import io.spring.application.user.UserService;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
@@ -65,8 +64,3 @@ public class UsersApi {
     };
   }
 }
-
-@JsonRootName("user")
-record LoginParam(
-    @NotBlank(message = "can't be empty") @Email(message = "should be an email") String email,
-    @NotBlank(message = "can't be empty") String password) {}

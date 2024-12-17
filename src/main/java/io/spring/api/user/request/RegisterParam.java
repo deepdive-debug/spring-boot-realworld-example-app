@@ -1,8 +1,11 @@
-package io.spring.application.user;
+package io.spring.api.user.request;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import io.spring.application.user.DuplicatedEmailConstraint;
+import io.spring.application.user.DuplicatedUsernameConstraint;
 
 @JsonRootName("user")
 public record RegisterParam(

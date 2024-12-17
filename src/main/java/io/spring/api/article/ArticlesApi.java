@@ -1,9 +1,9 @@
-package io.spring.api;
+package io.spring.api.article;
 
 import io.spring.application.ArticleQueryService;
 import io.spring.application.Page;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.application.article.NewArticleParam;
+import io.spring.api.article.request.NewArticleParam;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package io.spring.infrastructure.mybatis.readservice;
 
 import io.spring.application.CursorPageParameter;
-import io.spring.application.data.CommentData;
+import io.spring.api.comment.response.CommentData;
 import java.time.Instant;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;

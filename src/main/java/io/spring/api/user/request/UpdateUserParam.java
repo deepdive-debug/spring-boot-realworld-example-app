@@ -1,4 +1,4 @@
-package io.spring.application.user;
+package io.spring.api.user.request;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import javax.validation.constraints.Email;

@@ -5,6 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.spring.api.user.request.UpdateUserCommand;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 

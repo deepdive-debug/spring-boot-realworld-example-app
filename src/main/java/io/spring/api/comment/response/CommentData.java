@@ -1,10 +1,12 @@
-package io.spring.application.data;
+package io.spring.api.comment.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.spring.application.DateTimeCursor;
 import io.spring.application.Node;
 import java.time.Instant;
+
+import io.spring.api.user.response.ProfileData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

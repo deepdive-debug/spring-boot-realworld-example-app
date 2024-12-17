@@ -1,7 +1,7 @@
 package io.spring;
 
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.ProfileData;
+import io.spring.api.article.response.ArticleData;
+import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
 import java.time.Instant;

@@ -1,4 +1,4 @@
-package io.spring.application.data;
+package io.spring.api.article.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
