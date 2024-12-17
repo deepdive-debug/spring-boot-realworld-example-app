@@ -1,6 +1,5 @@
 package io.spring.api.user;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.api.user.request.LoginParam;
 import io.spring.application.UserQueryService;
@@ -8,15 +7,13 @@ import io.spring.api.user.response.UserData;
 import io.spring.api.user.response.UserWithToken;
 import io.spring.api.user.request.RegisterParam;
 import io.spring.application.user.UserService;
-import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
+import io.spring.infrastructure.service.JwtService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

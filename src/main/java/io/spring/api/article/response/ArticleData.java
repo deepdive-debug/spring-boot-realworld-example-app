@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleData implements io.spring.application.Node {
+public final class ArticleData implements Node {
   private String id;
   private String slug;
   private String title;
