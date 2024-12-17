@@ -2,7 +2,7 @@ package io.spring.application.article;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.List;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @JsonRootName("article")
 public record NewArticleParam(
