@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 @Constraint(validatedBy = UpdateUserValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.FIELD})
+@Target(ElementType.TYPE)
 public @interface UpdateUserConstraint {
 	String message() default "invalid update param";
 
