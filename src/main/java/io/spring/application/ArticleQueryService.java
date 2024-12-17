@@ -2,10 +2,10 @@ package io.spring.application;
 
 import static java.util.stream.Collectors.toList;
 
+import io.spring.api.article.response.ArticleDataList;
+import io.spring.api.article.response.ArticleFavoriteCount;
+import io.spring.api.data.ArticleData;
 import io.spring.api.exception.ResourceNotFoundException;
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.ArticleDataList;
-import io.spring.application.data.ArticleFavoriteCount;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.favorite.ArticleFavorite;
