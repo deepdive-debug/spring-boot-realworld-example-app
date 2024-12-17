@@ -55,10 +55,16 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'io.rest-assured:rest-assured:4.5.1'
-    testImplementation 'io.rest-assured:json-path:4.5.1'
-    testImplementation 'io.rest-assured:xml-path:4.5.1'
-    testImplementation 'io.rest-assured:spring-mock-mvc:4.5.1'
+    //groovy 버전 명시적 설정
+    testImplementation 'org.codehaus.groovy:groovy:3.0.9' // rest-assured와 호환되는 버전
+    testImplementation 'org.codehaus.groovy:groovy-json:3.0.9'
+    testImplementation 'org.codehaus.groovy:groovy-xml:3.0.9'
+
+    testImplementation 'io.rest-assured:rest-assured:5.3.2'
+    testImplementation 'io.rest-assured:json-path:5.3.2'
+    testImplementation 'io.rest-assured:xml-path:5.3.2'
+    testImplementation 'io.rest-assured:spring-mock-mvc:5.3.2'
+
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
