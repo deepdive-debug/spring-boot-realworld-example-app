@@ -17,7 +17,6 @@ import io.spring.application.article.ArticleCommandService;
 import io.spring.application.data.ArticleData;
 import io.spring.application.data.ProfileData;
 import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
 import io.spring.core.user.User;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -41,8 +40,6 @@ public class ArticleApiTest extends TestWithCurrentUser {
 
   @MockBean private ArticleQueryService articleQueryService;
 
-  @MockBean private ArticleRepository articleRepository;
-
   @MockBean ArticleCommandService articleCommandService;
 
   @Override
@@ -58,7 +55,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     Instant time = Instant.now();
     Article article =
         Article.of(
-            "Test Article.of",
+            "Test New Article",
             "Desc",
             "Body",
             Arrays.asList("java", "spring", "jpg"),
@@ -100,22 +97,22 @@ public class ArticleApiTest extends TestWithCurrentUser {
     ArticleData updatedArticleData =
         TestHelper.getArticleDataFromArticleAndUser(updatedArticle, user);
 
-    when(articleRepository.findBySlug(eq(originalArticle.getSlug())))
-        .thenReturn(Optional.of(originalArticle));
+    when(articleQueryService.findBySlug(eq(originalArticle.getSlug())))
+        .thenReturn(originalArticle);
     when(articleCommandService.updateArticle(eq(originalArticle), any()))
         .thenReturn(updatedArticle);
     when(articleQueryService.findBySlug(eq(updatedArticle.getSlug()), eq(user)))
         .thenReturn(Optional.of(updatedArticleData));
 
-    given()
-        .contentType("application/json")
-        .header("Authorization", "Token " + token)
-        .body(updateParam)
-        .when()
-        .put("/articles/{slug}", originalArticle.getSlug())
-        .then()
-        .statusCode(200)
-        .body("article.slug", equalTo(updatedArticleData.getSlug()));
+      given()
+          .contentType("application/json")
+          .header("Authorization", "Token " + token)
+          .body(updateParam)
+          .when()
+          .put("/articles/{slug}", originalArticle.getSlug())
+          .then()
+          .statusCode(200)
+          .body("article.slug", equalTo(updatedArticleData.getSlug()));
   }
 
   @Test
@@ -151,7 +148,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
                 anotherUser.getImage(),
                 false));
 
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
     when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user)))
         .thenReturn(Optional.of(articleData));
 
@@ -173,7 +170,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
 
     Article article =
         Article.of(title, description, body, Arrays.asList("java", "spring", "jpg"), user.getId());
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
 
     given()
         .header("Authorization", "Token " + token)
@@ -182,7 +179,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(204);
 
-    verify(articleRepository).remove(eq(article));
+    verify(articleQueryService).removeArticle(eq(article));
   }
 
   @Test
@@ -197,7 +194,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         Article.of(
             title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
 
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
+    when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
     given()
         .header("Authorization", "Token " + token)
         .when()

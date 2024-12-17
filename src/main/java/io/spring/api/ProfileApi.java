@@ -47,6 +47,7 @@ public class ProfileApi {
       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
       User target = userService.findByUsername(username);
       FollowRelation relation = userService.findRelation(user.getId(), target.getId());
+      userService.removeRelation(relation);
       return profileResponse(profileQueryService.findByUsername(username, user).get());
   }
 

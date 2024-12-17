@@ -53,8 +53,7 @@ public class ArticleApi {
       Article updatedArticle =
           articleCommandService.updateArticle(article, updateArticleParam);
       return ResponseEntity.ok(
-          articleResponse(
-              articleQueryService.findBySlug(updatedArticle.getSlug(), user).get()));
+          articleResponse(articleQueryService.findBySlug(updatedArticle.getSlug(), user).orElseThrow()));
   }
 
   @DeleteMapping

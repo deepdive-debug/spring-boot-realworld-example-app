@@ -29,7 +29,7 @@ public class Article {
   private Instant updatedAt;
 
   @Builder(access = AccessLevel.PRIVATE)
-  private Article(String userId, String title, String description, String body, List<Tag> tags,
+  private Article(String id, String userId, String title, String description, String body, List<Tag> tags,
       Instant createdAt, Instant updatedAt) {
     this.userId = userId;
     this.id = UUID.randomUUID().toString();

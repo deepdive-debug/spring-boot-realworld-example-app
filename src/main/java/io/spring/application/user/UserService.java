@@ -76,6 +76,10 @@ public class UserService {
 	  return userRepository.findRelation(userId, targetId).orElseThrow(ResourceNotFoundException::new);
   }
 
+  public void removeRelation(FollowRelation relation) {
+    userRepository.removeRelation(relation);
+  }
+
 }
 
 @Constraint(validatedBy = UpdateUserValidator.class)

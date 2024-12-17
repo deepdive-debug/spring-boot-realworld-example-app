@@ -10,7 +10,9 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ProfileQueryService;
+import io.spring.application.UserQueryService;
 import io.spring.application.data.ProfileData;
+import io.spring.application.user.UserService;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import java.util.Optional;
@@ -29,6 +31,8 @@ public class ProfileApiTest extends TestWithCurrentUser {
 
   @Autowired private MockMvc mvc;
 
+  @MockBean private UserService userService;
+
   @MockBean private ProfileQueryService profileQueryService;
 
   private ProfileData profileData;
@@ -45,8 +49,8 @@ public class ProfileApiTest extends TestWithCurrentUser {
             anotherUser.getBio(),
             anotherUser.getImage(),
             false);
-    when(userRepository.findByUsername(eq(anotherUser.getUsername())))
-        .thenReturn(Optional.of(anotherUser));
+    when(userService.findByUsername(eq(anotherUser.getUsername())))
+        .thenReturn(anotherUser);
   }
 
   @Test
@@ -72,14 +76,14 @@ public class ProfileApiTest extends TestWithCurrentUser {
         .prettyPeek()
         .then()
         .statusCode(200);
-    verify(userRepository).saveRelation(FollowRelation.of(user.getId(), anotherUser.getId()));
+    verify(userService).saveRelation(FollowRelation.of(user.getId(), anotherUser.getId()));
   }
 
   @Test
   public void should_unfollow_user_success() throws Exception {
     FollowRelation followRelation = FollowRelation.of(user.getId(), anotherUser.getId());
-    when(userRepository.findRelation(eq(user.getId()), eq(anotherUser.getId())))
-        .thenReturn(Optional.of(followRelation));
+    when(userService.findRelation(eq(user.getId()), eq(anotherUser.getId())))
+        .thenReturn(followRelation);
     when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(user)))
         .thenReturn(Optional.of(profileData));
 
@@ -91,6 +95,6 @@ public class ProfileApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(200);
 
-    verify(userRepository).removeRelation(eq(followRelation));
+    verify(userService).removeRelation(eq(followRelation));
   }
 }

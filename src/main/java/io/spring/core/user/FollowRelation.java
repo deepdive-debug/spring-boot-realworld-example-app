@@ -2,11 +2,13 @@ package io.spring.core.user;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class FollowRelation {
   private String userId;
   private String targetId;

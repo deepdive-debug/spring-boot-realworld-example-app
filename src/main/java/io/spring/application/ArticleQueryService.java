@@ -34,27 +34,6 @@ public class ArticleQueryService {
   private ArticleRepository articleRepository;
   private ArticleFavoriteRepository articleFavoriteRepository;
 
-  // 추가
-  public Article findBySlug(String slug) {
-    return articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
-  }
-
-  public void removeArticle(Article article) {
-    articleRepository.remove(article);
-  }
-
-  public void saveArticleFavorite(ArticleFavorite articleFavorite) {
-    articleFavoriteRepository.save(articleFavorite);
-  }
-
-  public ArticleFavorite findArticleFavorite(String articleId, String userId) {
-    return articleFavoriteRepository.find(articleId, userId).orElseThrow(ResourceNotFoundException::new);
-  }
-
-  public void removeArticleFavorite(ArticleFavorite favorite) {
-    articleFavoriteRepository.remove(favorite);
-  }
-
   public Optional<ArticleData> findById(String id, User user) {
     ArticleData articleData = articleReadService.findById(id);
     if (articleData == null) {
@@ -209,4 +188,26 @@ public class ArticleQueryService {
             userRelationshipQueryService.isUserFollowing(
                 user.getId(), articleData.getProfileData().getId()));
   }
+
+  // 추가
+  public Article findBySlug(String slug) {
+    return articleRepository.findBySlug(slug).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void removeArticle(Article article) {
+    articleRepository.remove(article);
+  }
+
+  public void saveArticleFavorite(ArticleFavorite articleFavorite) {
+    articleFavoriteRepository.save(articleFavorite);
+  }
+
+  public ArticleFavorite findArticleFavorite(String articleId, String userId) {
+    return articleFavoriteRepository.find(articleId, userId).orElseThrow(ResourceNotFoundException::new);
+  }
+
+  public void removeArticleFavorite(ArticleFavorite favorite) {
+    articleFavoriteRepository.remove(favorite);
+  }
+
 }
