@@ -1,4 +1,4 @@
-package io.spring.application.data;
+package io.spring.api.data;
 
 import io.spring.application.PageCursor;
 

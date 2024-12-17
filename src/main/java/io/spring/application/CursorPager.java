@@ -1,6 +1,6 @@
 package io.spring.application;
 
-import io.spring.application.data.Node;
+import io.spring.api.data.Node;
 import java.util.List;
 import lombok.Getter;
 

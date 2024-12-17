@@ -15,7 +15,7 @@
         <result column="userImage" property="image"/>
     </resultMap>
 
-    <resultMap id="articleData" type="io.spring.api.article.response.ArticleData">
+    <resultMap id="articleData" type="io.spring.api.data.ArticleData">
         <id column="articleId" property="id"/>
         <result column="articleSlug" property="slug"/>
         <result column="articleTitle" property="title"/>
@@ -29,7 +29,7 @@
         </collection>
     </resultMap>
 
-    <resultMap id="commentData" type="io.spring.api.comment.response.CommentData">
+    <resultMap id="commentData" type="io.spring.api.data.CommentData">
         <id column="commentId" property="id"/>
         <result column="commentBody" property="body"/>
         <result column="commentCreatedAt" property="createdAt"/>

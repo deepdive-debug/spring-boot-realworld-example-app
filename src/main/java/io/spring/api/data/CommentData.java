@@ -1,4 +1,4 @@
-package io.spring.api.comment.response;
+package io.spring.api.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

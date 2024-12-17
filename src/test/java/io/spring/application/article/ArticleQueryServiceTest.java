@@ -6,7 +6,7 @@ import io.spring.application.CursorPager;
 import io.spring.application.CursorPager.Direction;
 import io.spring.application.DateTimeCursor;
 import io.spring.application.Page;
-import io.spring.api.article.response.ArticleData;
+import io.spring.api.data.ArticleData;
 import io.spring.api.article.response.ArticleDataList;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;

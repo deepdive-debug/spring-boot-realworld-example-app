@@ -12,7 +12,7 @@ import io.spring.JacksonCustomizations;
 import io.spring.api.comment.CommentsApi;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.CommentQueryService;
-import io.spring.api.comment.response.CommentData;
+import io.spring.api.data.CommentData;
 import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;

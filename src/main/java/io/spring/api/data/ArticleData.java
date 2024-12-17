@@ -1,4 +1,4 @@
-package io.spring.api.article.response;
+package io.spring.api.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.spring.application.DateTimeCursor;

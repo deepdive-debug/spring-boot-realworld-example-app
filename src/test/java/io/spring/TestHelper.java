@@ -1,6 +1,6 @@
 package io.spring;
 
-import io.spring.api.article.response.ArticleData;
+import io.spring.api.data.ArticleData;
 import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;

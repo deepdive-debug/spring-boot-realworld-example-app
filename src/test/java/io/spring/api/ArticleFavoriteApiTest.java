@@ -12,7 +12,7 @@ import io.spring.JacksonCustomizations;
 import io.spring.api.article.ArticleFavoriteApi;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.application.ArticleQueryService;
-import io.spring.api.article.response.ArticleData;
+import io.spring.api.data.ArticleData;
 import io.spring.api.user.response.ProfileData;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
