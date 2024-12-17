@@ -1,7 +1,7 @@
-package io.spring.api;
+package io.spring.api.article;
 
 import io.spring.application.ArticleQueryService;
-import io.spring.application.data.ArticleData;
+import io.spring.api.data.ArticleData;
 import io.spring.core.article.Article;
 import io.spring.core.favorite.ArticleFavorite;
 import io.spring.core.user.User;

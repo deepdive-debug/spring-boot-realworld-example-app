@@ -1,17 +1,12 @@
 package io.spring.application.user;
 
-import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.user.request.RegisterParam;
+import io.spring.api.user.request.UpdateUserCommand;
+import io.spring.api.user.request.UpdateUserParam;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.Optional;
-
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,8 +44,8 @@ public class UserService {
   }
 
   public void updateUser(@Valid UpdateUserCommand command) {
-    User user = command.getTargetUser();
-    UpdateUserParam updateUserParam = command.getParam();
+    User user = command.targetUser();
+    UpdateUserParam updateUserParam = command.param();
     user.update(
         updateUserParam.email(),
         updateUserParam.username(),
@@ -73,6 +68,7 @@ public class UserService {
   }
 
   public FollowRelation findRelation(String userId, String targetId) {
+	  Object ResourceNotFoundException;
 	  return userRepository.findRelation(userId, targetId).orElseThrow(ResourceNotFoundException::new);
   }
 
@@ -80,53 +76,4 @@ public class UserService {
     userRepository.removeRelation(relation);
   }
 
-}
-
-@Constraint(validatedBy = UpdateUserValidator.class)
-@Retention(RetentionPolicy.RUNTIME)
-@interface UpdateUserConstraint {
-
-  String message() default "invalid update param";
-
-  Class[] groups() default {};
-
-  Class[] payload() default {};
-}
-
-class UpdateUserValidator implements ConstraintValidator<UpdateUserConstraint, UpdateUserCommand> {
-
-  @Autowired private UserRepository userRepository;
-
-  @Override
-  public boolean isValid(UpdateUserCommand value, ConstraintValidatorContext context) {
-    String inputEmail = value.getParam().email();
-    String inputUsername = value.getParam().username();
-    final User targetUser = value.getTargetUser();
-
-    boolean isEmailValid =
-        userRepository.findByEmail(inputEmail).map(user -> user.equals(targetUser)).orElse(true);
-    boolean isUsernameValid =
-        userRepository
-            .findByUsername(inputUsername)
-            .map(user -> user.equals(targetUser))
-            .orElse(true);
-    if (isEmailValid && isUsernameValid) {
-      return true;
-    } else {
-      context.disableDefaultConstraintViolation();
-      if (!isEmailValid) {
-        context
-            .buildConstraintViolationWithTemplate("email already exist")
-            .addPropertyNode("email")
-            .addConstraintViolation();
-      }
-      if (!isUsernameValid) {
-        context
-            .buildConstraintViolationWithTemplate("username already exist")
-            .addPropertyNode("username")
-            .addConstraintViolation();
-      }
-      return false;
-    }
-  }
 }

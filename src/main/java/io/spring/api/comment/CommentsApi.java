@@ -1,10 +1,10 @@
-package io.spring.api;
+package io.spring.api.comment;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
+import io.spring.api.comment.request.NewCommentParam;
 import io.spring.api.exception.NoAuthorizationException;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.CommentQueryService;
-import io.spring.application.data.CommentData;
+import io.spring.api.data.CommentData;
 import io.spring.core.article.Article;
 import io.spring.core.comment.Comment;
 import io.spring.core.service.AuthorizationService;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -80,6 +80,3 @@ public class CommentsApi {
     };
   }
 }
-
-@JsonRootName("comment")
-record NewCommentParam(@NotBlank(message = "can't be empty") String body) {}

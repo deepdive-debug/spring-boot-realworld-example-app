@@ -15,8 +15,8 @@ import io.spring.application.CursorPageParameter;
 import io.spring.application.CursorPager;
 import io.spring.application.CursorPager.Direction;
 import io.spring.application.DateTimeCursor;
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.CommentData;
+import io.spring.api.data.ArticleData;
+import io.spring.api.data.CommentData;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.graphql.DgsConstants.ARTICLEPAYLOAD;
@@ -48,7 +48,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
@@ -94,7 +94,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     Profile profile = dfe.getSource();
@@ -144,7 +144,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
@@ -198,7 +198,7 @@ public class ArticleDatafetcher {
       @InputArgument("before") String before,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);
@@ -254,7 +254,7 @@ public class ArticleDatafetcher {
       @InputArgument("withTag") String withTag,
       DgsDataFetchingEnvironment dfe) {
     if (first == null && last == null) {
-      throw new IllegalArgumentException("first 和 last 必须只存在一个");
+      throw new IllegalArgumentException("'first' and 'last' cannot both be null.");
     }
 
     User current = SecurityUtil.getCurrentUser().orElse(null);

@@ -1,7 +1,6 @@
 package io.spring.application;
 
-import io.spring.api.exception.ResourceNotFoundException;
-import io.spring.application.data.CommentData;
+import io.spring.api.data.CommentData;
 import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
 import io.spring.core.user.User;

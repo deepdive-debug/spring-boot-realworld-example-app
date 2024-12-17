@@ -1,15 +1,17 @@
-package io.spring.application.data;
+package io.spring.api.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.spring.application.DateTimeCursor;
 import java.time.Instant;
 import java.util.List;
+
+import io.spring.api.user.response.ProfileData;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleData implements io.spring.application.Node {
+public final class ArticleData implements Node {
   private String id;
   private String slug;
   private String title;

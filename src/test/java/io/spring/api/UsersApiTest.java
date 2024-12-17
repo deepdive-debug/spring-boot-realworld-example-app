@@ -10,13 +10,14 @@ import static org.mockito.Mockito.when;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.JacksonCustomizations;
 import io.spring.api.security.WebSecurityConfig;
+import io.spring.api.user.UsersApi;
 import io.spring.application.UserQueryService;
-import io.spring.application.data.UserData;
+import io.spring.api.user.response.UserData;
 import io.spring.application.user.UserService;
-import io.spring.infrastructure.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.mybatis.readservice.UserReadService;
+import io.spring.infrastructure.service.DefaultJwtService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class UsersApiTest {
 
   @MockBean private UserRepository userRepository;
 
-  @MockBean private JwtService jwtService;
+  @MockBean private DefaultJwtService jwtService;
 
   @MockBean private UserReadService userReadService;
 

@@ -1,11 +1,11 @@
-package io.spring.api;
+package io.spring.api.article;
 
 import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.article.ArticleCommandService;
-import io.spring.application.article.UpdateArticleParam;
-import io.spring.application.data.ArticleData;
+import io.spring.api.article.request.UpdateArticleParam;
+import io.spring.api.data.ArticleData;
 import io.spring.core.article.Article;
 import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
@@ -37,9 +37,9 @@ public class ArticleApi {
         .findBySlug(slug, user)
         .map(articleData -> ResponseEntity.ok(articleResponse(articleData)))
         .orElseThrow(ResourceNotFoundException::new);
-  } 
+  }
 
-  @PutMapping 
+  @PutMapping
   public ResponseEntity<?> updateArticle(
       @PathVariable("slug") String slug,
       @AuthenticationPrincipal User user,

@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface JwtService {
+public sealed interface JwtService permits DefaultJwtService {
   String toToken(User user);
 
   Optional<String> getSubFromToken(String token);

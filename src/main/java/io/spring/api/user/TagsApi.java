@@ -1,4 +1,4 @@
-package io.spring.api;
+package io.spring.api.user;
 
 import io.spring.application.TagsQueryService;
 import java.util.HashMap;

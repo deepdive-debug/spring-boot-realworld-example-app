@@ -1,7 +1,7 @@
 package io.spring.application.comment;
 
 import io.spring.application.CommentQueryService;
-import io.spring.application.data.CommentData;
+import io.spring.api.data.CommentData;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.comment.Comment;
