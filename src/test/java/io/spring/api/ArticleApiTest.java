@@ -60,8 +60,10 @@ public class ArticleApiTest {
     when(articleService.getArticles(page, size)).thenReturn(paginatedResponse);
 
     given()
+        .queryParam("page", page)
+        .queryParam("size", size)
         .when()
-        .get("/articles?page={page}&size={size}", page, size)
+        .get("/articles")
         .then()
         .statusCode(200)
         .body("contents[0].slug", equalTo("slug1"))
@@ -92,8 +94,10 @@ public class ArticleApiTest {
     );
 
     given()
+        .queryParam("page", 0)
+        .queryParam("size", 1)
         .when()
-        .get("/articles?page=0&size=1")
+        .get("/articles")
         .then()
         .statusCode(200)
         .body("contents[0].slug", equalTo(slug))
