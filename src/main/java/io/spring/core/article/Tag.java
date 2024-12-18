@@ -1,26 +1,27 @@
 package io.spring.core.article;
 
-import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import io.spring.core.BaseTimeEntity;
+import jakarta.persistence.*;
+import lombok.*;
 
-@NoArgsConstructor
+@Entity
 @Getter
-@EqualsAndHashCode(of = "name")
-public class Tag {
-  private String id;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Tag extends BaseTimeEntity {
+
+  @Column(nullable = false, unique = true)
   private String name;
 
-  @Builder(access = AccessLevel.PRIVATE)
-  private Tag(String id, String name) {
-    this.id = id;
-    this.name = name;
-  }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "article_id", nullable = false)
+  private Article article;
 
-  public static Tag of(String name) {
-    return Tag.builder().id(UUID.randomUUID().toString()).name(name).build();
+  public static Tag create(String name, Article article) {
+    return Tag.builder()
+        .name(name)
+        .article(article)
+        .build();
   }
 }

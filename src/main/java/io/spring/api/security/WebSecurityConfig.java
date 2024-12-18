@@ -18,13 +18,21 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import io.spring.core.user.UserRepository;
+import io.spring.infrastructure.service.JwtService;
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+  private final UserRepository userRepository;
+  private final JwtService jwtService;
 
   @Bean
   public JwtTokenFilter jwtTokenFilter() {
-    return new JwtTokenFilter();
+    return new JwtTokenFilter(userRepository, jwtService);
   }
 
   @Bean

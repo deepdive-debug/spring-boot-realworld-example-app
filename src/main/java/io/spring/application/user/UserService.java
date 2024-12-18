@@ -1,37 +1,42 @@
 package io.spring.application.user;
 
+import io.spring.api.exception.InvalidAuthenticationException;
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.user.request.LoginParam;
 import io.spring.api.user.request.RegisterParam;
 import io.spring.api.user.request.UpdateUserCommand;
 import io.spring.api.user.request.UpdateUserParam;
+import io.spring.api.user.response.UserData;
+import io.spring.api.user.response.UserPersistResponse;
+import io.spring.api.user.response.UserResponse;
+import io.spring.api.user.response.UserWithToken;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
+import io.spring.infrastructure.service.JwtService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
+@RequiredArgsConstructor
 public class UserService {
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
+
+  @Value("${image.default}")
   private String defaultImage;
-  private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  public UserService(
-      UserRepository userRepository,
-      @Value("${image.default}") String defaultImage,
-      PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
-    this.defaultImage = defaultImage;
-    this.passwordEncoder = passwordEncoder;
-  }
-
-  public User createUser(@Valid RegisterParam registerParam) {
+  @Transactional
+  public UserPersistResponse createUser(@Valid RegisterParam registerParam) {
     User user =
         User.of(
             registerParam.email(),
@@ -40,9 +45,22 @@ public class UserService {
             "",
             defaultImage);
     userRepository.save(user);
-    return user;
+    return UserPersistResponse.from(user);
   }
 
+  public UserWithToken login(LoginParam loginParam) {
+    User user = userRepository.findByEmail(loginParam.email())
+        .orElseThrow(ResourceNotFoundException::new);
+
+    if (passwordEncoder.matches(loginParam.password(), user.getPassword())) {
+      return UserWithToken.of(user, jwtService.toToken(user));
+
+    } else {
+      throw new InvalidAuthenticationException();
+    }
+  }
+
+  @Transactional
   public void updateUser(@Valid UpdateUserCommand command) {
     User user = command.targetUser();
     UpdateUserParam updateUserParam = command.param();
@@ -63,18 +81,25 @@ public class UserService {
     return userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
   }
 
-  public void saveRelation(FollowRelation followRelation) {
-    userRepository.saveRelation(followRelation);
-  }
+  // public void saveRelation(FollowRelation followRelation) {
+  //   userRepository.saveRelation(followRelation);
+  // }
+  //
+  // public FollowRelation findRelation(String userId, String targetId) {
+  //   Object ResourceNotFoundException;
+  //   return userRepository
+  //       .findRelation(userId, targetId)
+  //       .orElseThrow(ResourceNotFoundException::new);
+  // }
+  //
+  // public void removeRelation(FollowRelation relation) {
+  //   userRepository.removeRelation(relation);
+  // }
 
-  public FollowRelation findRelation(String userId, String targetId) {
-    Object ResourceNotFoundException;
-    return userRepository
-        .findRelation(userId, targetId)
+  public UserResponse getUserInfo(String id) {
+    User user = userRepository.findById(id)
         .orElseThrow(ResourceNotFoundException::new);
-  }
 
-  public void removeRelation(FollowRelation relation) {
-    userRepository.removeRelation(relation);
+    return UserResponse.of(user);
   }
 }
