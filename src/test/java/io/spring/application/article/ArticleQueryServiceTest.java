@@ -1,6 +1,5 @@
 package io.spring.application.article;
 
-import io.spring.api.article.response.ArticleDataList;
 import io.spring.api.data.ArticleData;
 import io.spring.application.ArticleQueryService;
 import io.spring.application.CursorPageParameter;
