@@ -1,11 +1,7 @@
 package io.spring.core.comment;
 
-import java.util.Optional;
 
-public interface CommentRepository {
-  void save(Comment comment);
+import org.springframework.data.jpa.repository.JpaRepository;
 
-  Optional<Comment> findById(String articleId, String id);
-
-  void remove(Comment comment);
+public interface CommentRepository extends JpaRepository<Comment, String> {
 }

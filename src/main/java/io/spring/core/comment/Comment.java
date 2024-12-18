@@ -1,39 +1,54 @@
 package io.spring.core.comment;
 
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+import static org.hibernate.annotations.UuidGenerator.Style.RANDOM;
+
 import java.time.Instant;
 import java.util.UUID;
+
+import org.hibernate.annotations.UuidGenerator;
+
+import io.spring.core.BaseTimeEntity;
+import io.spring.core.article.Article;
+import io.spring.core.user.User;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Getter
-@NoArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Comment {
-  private String id;
-  private String body;
-  private String userId;
-  private String articleId;
-  private Instant createdAt;
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+public class Comment extends BaseTimeEntity {
 
-  @Builder(access = AccessLevel.PRIVATE)
-  private Comment(String id, String body, String userId, String articleId, Instant createdAt) {
-    this.id = id;
-    this.body = body;
-    this.userId = userId;
-    this.articleId = articleId;
-    this.createdAt = createdAt;
+  @Column(nullable = false)
+  private String body;
+
+  @ManyToOne(fetch = LAZY)
+  private User commenter;
+
+  @ManyToOne(fetch = LAZY)
+  private Article article;
+
+  public static Comment create(String body, User commenter, Article article) {
+    return Comment.builder()
+        .body(body)
+        .commenter(commenter)
+        .article(article)
+        .build();
   }
 
-  public static Comment of(String body, String userId, String articleId) {
-    return Comment.builder()
-        .id(UUID.randomUUID().toString())
-        .body(body)
-        .userId(userId)
-        .articleId(articleId)
-        .createdAt(Instant.now())
-        .build();
+  public void update(String body){
+    this.body = body;
   }
 }
