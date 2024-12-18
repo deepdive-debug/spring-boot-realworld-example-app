@@ -27,8 +27,8 @@ public record ArticleResponse(
 			article.getCreatedAt(),
 			article.getUpdatedAt(),
 			UserResponse.of(article.getAuthor()),
-			article.getTags().stream().map(TagResponse::of).toList(),
-			article.getComments().stream().map(CommentResponse::of).toList()
+			article.getTags().stream().map(TagResponse::from).toList(),
+			article.getComments().stream().map(CommentResponse::from).toList()
 		);
 	}
 }

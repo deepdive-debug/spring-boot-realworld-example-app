@@ -10,7 +10,6 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.ProfileApi;
 import io.spring.api.user.response.ProfileData;
-import io.spring.application.ProfileQueryService;
 import io.spring.application.user.UserService;
 import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;

@@ -46,7 +46,7 @@ public class ArticleApi {
   }
 
   @PostMapping
-  public ResponseEntity createArticle(
+  public ResponseEntity<ArticlePersistResponse> createArticle(
       @Valid @RequestBody NewArticleParam newArticleParam, @AuthenticationPrincipal User user) {
     Article article = articleService.createArticle(newArticleParam, user);
     return ResponseEntity.status(CREATED).body(ArticlePersistResponse.of(article.getSlug()));

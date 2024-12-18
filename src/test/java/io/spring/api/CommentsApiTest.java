@@ -12,8 +12,6 @@ import io.spring.api.comment.CommentsApi;
 import io.spring.api.data.CommentData;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.response.ProfileData;
-import io.spring.application.ArticleQueryService;
-import io.spring.application.CommentQueryService;
 import io.spring.core.article.Article;
 import io.spring.core.comment.Comment;
 import io.spring.core.user.User;

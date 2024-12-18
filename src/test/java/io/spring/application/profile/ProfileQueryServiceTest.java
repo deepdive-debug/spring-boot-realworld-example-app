@@ -1,7 +1,6 @@
 package io.spring.application.profile;
 
 import io.spring.api.user.response.ProfileData;
-import io.spring.application.ProfileQueryService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.DbTestBase;
