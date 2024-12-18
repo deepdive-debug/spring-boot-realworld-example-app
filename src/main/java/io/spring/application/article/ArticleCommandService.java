@@ -21,28 +21,7 @@ import org.springframework.validation.annotation.Validated;
 public class ArticleCommandService {
 
   private final ArticleRepository articleRepository;
-  private final TagRepository tagRepository;
 
-  @Transactional
-  public Article createArticle(@Valid NewArticleParam newArticleParam, User creator) {
-    Article article =
-        Article.create(
-            newArticleParam.title(),
-            newArticleParam.description(),
-            newArticleParam.body(),
-            creator);
-
-    articleRepository.save(article);
-
-    List<Tag> tags = newArticleParam.tagList()
-        .stream()
-        .map(tag -> Tag.create(tag, article))
-        .toList();
-
-    tagRepository.saveAll(tags);
-
-    return article;
-  }
 
   @Transactional
   public Article updateArticle(Article article, @Valid UpdateArticleParam updateArticleParam) {

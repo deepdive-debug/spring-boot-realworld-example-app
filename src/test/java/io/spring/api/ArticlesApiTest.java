@@ -9,12 +9,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.spring.api.article.ArticlesApi;
 import io.spring.api.data.ArticleData;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.response.ProfileData;
 import io.spring.application.ArticleQueryService;
-import io.spring.application.article.ArticleCommandService;
+import io.spring.application.article.ArticleService;
 import io.spring.core.article.Article;
 import java.time.Instant;
 import java.util.HashMap;
@@ -30,13 +29,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest({ArticlesApi.class})
-@Import({WebSecurityConfig.class, JacksonCustomizations.class})
+@Import({WebSecurityConfig.class})
 public class ArticlesApiTest extends TestWithCurrentUser {
   @Autowired private MockMvc mvc;
 
-  @MockBean private ArticleQueryService articleQueryService;
-
-  @MockBean private ArticleCommandService articleCommandService;
+  @MockBean private ArticleService articleService;
 
   @Override
   @BeforeEach
@@ -88,7 +85,7 @@ public class ArticlesApiTest extends TestWithCurrentUser {
         .body("article.author.username", equalTo(user.getUsername()))
         .body("article.author.id", equalTo(null));
 
-    verify(articleCommandService).createArticle(any(), any());
+    verify(articleService).createArticle(any(), any());
   }
 
   @Test
@@ -134,10 +131,10 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             asList(tagList),
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
 
-    when(articleQueryService.findBySlug(eq(Article.toSlug(title)), any()))
+    when(articleService.findBySlug(eq(Article.toSlug(title)), any()))
         .thenReturn(Optional.of(articleData));
 
-    when(articleQueryService.findById(any(), any())).thenReturn(Optional.of(articleData));
+    when(articleService.findById(any(), any())).thenReturn(Optional.of(articleData));
 
     given()
         .contentType("application/json")
