@@ -73,7 +73,7 @@ public class Article extends BaseTimeEntity {
       this.body = body;
     }
   }
-  
+
   public static String toSlug(String title) {
     return title.toLowerCase().replaceAll("[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+", "-");
   }
