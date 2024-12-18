@@ -37,7 +37,7 @@ public class CommentsApi {
       @AuthenticationPrincipal User user,
       @Valid @RequestBody NewCommentParam newCommentParam) {
     Article article = articleQueryService.findBySlug(slug);
-    Comment comment = Comment.of(newCommentParam.body(), user.getId(), article.getId());
+    Comment comment = Comment.create(newCommentParam.body(), user, article);
     commentQueryService.save(comment);
     return ResponseEntity.status(201)
         .body(commentResponse(commentQueryService.findById(comment.getId(), user).get()));

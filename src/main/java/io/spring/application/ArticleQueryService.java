@@ -195,7 +195,7 @@ public class ArticleQueryService {
   }
 
   public void removeArticle(Article article) {
-    articleRepository.remove(article);
+    articleRepository.delete(article);
   }
 
   public void saveArticleFavorite(ArticleFavorite articleFavorite) {
