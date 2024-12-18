@@ -1,11 +1,6 @@
 package io.spring.core.favorite;
 
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ArticleFavoriteRepository {
-  void save(ArticleFavorite articleFavorite);
-
-  Optional<ArticleFavorite> find(String articleId, String userId);
-
-  void remove(ArticleFavorite favorite);
+public interface ArticleFavoriteRepository extends JpaRepository<ArticleFavorite, ArticleFavoriteId> {
 }

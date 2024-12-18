@@ -1,26 +1,29 @@
 package io.spring.core.favorite;
 
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @NoArgsConstructor
 @Getter
-@EqualsAndHashCode
+@Builder
+@AllArgsConstructor
 public class ArticleFavorite {
 
-  private String articleId;
-  private String userId;
+  @EmbeddedId
+  private ArticleFavoriteId id;
 
-  @Builder(access = AccessLevel.PRIVATE)
-  private ArticleFavorite(String articleId, String userId) {
-    this.articleId = articleId;
-    this.userId = userId;
-  }
-
-  public static ArticleFavorite of(String articleId, String userId) {
-    return ArticleFavorite.builder().articleId(articleId).userId(userId).build();
+  public static ArticleFavorite create(String articleId, String userId) {
+    ArticleFavoriteId articleFavoriteId = ArticleFavoriteId.of(articleId, userId);
+    return ArticleFavorite.builder()
+        .id(articleFavoriteId)
+        .build();
   }
 }
