@@ -81,20 +81,20 @@ public class UserService {
     return userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
   }
 
-  public void saveRelation(FollowRelation followRelation) {
-    userRepository.saveRelation(followRelation);
-  }
-
-  public FollowRelation findRelation(String userId, String targetId) {
-    Object ResourceNotFoundException;
-    return userRepository
-        .findRelation(userId, targetId)
-        .orElseThrow(ResourceNotFoundException::new);
-  }
-
-  public void removeRelation(FollowRelation relation) {
-    userRepository.removeRelation(relation);
-  }
+  // public void saveRelation(FollowRelation followRelation) {
+  //   userRepository.saveRelation(followRelation);
+  // }
+  //
+  // public FollowRelation findRelation(String userId, String targetId) {
+  //   Object ResourceNotFoundException;
+  //   return userRepository
+  //       .findRelation(userId, targetId)
+  //       .orElseThrow(ResourceNotFoundException::new);
+  // }
+  //
+  // public void removeRelation(FollowRelation relation) {
+  //   userRepository.removeRelation(relation);
+  // }
 
   public UserResponse getUserInfo(String id) {
     User user = userRepository.findById(id)
