@@ -15,7 +15,6 @@ import io.spring.api.data.ArticleData;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.response.ProfileData;
 import io.spring.application.ArticleQueryService;
-import io.spring.application.article.ArticleCommandService;
 import io.spring.core.article.Article;
 import io.spring.core.user.User;
 import java.time.Instant;

@@ -42,7 +42,7 @@ public class ArticleService {
 		Page<Article> articlePage = articleRepository.findAll(
 			PageRequest.of(page, size, Sort.by("createdAt").descending())
 		);
-		
+
 		List<ArticleSummaryResponse> articleSummaryResponses = articlePage.getContent().stream()
 			.map(ArticleSummaryResponse::from)
 			.toList();
@@ -69,7 +69,7 @@ public class ArticleService {
 		articleRepository.delete(article);
 	}
 
-	private Article findBySlug(String slug) {
+	Article findBySlug(String slug) {
 		return articleRepository.findBySlug(slug)
 			.orElseThrow(ResourceNotFoundException::new);
 	}

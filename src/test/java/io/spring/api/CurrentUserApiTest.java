@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.api.security.WebSecurityConfig;
-import io.spring.api.user.CurrentUserApi;
 import io.spring.application.UserQueryService;
 import io.spring.application.user.UserService;
 import io.spring.core.user.User;
