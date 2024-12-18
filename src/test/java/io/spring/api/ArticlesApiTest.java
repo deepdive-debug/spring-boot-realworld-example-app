@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.spring.JacksonCustomizations;
 import io.spring.api.article.ArticlesApi;
 import io.spring.api.data.ArticleData;
 import io.spring.api.security.WebSecurityConfig;
@@ -68,9 +67,6 @@ public class ArticlesApiTest extends TestWithCurrentUser {
             Instant.now(),
             tagList,
             new ProfileData("userid", user.getUsername(), user.getBio(), user.getImage(), false));
-
-    when(articleCommandService.createArticle(any(), any()))
-        .thenReturn(Article.of(title, description, body, tagList, user.getId()));
 
     when(articleQueryService.findBySlug(eq(Article.toSlug(title)), any()))
         .thenReturn(Optional.empty());

@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.spring.JacksonCustomizations;
 import io.spring.api.comment.CommentsApi;
 import io.spring.api.data.CommentData;
 import io.spring.api.security.WebSecurityConfig;

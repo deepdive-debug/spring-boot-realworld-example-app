@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.spring.JacksonCustomizations;
 import io.spring.api.article.ArticleFavoriteApi;
 import io.spring.api.data.ArticleData;
 import io.spring.api.security.WebSecurityConfig;
