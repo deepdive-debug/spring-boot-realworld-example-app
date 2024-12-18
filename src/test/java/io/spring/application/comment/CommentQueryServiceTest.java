@@ -50,9 +50,7 @@ public class CommentQueryServiceTest extends DbTestBase {
     Comment comment = Comment.of("content", user.getId(), "123");
     commentRepository.save(comment);
 
-    Optional<CommentData> optional = commentQueryService.findById(comment.getId(), user);
-    Assertions.assertTrue(optional.isPresent());
-    CommentData commentData = optional.get();
+    CommentData commentData = commentQueryService.findById(comment.getId(), user);
     Assertions.assertEquals(commentData.getProfileData().getUsername(), user.getUsername());
   }
 

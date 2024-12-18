@@ -24,20 +24,13 @@ public class ArticleFavoriteApi {
   @PostMapping
   public ResponseEntity favoriteArticle(
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
-    Article article = articleQueryService.findBySlug(slug);
-    ArticleFavorite articleFavorite = ArticleFavorite.of(article.getId(), user.getId());
-    articleQueryService.saveArticleFavorite(articleFavorite);
-    return responseArticleData(articleQueryService.findBySlug(slug, user).get());
+    return responseArticleData(articleQueryService.saveFavoriteArticle(slug, user));
   }
 
   @DeleteMapping
   public ResponseEntity unfavoriteArticle(
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
-    Article article = articleQueryService.findBySlug(slug);
-    ArticleFavorite favorite =
-        articleQueryService.findArticleFavorite(article.getId(), user.getId());
-    articleQueryService.removeArticleFavorite(favorite);
-    return responseArticleData(articleQueryService.findBySlug(slug, user).get());
+    return responseArticleData(articleQueryService.deleteFavoriteArticle(slug, user));
   }
 
   private ResponseEntity<HashMap<String, Object>> responseArticleData(

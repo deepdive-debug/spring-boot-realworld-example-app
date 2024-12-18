@@ -59,10 +59,9 @@ public class ArticleQueryServiceTest extends DbTestBase {
 
   @Test
   public void should_fetch_article_success() {
-    Optional<ArticleData> optional = queryService.findById(article.getId(), user);
-    Assertions.assertTrue(optional.isPresent());
+    ArticleData fetched = queryService.findById(article.getId(), user);
+    Assertions.assertNotNull(fetched);
 
-    ArticleData fetched = optional.get();
     Assertions.assertEquals(fetched.getFavoritesCount(), 0);
     Assertions.assertFalse(fetched.isFavorited());
     Assertions.assertNotNull(fetched.getCreatedAt());
@@ -76,10 +75,9 @@ public class ArticleQueryServiceTest extends DbTestBase {
     userRepository.save(anotherUser);
     articleFavoriteRepository.save(ArticleFavorite.of(article.getId(), anotherUser.getId()));
 
-    Optional<ArticleData> optional = queryService.findById(article.getId(), anotherUser);
-    Assertions.assertTrue(optional.isPresent());
+    ArticleData articleData = queryService.findById(article.getId(), anotherUser);
+    Assertions.assertNotNull(articleData);
 
-    ArticleData articleData = optional.get();
     Assertions.assertEquals(articleData.getFavoritesCount(), 1);
     Assertions.assertTrue(articleData.isFavorited());
   }

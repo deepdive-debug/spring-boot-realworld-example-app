@@ -13,6 +13,7 @@ import io.spring.JacksonCustomizations;
 import io.spring.TestHelper;
 import io.spring.api.article.ArticleApi;
 import io.spring.api.data.ArticleData;
+import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.response.ProfileData;
 import io.spring.application.ArticleQueryService;
@@ -25,7 +26,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
             time);
     ArticleData articleData = TestHelper.getArticleDataFromArticleAndUser(article, user);
 
-    when(articleQueryService.findBySlug(eq(slug), eq(null))).thenReturn(Optional.of(articleData));
+    when(articleQueryService.findBySlug(eq(slug), eq(null))).thenReturn(articleData);
 
     RestAssuredMockMvc.when()
         .get("/articles/{slug}", slug)
@@ -77,7 +77,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
 
   @Test
   public void should_404_if_article_not_found() throws Exception {
-    when(articleQueryService.findBySlug(anyString(), any())).thenReturn(Optional.empty());
+    when(articleQueryService.findBySlug(anyString(), any())).thenThrow(new ResourceNotFoundException());
     RestAssuredMockMvc.when().get("/articles/not-exists").then().statusCode(404);
   }
 
@@ -102,7 +102,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     when(articleCommandService.updateArticle(eq(originalArticle), any()))
         .thenReturn(updatedArticle);
     when(articleQueryService.findBySlug(eq(updatedArticle.getSlug()), eq(user)))
-        .thenReturn(Optional.of(updatedArticleData));
+        .thenReturn(updatedArticleData);
 
     given()
         .contentType("application/json")
@@ -149,8 +149,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
                 false));
 
     when(articleQueryService.findBySlug(eq(article.getSlug()))).thenReturn(article);
-    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user)))
-        .thenReturn(Optional.of(articleData));
+    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user))).thenReturn(articleData);
 
     given()
         .contentType("application/json")

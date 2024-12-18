@@ -1,11 +1,9 @@
 package io.spring.api.user;
 
-import io.spring.api.user.request.UpdateUserCommand;
 import io.spring.api.user.request.UpdateUserParam;
 import io.spring.api.user.response.UserData;
 import io.spring.api.user.response.UserWithToken;
 import io.spring.application.UserQueryService;
-import io.spring.application.user.UserService;
 import io.spring.core.user.User;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -26,14 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CurrentUserApi {
 
   private UserQueryService userQueryService;
-  private UserService userService;
 
   @GetMapping
   public ResponseEntity currentUser(
       @AuthenticationPrincipal User currentUser,
       @RequestHeader(value = "Authorization") String authorization) {
-    UserData userData = userQueryService.findById(currentUser.getId());
-    return ResponseEntity.ok(userResponse(UserWithToken.of(userData, authorization.split(" ")[1])));
+    return ResponseEntity.ok(userResponse(userQueryService.findById(currentUser, authorization)));
   }
 
   @PutMapping
@@ -41,10 +37,7 @@ public class CurrentUserApi {
       @AuthenticationPrincipal User currentUser,
       @RequestHeader("Authorization") String token,
       @Valid @RequestBody UpdateUserParam updateUserParam) {
-
-    userService.updateUser(new UpdateUserCommand(currentUser, updateUserParam));
-    UserData userData = userQueryService.findById(currentUser.getId());
-    return ResponseEntity.ok(userResponse(UserWithToken.of(userData, token.split(" ")[1])));
+    return ResponseEntity.ok(userResponse(userQueryService.update(currentUser, updateUserParam, token)));
   }
 
   private Map<String, Object> userResponse(UserWithToken userWithToken) {

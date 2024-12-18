@@ -76,7 +76,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
           }
         };
 
-    when(commentQueryService.findById(anyString(), eq(user))).thenReturn(Optional.of(commentData));
+    when(commentQueryService.findById(anyString(), eq(user))).thenReturn(commentData);
 
     given()
         .contentType("application/json")

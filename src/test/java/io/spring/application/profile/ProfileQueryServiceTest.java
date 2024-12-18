@@ -23,8 +23,8 @@ public class ProfileQueryServiceTest extends DbTestBase {
     User profileUser = User.of("p@test.com", "p", "123", "", "");
     userRepository.save(profileUser);
 
-    Optional<ProfileData> optional =
+    ProfileData profileData =
         profileQueryService.findByUsername(profileUser.getUsername(), currentUser);
-    Assertions.assertTrue(optional.isPresent());
+	  Assertions.assertNotNull(profileData);
   }
 }

@@ -1,9 +1,14 @@
 package io.spring.application;
 
+import io.spring.api.comment.request.NewCommentParam;
 import io.spring.api.data.CommentData;
+import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.user.response.ProfileData;
+import io.spring.core.article.Article;
 import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
+import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.CommentReadService;
 import io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService;
@@ -11,7 +16,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -23,19 +27,16 @@ public class CommentQueryService {
   private CommentReadService commentReadService;
   private UserRelationshipQueryService userRelationshipQueryService;
   private CommentRepository commentRepository;
+  private ArticleQueryService articleQueryService;
 
-  public Optional<CommentData> findById(String id, User user) {
+  public CommentData findById(String id, User user) {
     CommentData commentData = commentReadService.findById(id);
     if (commentData == null) {
-      return Optional.empty();
-    } else {
-      commentData
-          .getProfileData()
-          .updateFollowing(
-              userRelationshipQueryService.isUserFollowing(
-                  user.getId(), commentData.getProfileData().getId()));
+      return null;
     }
-    return Optional.ofNullable(commentData);
+    ProfileData profileData = commentData.getProfileData();
+    profileData.updateFollowing(userRelationshipQueryService.isUserFollowing(user.getId(), profileData.getId()));
+    return commentData;
   }
 
   public List<CommentData> findByArticleId(String articleId, User user) {
@@ -88,8 +89,16 @@ public class CommentQueryService {
   }
 
   // 추가
-  public void save(Comment comment) {
+  public CommentData save(String slug, User user, NewCommentParam newCommentParam) {
+    Article article = articleQueryService.findBySlug(slug);
+    Comment comment = Comment.of(newCommentParam.body(), user.getId(), article.getId());
     commentRepository.save(comment);
+    return findById(comment.getId(), user);
+  }
+
+  public List<CommentData> findCommentsBySlug(String slug, User user) {
+    Article article = articleQueryService.findBySlug(slug);
+    return findByArticleId(article.getId(), user);
   }
 
   public Comment findCommentById(String articleId, String commentId) {
@@ -98,7 +107,13 @@ public class CommentQueryService {
         .orElseThrow(ResourceNotFoundException::new);
   }
 
-  public void remove(Comment comment) {
+  public void remove(String slug, String commentId, User user) {
+    Article article = articleQueryService.findBySlug(slug);
+    Comment comment = findCommentById(article.getId(), commentId);
+    if (!AuthorizationService.canWriteComment(user, article, comment)) {
+      throw new NoAuthorizationException();
+    }
     commentRepository.remove(comment);
+
   }
 }

@@ -55,7 +55,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
   @Test
   public void should_get_user_profile_success() throws Exception {
     when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(null)))
-        .thenReturn(Optional.of(profileData));
+        .thenReturn(profileData);
     RestAssuredMockMvc.when()
         .get("/profiles/{username}", profileData.getUsername())
         .prettyPeek()
@@ -67,7 +67,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
   @Test
   public void should_follow_user_success() throws Exception {
     when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(user)))
-        .thenReturn(Optional.of(profileData));
+        .thenReturn(profileData);
     given()
         .header("Authorization", "Token " + token)
         .when()
@@ -84,7 +84,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
     when(userService.findRelation(eq(user.getId()), eq(anotherUser.getId())))
         .thenReturn(followRelation);
     when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(user)))
-        .thenReturn(Optional.of(profileData));
+        .thenReturn(profileData);
 
     given()
         .header("Authorization", "Token " + token)

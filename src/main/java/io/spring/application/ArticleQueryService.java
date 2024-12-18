@@ -2,14 +2,19 @@ package io.spring.application;
 
 import static java.util.stream.Collectors.toList;
 
+import io.spring.api.article.request.NewArticleParam;
+import io.spring.api.article.request.UpdateArticleParam;
 import io.spring.api.article.response.ArticleDataList;
 import io.spring.api.article.response.ArticleFavoriteCount;
 import io.spring.api.data.ArticleData;
+import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.application.article.ArticleCommandService;
 import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.favorite.ArticleFavorite;
 import io.spring.core.favorite.ArticleFavoriteRepository;
+import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import io.spring.infrastructure.mybatis.readservice.ArticleFavoritesReadService;
 import io.spring.infrastructure.mybatis.readservice.ArticleReadService;
@@ -20,9 +25,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,29 +39,24 @@ public class ArticleQueryService {
   private ArticleFavoritesReadService articleFavoritesReadService;
   private ArticleRepository articleRepository;
   private ArticleFavoriteRepository articleFavoriteRepository;
+  private ArticleCommandService articleCommandService;
 
-  public Optional<ArticleData> findById(String id, User user) {
+  public ArticleData findById(String id, User user) {
     ArticleData articleData = articleReadService.findById(id);
-    if (articleData == null) {
-      return Optional.empty();
-    } else {
-      if (user != null) {
-        fillExtraInfo(id, user, articleData);
-      }
-      return Optional.of(articleData);
+    if (articleData == null || user == null) {
+      throw new ResourceNotFoundException();
     }
+    fillExtraInfo(id, user, articleData);
+    return articleData;
   }
 
-  public Optional<ArticleData> findBySlug(String slug, User user) {
+  public ArticleData findBySlug(String slug, User user) {
     ArticleData articleData = articleReadService.findBySlug(slug);
-    if (articleData == null) {
-      return Optional.empty();
-    } else {
-      if (user != null) {
-        fillExtraInfo(articleData.getId(), user, articleData);
-      }
-      return Optional.of(articleData);
+    if (articleData == null || user == null) {
+      throw new ResourceNotFoundException();
     }
+    fillExtraInfo(articleData.getId(), user, articleData);
+    return articleData;
   }
 
   public CursorPager<ArticleData> findRecentArticlesWithCursor(
@@ -210,5 +211,41 @@ public class ArticleQueryService {
 
   public void removeArticleFavorite(ArticleFavorite favorite) {
     articleFavoriteRepository.remove(favorite);
+  }
+
+  public ArticleData createArticle(NewArticleParam newArticleParam, User user) {
+    Article article = articleCommandService.createArticle(newArticleParam, user);
+    return findById(article.getId(), user);
+  }
+
+  public ArticleData updateArticle(String slug, User user, UpdateArticleParam updateArticleParam) {
+    Article article = findBySlug(slug);
+    if (!AuthorizationService.canWriteArticle(user, article)) {
+      throw new NoAuthorizationException();
+    }
+    Article updatedArticle = articleCommandService.updateArticle(article, updateArticleParam);
+    return findBySlug(updatedArticle.getSlug(), user);
+  }
+
+  public void deleteArticle(String slug, @AuthenticationPrincipal User user) {
+    Article article = findBySlug(slug);
+    if (!AuthorizationService.canWriteArticle(user, article)) {
+      throw new NoAuthorizationException();
+    }
+    removeArticle(article);
+  }
+
+  public ArticleData saveFavoriteArticle(String slug, User user) {
+    Article article = findBySlug(slug);
+    ArticleFavorite articleFavorite = ArticleFavorite.of(article.getId(), user.getId());
+    saveArticleFavorite(articleFavorite);
+    return findBySlug(slug, user);
+  }
+
+  public ArticleData deleteFavoriteArticle(String slug, User user) {
+    Article article = findBySlug(slug);
+    ArticleFavorite favorite = findArticleFavorite(article.getId(), user.getId());
+    removeArticleFavorite(favorite);
+    return findBySlug(slug, user);
   }
 }

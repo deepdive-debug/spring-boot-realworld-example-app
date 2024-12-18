@@ -2,12 +2,7 @@ package io.spring.api.comment;
 
 import io.spring.api.comment.request.NewCommentParam;
 import io.spring.api.data.CommentData;
-import io.spring.api.exception.NoAuthorizationException;
-import io.spring.application.ArticleQueryService;
 import io.spring.application.CommentQueryService;
-import io.spring.core.article.Article;
-import io.spring.core.comment.Comment;
-import io.spring.core.service.AuthorizationService;
 import io.spring.core.user.User;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -29,25 +24,20 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class CommentsApi {
   private CommentQueryService commentQueryService;
-  private ArticleQueryService articleQueryService;
 
   @PostMapping
   public ResponseEntity<?> createComment(
       @PathVariable("slug") String slug,
       @AuthenticationPrincipal User user,
       @Valid @RequestBody NewCommentParam newCommentParam) {
-    Article article = articleQueryService.findBySlug(slug);
-    Comment comment = Comment.of(newCommentParam.body(), user.getId(), article.getId());
-    commentQueryService.save(comment);
     return ResponseEntity.status(201)
-        .body(commentResponse(commentQueryService.findById(comment.getId(), user).get()));
+        .body(commentResponse(commentQueryService.save(slug, user, newCommentParam)));
   }
 
   @GetMapping
   public ResponseEntity getComments(
       @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
-    Article article = articleQueryService.findBySlug(slug);
-    List<CommentData> comments = commentQueryService.findByArticleId(article.getId(), user);
+    List<CommentData> comments = commentQueryService.findCommentsBySlug(slug, user);
     return ResponseEntity.ok(
         new HashMap<String, Object>() {
           {
@@ -61,13 +51,7 @@ public class CommentsApi {
       @PathVariable("slug") String slug,
       @PathVariable("id") String commentId,
       @AuthenticationPrincipal User user) {
-    Article article = articleQueryService.findBySlug(slug);
-
-    Comment comment = commentQueryService.findCommentById(article.getId(), commentId);
-    if (!AuthorizationService.canWriteComment(user, article, comment)) {
-      throw new NoAuthorizationException();
-    }
-    commentQueryService.remove(comment);
+    commentQueryService.remove(slug, commentId, user);
     return ResponseEntity.noContent().build();
   }
 

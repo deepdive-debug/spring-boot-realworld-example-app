@@ -1,5 +1,6 @@
 package io.spring.application.article;
 
+import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.application.ArticleQueryService;
 import io.spring.core.article.Article;
 import jakarta.validation.ConstraintValidator;
@@ -13,6 +14,11 @@ class DuplicatedArticleValidator
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return !articleQueryService.findBySlug(Article.toSlug(value), null).isPresent();
+    try {
+      articleQueryService.findBySlug(Article.toSlug(value), null);
+      return false;
+    } catch (ResourceNotFoundException e) {
+      return true;
+    }
   }
 }
