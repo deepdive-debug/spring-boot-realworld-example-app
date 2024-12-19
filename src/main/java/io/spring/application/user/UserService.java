@@ -6,18 +6,14 @@ import io.spring.api.user.request.LoginParam;
 import io.spring.api.user.request.RegisterParam;
 import io.spring.api.user.request.UpdateUserCommand;
 import io.spring.api.user.request.UpdateUserParam;
-import io.spring.api.user.response.UserData;
 import io.spring.api.user.response.UserPersistResponse;
 import io.spring.api.user.response.UserResponse;
 import io.spring.api.user.response.UserWithToken;
-import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,8 +45,8 @@ public class UserService {
   }
 
   public UserWithToken login(LoginParam loginParam) {
-    User user = userRepository.findByEmail(loginParam.email())
-        .orElseThrow(ResourceNotFoundException::new);
+    User user =
+        userRepository.findByEmail(loginParam.email()).orElseThrow(ResourceNotFoundException::new);
 
     if (passwordEncoder.matches(loginParam.password(), user.getPassword())) {
       return UserWithToken.of(user, jwtService.toToken(user));
@@ -97,8 +93,7 @@ public class UserService {
   // }
 
   public UserResponse getUserInfo(String id) {
-    User user = userRepository.findById(id)
-        .orElseThrow(ResourceNotFoundException::new);
+    User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
     return UserResponse.of(user);
   }

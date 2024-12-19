@@ -4,8 +4,6 @@ import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
-import java.util.List;
-
 import io.spring.core.BaseTimeEntity;
 import io.spring.core.comment.Comment;
 import io.spring.core.user.User;
@@ -14,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,8 +49,7 @@ public class Article extends BaseTimeEntity {
   @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true, fetch = LAZY)
   private List<Tag> tags;
 
-  public static Article create(
-      String title, String description, String body, User author) {
+  public static Article create(String title, String description, String body, User author) {
     return Article.builder()
         .title(title)
         .slug(toSlug(title))

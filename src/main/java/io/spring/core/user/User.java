@@ -3,15 +3,14 @@ package io.spring.core.user;
 import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.spring.core.BaseTimeEntity;
 import io.spring.core.article.Article;
 import io.spring.core.comment.Comment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

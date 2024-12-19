@@ -19,9 +19,6 @@ public class Tag extends BaseTimeEntity {
   private Article article;
 
   public static Tag create(String name, Article article) {
-    return Tag.builder()
-        .name(name)
-        .article(article)
-        .build();
+    return Tag.builder().name(name).article(article).build();
   }
 }
