@@ -1,9 +1,7 @@
 // package io.spring.api.user;
 //
-// import io.spring.api.exception.ResourceNotFoundException;
 // import io.spring.api.user.response.ProfileData;
-// import io.spring.application.user.UserService;
-// import io.spring.core.user.FollowRelation;
+// import io.spring.application.ProfileQueryService;
 // import io.spring.core.user.User;
 // import java.util.HashMap;
 // import lombok.AllArgsConstructor;
@@ -21,33 +19,23 @@
 // @AllArgsConstructor
 // public class ProfileApi {
 //   private ProfileQueryService profileQueryService;
-//   private UserService userService;
 //
 //   @GetMapping
 //   public ResponseEntity getProfile(
 //       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
-//     return profileQueryService
-//         .findByUsername(username, user)
-//         .map(this::profileResponse)
-//         .orElseThrow(ResourceNotFoundException::new);
+//     return profileResponse(profileQueryService.findByUsername(username, user));
 //   }
 //
 //   @PostMapping(path = "/follow")
 //   public ResponseEntity follow(
 //       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
-//     User target = userService.findByUsername(username);
-//     FollowRelation followRelation = FollowRelation.of(user.getId(), target.getId());
-//     userService.saveRelation(followRelation);
-//     return profileResponse(profileQueryService.findByUsername(username, user).get());
+//     return profileResponse(profileQueryService.createFollow(username, user));
 //   }
 //
 //   @DeleteMapping(path = "/follow")
 //   public ResponseEntity unfollow(
 //       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
-//     User target = userService.findByUsername(username);
-//     FollowRelation relation = userService.findRelation(user.getId(), target.getId());
-//     userService.removeRelation(relation);
-//     return profileResponse(profileQueryService.findByUsername(username, user).get());
+//     return profileResponse(profileQueryService.unFollow(username, user));
 //   }
 //
 //   private ResponseEntity profileResponse(ProfileData profile) {
