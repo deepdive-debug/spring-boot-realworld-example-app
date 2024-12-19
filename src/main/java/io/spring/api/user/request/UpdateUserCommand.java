@@ -1,6 +1,6 @@
 package io.spring.api.user.request;
 
-import io.spring.application.user.UpdateUserConstraint;
+import io.spring.api.user.validation.UpdateUserConstraint;
 import io.spring.core.user.User;
 
 @UpdateUserConstraint
