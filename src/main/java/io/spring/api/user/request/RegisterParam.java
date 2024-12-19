@@ -1,12 +1,10 @@
 package io.spring.api.user.request;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import io.spring.application.user.DuplicatedEmailConstraint;
 import io.spring.application.user.DuplicatedUsernameConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-@JsonRootName("user")
 public record RegisterParam(
     @NotBlank(message = "can't be empty")
         @Email(message = "should be an email")
