@@ -1,95 +1,74 @@
 package io.spring.core.article;
 
-import static java.util.stream.Collectors.toList;
+import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
-import io.spring.Util;
-import java.time.Instant;
-import java.util.HashSet;
+import io.spring.core.BaseTimeEntity;
+import io.spring.core.comment.Comment;
+import io.spring.core.user.User;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.List;
-import java.util.UUID;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Getter
-@NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
-public class Article {
-  private String userId;
-  private String id;
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+public class Article extends BaseTimeEntity {
+
+  @JoinColumn(name = "author_id", nullable = false)
+  @ManyToOne(fetch = LAZY)
+  private User author;
+
+  @Column(nullable = false, unique = true)
   private String slug;
+
+  @Column(nullable = false)
   private String title;
+
+  @Column(nullable = false)
   private String description;
+
+  @Column(nullable = false)
   private String body;
+
+  @Column(nullable = false)
+  @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true, fetch = LAZY)
+  private List<Comment> comments;
+
+  @Column(nullable = false)
+  @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true, fetch = LAZY)
   private List<Tag> tags;
-  private Instant createdAt;
-  private Instant updatedAt;
 
-  @Builder(access = AccessLevel.PRIVATE)
-  private Article(
-      String id,
-      String userId,
-      String title,
-      String description,
-      String body,
-      List<Tag> tags,
-      Instant createdAt,
-      Instant updatedAt) {
-    this.userId = userId;
-    this.id = UUID.randomUUID().toString();
-    this.slug = toSlug(title);
-    this.title = title;
-    this.description = description;
-    this.body = body;
-    this.tags = tags;
-    this.createdAt = createdAt;
-    this.updatedAt = createdAt;
-  }
-
-  public static Article of(
-      String title, String description, String body, List<String> tagList, String userId) {
+  public static Article create(String title, String description, String body, User author) {
     return Article.builder()
         .title(title)
+        .slug(toSlug(title))
         .description(description)
         .body(body)
-        .tags(new HashSet<>(tagList).stream().map(Tag::of).collect(toList()))
-        .userId(userId)
-        .createdAt(Instant.now())
-        .build();
-  }
-
-  public static Article of(
-      String title,
-      String description,
-      String body,
-      List<String> tagList,
-      String userId,
-      Instant createdAt) {
-    return Article.builder()
-        .title(title)
-        .description(description)
-        .body(body)
-        .tags(new HashSet<>(tagList).stream().map(Tag::of).collect(toList()))
-        .userId(userId)
-        .createdAt(createdAt)
+        .author(author)
         .build();
   }
 
   public void update(String title, String description, String body) {
-    if (!Util.isEmpty(title)) {
+    if (!title.isEmpty()) {
       this.title = title;
       this.slug = toSlug(title);
-      this.updatedAt = Instant.now();
     }
-    if (!Util.isEmpty(description)) {
+    if (!title.isEmpty()) {
       this.description = description;
-      this.updatedAt = Instant.now();
     }
-    if (!Util.isEmpty(body)) {
+    if (!title.isEmpty()) {
       this.body = body;
-      this.updatedAt = Instant.now();
     }
   }
 

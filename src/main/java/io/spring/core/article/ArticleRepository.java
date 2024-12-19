@@ -1,14 +1,8 @@
 package io.spring.core.article;
 
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ArticleRepository {
-
-  void save(Article article);
-
-  Optional<Article> findById(String id);
-
+public interface ArticleRepository extends JpaRepository<Article, String> {
   Optional<Article> findBySlug(String slug);
-
-  void remove(Article article);
 }

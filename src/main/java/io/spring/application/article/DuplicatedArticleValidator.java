@@ -1,24 +1,19 @@
 package io.spring.application.article;
 
-import io.spring.api.exception.ResourceNotFoundException;
-import io.spring.application.ArticleQueryService;
 import io.spring.core.article.Article;
+import io.spring.core.article.ArticleRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 class DuplicatedArticleValidator
     implements ConstraintValidator<DuplicatedArticleConstraint, String> {
 
-  @Autowired private ArticleQueryService articleQueryService;
+  private final ArticleRepository articleRepository;
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    try {
-      articleQueryService.findBySlug(Article.toSlug(value), null);
-      return false;
-    } catch (ResourceNotFoundException e) {
-      return true;
-    }
+    return articleRepository.findBySlug(Article.toSlug(value)).isEmpty();
   }
 }

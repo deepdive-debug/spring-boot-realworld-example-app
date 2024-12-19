@@ -1,16 +1,17 @@
 package io.spring.application;
 
-import io.spring.infrastructure.mybatis.readservice.TagReadService;
+import io.spring.api.article.response.tag.TagResponse;
+import io.spring.core.article.TagRepository;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TagsQueryService {
-  private TagReadService tagReadService;
+  private final TagRepository tagRepository;
 
-  public List<String> allTags() {
-    return tagReadService.all();
+  public List<TagResponse> allTags() {
+    return tagRepository.findAll().stream().map(TagResponse::from).toList();
   }
 }

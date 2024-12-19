@@ -1,39 +1,52 @@
 package io.spring.core.user;
 
-import io.spring.Util;
-import java.util.UUID;
-import lombok.AccessLevel;
+import static jakarta.persistence.CascadeType.ALL;
+import static lombok.AccessLevel.PROTECTED;
+
+import io.spring.core.BaseTimeEntity;
+import io.spring.core.article.Article;
+import io.spring.core.comment.Comment;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Getter
-@NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
-public class User {
+@Builder
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
+public class User extends BaseTimeEntity {
 
-  private String id;
+  @Column(nullable = false, unique = true)
   private String email;
+
+  @Column(nullable = false)
   private String username;
+
+  @Column(nullable = false)
   private String password;
+
+  @Column(nullable = false)
   private String bio;
+
   private String image;
 
-  @Builder(access = AccessLevel.PRIVATE)
-  private User(
-      String id, String email, String username, String password, String bio, String image) {
-    this.id = id;
-    this.email = email;
-    this.username = username;
-    this.password = password;
-    this.bio = bio;
-    this.image = image;
-  }
+  @OneToMany(mappedBy = "author", cascade = ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Article> articles = new ArrayList<>();
+
+  @OneToMany(mappedBy = "commenter", cascade = ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Comment> comments = new ArrayList<>();
 
   public static User of(String email, String username, String password, String bio, String image) {
     return User.builder()
-        .id(UUID.randomUUID().toString())
         .email(email)
         .username(username)
         .password(password)
@@ -43,23 +56,23 @@ public class User {
   }
 
   public void update(String email, String username, String password, String bio, String image) {
-    if (!Util.isEmpty(email)) {
+    if (!email.isEmpty()) {
       this.email = email;
     }
 
-    if (!Util.isEmpty(username)) {
+    if (!email.isEmpty()) {
       this.username = username;
     }
 
-    if (!Util.isEmpty(password)) {
+    if (!email.isEmpty()) {
       this.password = password;
     }
 
-    if (!Util.isEmpty(bio)) {
+    if (!email.isEmpty()) {
       this.bio = bio;
     }
 
-    if (!Util.isEmpty(image)) {
+    if (!email.isEmpty()) {
       this.image = image;
     }
   }
