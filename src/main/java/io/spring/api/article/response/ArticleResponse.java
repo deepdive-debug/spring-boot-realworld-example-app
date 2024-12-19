@@ -8,27 +8,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ArticleResponse(
-	String slug,
-	String title,
-	String description,
-	String body,
-	LocalDateTime createdAt,
-	LocalDateTime updatedAt,
-	UserResponse author,
-	List<TagResponse> tags,
-	List<CommentResponse> comments
-) {
-	public static ArticleResponse from(Article article) {
-		return new ArticleResponse(
-			article.getSlug(),
-			article.getTitle(),
-			article.getDescription(),
-			article.getBody(),
-			article.getCreatedAt(),
-			article.getUpdatedAt(),
-			UserResponse.of(article.getAuthor()),
-			article.getTags().stream().map(TagResponse::from).toList(),
-			article.getComments().stream().map(CommentResponse::from).toList()
-		);
-	}
+    String slug,
+    String title,
+    String description,
+    String body,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt,
+    UserResponse author,
+    List<TagResponse> tags,
+    List<CommentResponse> comments) {
+  public static ArticleResponse from(Article article) {
+    return new ArticleResponse(
+        article.getSlug(),
+        article.getTitle(),
+        article.getDescription(),
+        article.getBody(),
+        article.getCreatedAt(),
+        article.getUpdatedAt(),
+        UserResponse.of(article.getAuthor()),
+        article.getTags().stream().map(TagResponse::from).toList(),
+        article.getComments().stream().map(CommentResponse::from).toList());
+  }
 }

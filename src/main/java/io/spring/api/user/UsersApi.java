@@ -29,7 +29,8 @@ public class UsersApi {
   private UserService userService;
 
   @PostMapping
-  public ResponseEntity<UserPersistResponse> createUser(@Valid @RequestBody RegisterParam registerParam) {
+  public ResponseEntity<UserPersistResponse> createUser(
+      @Valid @RequestBody RegisterParam registerParam) {
     return ResponseEntity.status(CREATED).body(userService.createUser(registerParam));
   }
 
@@ -39,8 +40,7 @@ public class UsersApi {
   }
 
   @GetMapping("/mypage")
-  public ResponseEntity<UserResponse> currentUser(
-      @AuthenticationPrincipal User currentUser) {
+  public ResponseEntity<UserResponse> currentUser(@AuthenticationPrincipal User currentUser) {
     return ResponseEntity.ok(userService.getUserInfo(currentUser.getId()));
   }
 

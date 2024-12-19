@@ -29,8 +29,7 @@ public class CommentsApi {
   public ResponseEntity<CommentPersistResponse> createComment(
       @PathVariable("slug") String slug,
       @AuthenticationPrincipal User user,
-      @Valid @RequestBody NewCommentParam newCommentParam
-  ) {
+      @Valid @RequestBody NewCommentParam newCommentParam) {
     return ResponseEntity.status(CREATED)
         .body(commentService.createComment(slug, user, newCommentParam));
   }
@@ -39,17 +38,14 @@ public class CommentsApi {
   public ResponseEntity<Void> updateComment(
       @PathVariable("id") String commentId,
       @AuthenticationPrincipal User user,
-      @Valid @RequestBody NewCommentParam newCommentParam
-  ) {
+      @Valid @RequestBody NewCommentParam newCommentParam) {
     commentService.update(commentId, user, newCommentParam);
     return ResponseEntity.noContent().build();
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity deleteComment(
-      @PathVariable("id") String commentId,
-      @AuthenticationPrincipal User user
-  ) {
+      @PathVariable("id") String commentId, @AuthenticationPrincipal User user) {
     commentService.delete(user, commentId);
     return ResponseEntity.noContent().build();
   }

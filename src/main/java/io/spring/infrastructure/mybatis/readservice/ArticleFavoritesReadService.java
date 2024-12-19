@@ -15,5 +15,6 @@
 //
 //   List<ArticleFavoriteCount> articlesFavoriteCount(@Param("ids") List<String> ids);
 //
-//   Set<String> userFavorites(@Param("ids") List<String> ids, @Param("currentUser") User currentUser);
+//   Set<String> userFavorites(@Param("ids") List<String> ids, @Param("currentUser") User
+// currentUser);
 // }

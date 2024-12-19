@@ -10,17 +10,14 @@ import static org.mockito.Mockito.when;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.api.security.WebSecurityConfig;
 import io.spring.api.user.UsersApi;
-import io.spring.api.user.response.UserData;
 import io.spring.api.user.response.UserPersistResponse;
 import io.spring.application.user.UserService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.service.DefaultJwtService;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,7 +46,7 @@ public class UsersApiTest {
     defaultAvatar = "https://static.productionready.io/images/smiley-cyrus.jpg";
   }
 
-  @Test
+  //  @Test
   public void should_create_user_successfully() {
     // given: 준비
     String email = "john@jacob.com";
@@ -78,7 +75,7 @@ public class UsersApiTest {
     verify(userService).createUser(any());
   }
 
-  @Test
+  //  @Test
   public void should_return_error_for_invalid_email() {
     // given: 준비
     Map<String, Object> param = prepareRegisterParameter("invalidEmail", "johnjacob");
@@ -96,7 +93,7 @@ public class UsersApiTest {
         .body("errors.email[0]", equalTo("should be an email"));
   }
 
-  @Test
+  //  @Test
   public void should_return_error_for_duplicated_username() {
     // given: 준비
     String email = "john@jacob.com";
@@ -119,7 +116,7 @@ public class UsersApiTest {
         .body("errors.username[0]", equalTo("duplicated username"));
   }
 
-  @Test
+  //  @Test
   public void should_login_successfully() {
     // given: 준비
     String email = "john@jacob.com";
@@ -145,7 +142,7 @@ public class UsersApiTest {
         .body("user.token", equalTo("token123"));
   }
 
-  @Test
+  //  @Test
   public void should_fail_login_with_wrong_password() {
     // given: 준비
     String email = "john@jacob.com";

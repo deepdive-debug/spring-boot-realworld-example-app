@@ -17,7 +17,8 @@
 //
 //   void update(@Param("user") User user);
 //
-//   FollowRelation findRelation(@Param("userId") String userId, @Param("targetId") String targetId);
+//   FollowRelation findRelation(@Param("userId") String userId, @Param("targetId") String
+// targetId);
 //
 //   void saveRelation(@Param("followRelation") FollowRelation followRelation);
 //

@@ -36,10 +36,14 @@ public class ArticleApi {
 
   @GetMapping
   public ResponseEntity<PaginatedListResponse<ArticleSummaryResponse>> getArticles(
-
-      @Parameter(description = "페이지 인덱스", example = "0", required = true) @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-      @Parameter(description = "응답 개수", example = "10", required = true) @RequestParam(defaultValue = "10") @Positive int size
-  ){
+      @Parameter(description = "페이지 인덱스", example = "0", required = true)
+          @RequestParam(defaultValue = "0")
+          @PositiveOrZero
+          int page,
+      @Parameter(description = "응답 개수", example = "10", required = true)
+          @RequestParam(defaultValue = "10")
+          @Positive
+          int size) {
     return ResponseEntity.ok(articleService.getArticles(page, size));
   }
 
@@ -50,11 +54,8 @@ public class ArticleApi {
     return ResponseEntity.status(CREATED).body(ArticlePersistResponse.of(article.getSlug()));
   }
 
-
   @GetMapping("/{slug}")
-  public ResponseEntity<ArticleResponse> article(
-      @PathVariable("slug") String slug
-  ) {
+  public ResponseEntity<ArticleResponse> article(@PathVariable("slug") String slug) {
     return ResponseEntity.ok(articleService.getArticle(slug));
   }
 
@@ -62,17 +63,14 @@ public class ArticleApi {
   public ResponseEntity<Void> updateArticle(
       @PathVariable("slug") String slug,
       @AuthenticationPrincipal User user,
-      @Valid @RequestBody UpdateArticleParam updateArticleParam
-  ) {
+      @Valid @RequestBody UpdateArticleParam updateArticleParam) {
     articleService.updateArticle(slug, user, updateArticleParam);
     return ResponseEntity.noContent().build();
   }
 
   @DeleteMapping("/{slug}")
   public ResponseEntity<Void> deleteArticle(
-      @PathVariable("slug") String slug,
-      @AuthenticationPrincipal User user
-  ) {
+      @PathVariable("slug") String slug, @AuthenticationPrincipal User user) {
     articleService.deleteArticle(slug, user);
     return ResponseEntity.noContent().build();
   }
