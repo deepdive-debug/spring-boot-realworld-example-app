@@ -1,6 +1,6 @@
 package io.spring.infrastructure.service;
 
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 

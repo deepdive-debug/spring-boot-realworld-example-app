@@ -1,7 +1,7 @@
 package io.spring.api.comment.response;
 
 import io.spring.api.user.response.UserResponse;
-import io.spring.core.comment.Comment;
+import io.spring.core.comment.domain.Comment;
 import java.time.LocalDateTime;
 
 public record CommentResponse(

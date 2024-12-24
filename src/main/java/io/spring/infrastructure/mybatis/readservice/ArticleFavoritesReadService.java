@@ -1,7 +1,7 @@
 // package io.spring.infrastructure.mybatis.readservice;
 //
 // import io.spring.api.article.response.ArticleFavoriteCount;
-// import io.spring.core.user.User;
+// import io.spring.core.user.domain.User;
 // import java.util.List;
 // import java.util.Set;
 // import org.apache.ibatis.annotations.Mapper;

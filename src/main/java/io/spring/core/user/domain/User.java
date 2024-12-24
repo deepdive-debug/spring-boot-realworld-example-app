@@ -1,11 +1,11 @@
-package io.spring.core.user;
+package io.spring.core.user.domain;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 import io.spring.core.BaseTimeEntity;
-import io.spring.core.article.Article;
-import io.spring.core.comment.Comment;
+import io.spring.core.article.domain.Article;
+import io.spring.core.comment.domain.Comment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;

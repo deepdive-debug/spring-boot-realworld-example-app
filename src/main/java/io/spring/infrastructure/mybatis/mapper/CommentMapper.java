@@ -1,6 +1,6 @@
 // package io.spring.infrastructure.mybatis.mapper;
 //
-// import io.spring.core.comment.Comment;
+// import io.spring.core.comment.domain.Comment;
 // import org.apache.ibatis.annotations.Mapper;
 // import org.apache.ibatis.annotations.Param;
 //

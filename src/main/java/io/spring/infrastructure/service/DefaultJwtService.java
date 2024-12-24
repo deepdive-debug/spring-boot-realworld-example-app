@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;

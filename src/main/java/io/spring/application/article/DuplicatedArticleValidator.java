@@ -1,7 +1,7 @@
 package io.spring.application.article;
 
-import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
+import io.spring.core.article.domain.Article;
+import io.spring.core.article.domain.ArticleRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;

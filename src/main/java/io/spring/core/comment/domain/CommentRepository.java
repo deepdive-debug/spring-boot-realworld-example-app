@@ -1,4 +1,4 @@
-package io.spring.core.comment;
+package io.spring.core.comment.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
