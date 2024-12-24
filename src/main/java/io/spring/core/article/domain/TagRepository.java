@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface TagRepository {
-	void saveAll(List<Tag> tags);
+  void saveAll(List<Tag> tags);
 
-	Collection<Tag> findAll();
+  Collection<Tag> findAll();
 }
