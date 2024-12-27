@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             id -> {
               if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 userRepository
-                    .findById(id)
+                    .findById(UUID.fromString(id))
                     .ifPresent(
                         user -> {
                           UsernamePasswordAuthenticationToken authenticationToken =

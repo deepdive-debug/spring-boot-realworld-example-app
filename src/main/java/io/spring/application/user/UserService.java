@@ -13,6 +13,7 @@ import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.service.JwtService;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,7 +95,7 @@ public class UserService {
   //   userRepository.removeRelation(relation);
   // }
 
-  public UserResponse getUserInfo(String id) {
+  public UserResponse getUserInfo(UUID id) {
     User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
     return UserResponse.of(user);

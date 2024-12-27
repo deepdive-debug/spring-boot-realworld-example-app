@@ -14,6 +14,7 @@ import io.spring.core.comment.Comment;
 import io.spring.core.comment.CommentRepository;
 import io.spring.core.user.User;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -107,13 +108,13 @@ public class CommentServiceTest {
   @Test
   public void should_throw_exception_when_comment_not_found_on_delete() {
     // given
-    when(commentRepository.findById("invalid-id")).thenReturn(Optional.empty());
+    when(commentRepository.findById(UUID.fromString("invalid-id"))).thenReturn(Optional.empty());
 
     // when & then
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          commentService.delete(user, "invalid-id");
+          commentService.delete(user, UUID.fromString("invalid-id"));
         });
 
     verify(commentRepository, never()).delete(any(Comment.class));
@@ -154,13 +155,14 @@ public class CommentServiceTest {
   public void should_throw_exception_when_comment_not_found_on_update() {
     // given
     NewCommentParam param = new NewCommentParam("Updated Comment Content");
-    when(commentRepository.findById("invalid-id")).thenReturn(Optional.empty());
+    UUID randomUUID = UUID.randomUUID();
+    when(commentRepository.findById(randomUUID)).thenReturn(Optional.empty());
 
     // when & then
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          commentService.update("invalid-id", user, param);
+          commentService.update(randomUUID, user, param);
         });
 
     verify(commentRepository, never()).save(any(Comment.class));
