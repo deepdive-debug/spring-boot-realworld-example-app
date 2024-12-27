@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,7 +23,7 @@ public abstract class BaseTimeEntity {
   @GeneratedValue
   @UuidGenerator(style = RANDOM)
   @Column(columnDefinition = "BINARY(16)")
-  private String id;
+  private UUID id;
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)

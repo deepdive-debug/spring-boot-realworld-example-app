@@ -14,6 +14,7 @@ import io.spring.core.user.UserRepository;
 import io.spring.infrastructure.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;

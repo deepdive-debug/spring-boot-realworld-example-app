@@ -41,7 +41,7 @@ public class UsersApi {
 
   @GetMapping("/mypage")
   public ResponseEntity<UserResponse> currentUser(@AuthenticationPrincipal User currentUser) {
-    return ResponseEntity.ok(userService.getUserInfo(currentUser.getId()));
+    return ResponseEntity.ok(userService.getUserInfo(String.valueOf(currentUser.getId())));
   }
 
   @PatchMapping("/mypage")

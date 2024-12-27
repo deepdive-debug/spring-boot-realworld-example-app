@@ -6,6 +6,6 @@ import lombok.Builder;
 @Builder
 public record UserPersistResponse(String id) {
   public static UserPersistResponse from(User user) {
-    return UserPersistResponse.builder().id(user.getId()).build();
+    return UserPersistResponse.builder().id(String.valueOf(user.getId())).build();
   }
 }

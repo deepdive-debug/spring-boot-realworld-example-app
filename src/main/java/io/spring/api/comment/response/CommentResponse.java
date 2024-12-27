@@ -5,7 +5,7 @@ import io.spring.core.comment.Comment;
 import java.time.LocalDateTime;
 
 public record CommentResponse(
-    String id, String body, LocalDateTime createdAt, UserResponse commenter) {
+    java.util.UUID id, String body, LocalDateTime createdAt, UserResponse commenter) {
   public static CommentResponse from(Comment comment) {
     return new CommentResponse(
         comment.getId(),

@@ -30,7 +30,7 @@ public non-sealed class DefaultJwtService implements JwtService {
   @Override
   public String toToken(User user) {
     return Jwts.builder()
-        .setSubject(user.getId())
+        .setSubject(String.valueOf(user.getId()))
         .setExpiration(expireTimeFromNow())
         .signWith(signingKey)
         .compact();
