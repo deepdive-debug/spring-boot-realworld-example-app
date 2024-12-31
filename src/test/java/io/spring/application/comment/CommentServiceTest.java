@@ -108,13 +108,13 @@ public class CommentServiceTest {
   @Test
   public void should_throw_exception_when_comment_not_found_on_delete() {
     // given
-    when(commentRepository.findById(UUID.fromString("invalid-id"))).thenReturn(Optional.empty());
-
+    when(commentRepository.findById(UUID.nameUUIDFromBytes("invalid-id".getBytes())))
+        .thenReturn(Optional.empty());
     // when & then
     assertThrows(
         ResourceNotFoundException.class,
         () -> {
-          commentService.delete(user, UUID.fromString("invalid-id"));
+          commentService.delete(user, UUID.nameUUIDFromBytes("invalid-id".getBytes()));
         });
 
     verify(commentRepository, never()).delete(any(Comment.class));
