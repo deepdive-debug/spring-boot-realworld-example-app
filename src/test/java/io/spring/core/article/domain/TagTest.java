@@ -1,9 +1,8 @@
-package io.spring.core.article;
+package io.spring.core.article.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import io.spring.core.article.domain.Tag;
 import org.junit.jupiter.api.Test;
 
 public class TagTest {

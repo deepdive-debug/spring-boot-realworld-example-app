@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,13 +43,13 @@ public class Article extends BaseTimeEntity {
   @Column(nullable = false)
   private String body;
 
-  @Column(nullable = false)
   @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true, fetch = LAZY)
-  private List<Comment> comments;
+  @Builder.Default
+  private List<Comment> comments = new ArrayList<>();
 
-  @Column(nullable = false)
   @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true, fetch = LAZY)
-  private List<Tag> tags;
+  @Builder.Default
+  private List<Tag> tags = new ArrayList<>();
 
   public static Article create(String title, String description, String body, User author) {
     return Article.builder()

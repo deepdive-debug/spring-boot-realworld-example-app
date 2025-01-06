@@ -1,10 +1,9 @@
-package io.spring.core.article;
+package io.spring.core.article.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.spring.core.article.domain.Article;
 import org.junit.jupiter.api.Test;
 
 public class ArticleTest {
@@ -16,6 +15,10 @@ public class ArticleTest {
 		//then
 		assertNotNull(article);
 		assertEquals("a new title", article.getTitle());
+		assertEquals("desc", article.getDescription());
+		assertEquals("body", article.getBody());
+		assertNotNull(article.getComments());
+		assertNotNull(article.getTags());
 	}
 
 	@Test

@@ -1,9 +1,8 @@
-package io.spring.core.comment;
+package io.spring.core.comment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.spring.core.comment.domain.Comment;
 import org.junit.jupiter.api.Test;
 
 public class CommentTest {

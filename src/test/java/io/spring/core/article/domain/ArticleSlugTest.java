@@ -1,9 +1,8 @@
-package io.spring.core.article;
+package io.spring.core.article.domain;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import io.spring.core.article.domain.Article;
 import org.junit.jupiter.api.Test;
 
 public class ArticleSlugTest {

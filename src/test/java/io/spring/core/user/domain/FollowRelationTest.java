@@ -1,9 +1,8 @@
-package io.spring.core.user;
+package io.spring.core.user.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import io.spring.core.user.domain.FollowRelation;
 import org.junit.jupiter.api.Test;
 
 public class FollowRelationTest {
