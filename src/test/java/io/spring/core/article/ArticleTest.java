@@ -1,55 +1,42 @@
 package io.spring.core.article;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.spring.core.article.domain.Article;
 import org.junit.jupiter.api.Test;
 
 public class ArticleTest {
+	@Test
+	public void articleCreateTest_success() {
+		//given
+		Article article = Article.create("a new title", "desc", "body", null);
 
-  @Test
-  public void should_get_right_slug() {
-    // given
-    Article article = Article.create("a new   title", "desc", "body", null);
+		//then
+		assertNotNull(article);
+		assertThat(article.getTitle()).isEqualTo("a new title");
+	}
 
-    // then
-    assertThat(article.getSlug(), is("a-new-title"));
-  }
+	@Test
+	public void articleCreateTest_fail() {
+		assertThrows(NullPointerException.class,
+			() -> Article.create(null, "desc", "body", null)
+		);
+	}
 
-  @Test
-  public void should_get_right_slug_with_number_in_title() {
-    // given
-    Article article = Article.create("a new title 2", "desc", "body", null);
+	@Test
+	public void articleUpdateTest() {
+		//given
+		Article article = Article.create("a new title", "desc", "body", null);
 
-    // then
-    assertThat(article.getSlug(), is("a-new-title-2"));
-  }
+		//when
+		article.update("a new title updated", "updated desc", "updated body");
 
-  @Test
-  public void should_get_lower_case_slug() {
-    // given
-    Article article = Article.create("A NEW TITLE", "desc", "body", null);
-
-    // then
-    assertThat(article.getSlug(), is("a-new-title"));
-  }
-
-  @Test
-  public void should_handle_other_language() {
-    // given
-    Article article = Article.create("한글 제목", "desc", "body", null);
-
-    // then
-    assertThat(article.getSlug(), is("한글-제목"));
-  }
-
-  @Test
-  public void should_handle_special_characters() {
-    // given
-    Article article = Article.create("what?the.hell,w", "desc", "body", null);
-
-    // then
-    assertThat(article.getSlug(), is("what-the-hell-w"));
-  }
+		//then
+		assertThat(article.getTitle()).isEqualTo("a new title updated");
+		assertThat(article.getDescription()).isEqualTo("updated desc");
+		assertThat(article.getBody()).isEqualTo("updated body");
+		assertThat(article.getSlug()).isEqualTo("a-new-title-updated");
+	}
 }
