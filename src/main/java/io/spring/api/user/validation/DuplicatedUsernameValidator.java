@@ -1,4 +1,4 @@
-package io.spring.application.user;
+package io.spring.api.user.validation;
 
 import io.spring.core.user.UserRepository;
 import jakarta.validation.ConstraintValidator;
