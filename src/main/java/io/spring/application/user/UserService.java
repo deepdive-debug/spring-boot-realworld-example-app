@@ -27,12 +27,15 @@ public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
+  private final UserValidator userValidator;
 
   @Value("${image.default}")
   private String defaultImage;
 
   @Transactional
   public UserPersistResponse createUser(@Valid RegisterParam registerParam) {
+    userValidator.validateRegistration(registerParam.email(), registerParam.username());
+
     User user =
         User.of(
             registerParam.email(),
@@ -60,12 +63,17 @@ public class UserService {
   public void updateUser(@Valid UpdateUserCommand command) {
     User user = command.targetUser();
     UpdateUserParam updateUserParam = command.param();
+
+    userValidator.validateEmailAvailability(updateUserParam.email(), user);
+    userValidator.validateUsernameAvailability(updateUserParam.username(), user);
+
     user.update(
         updateUserParam.email(),
         updateUserParam.username(),
         updateUserParam.password(),
         updateUserParam.bio(),
         updateUserParam.image());
+
     userRepository.save(user);
   }
 
@@ -94,7 +102,6 @@ public class UserService {
 
   public UserResponse getUserInfo(String id) {
     User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-
     return UserResponse.of(user);
   }
 }

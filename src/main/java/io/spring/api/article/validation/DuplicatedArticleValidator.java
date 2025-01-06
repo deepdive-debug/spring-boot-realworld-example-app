@@ -1,4 +1,4 @@
-package io.spring.application.article;
+package io.spring.api.article.validation;
 
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.ArticleRepository;

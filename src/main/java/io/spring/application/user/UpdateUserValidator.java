@@ -1,6 +1,7 @@
 package io.spring.application.user;
 
 import io.spring.api.user.request.UpdateUserCommand;
+import io.spring.api.user.validation.UpdateUserConstraint;
 import io.spring.core.user.domain.User;
 import io.spring.core.user.domain.UserRepository;
 import jakarta.validation.ConstraintValidator;
