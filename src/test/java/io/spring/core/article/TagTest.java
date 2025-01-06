@@ -1,7 +1,9 @@
 package io.spring.core.article;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import io.spring.core.article.domain.Tag;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TagTest {
@@ -11,7 +13,7 @@ public class TagTest {
 		Tag tag = Tag.create("test", null);
 
 		//then
-		Assertions.assertNotNull(tag);
-		Assertions.assertEquals("test", tag.getName());
+		assertNotNull(tag);
+		assertEquals("test", tag.getName());
 	}
 }
