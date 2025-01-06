@@ -4,15 +4,19 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.spring.api.comment.CommentsApi;
 import io.spring.api.comment.response.CommentPersistResponse;
 import io.spring.application.comment.CommentService;
-import io.spring.core.article.Article;
-import io.spring.core.comment.Comment;
-import io.spring.core.user.User;
+import io.spring.core.article.domain.Article;
+import io.spring.core.comment.domain.Comment;
+import io.spring.core.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -50,12 +54,11 @@ public class CommentsApiTest {
     // when - 요청
     given()
         .contentType("application/json")
-        .body(
-            """
-                {
-                  "body": "This is a test comment"
-                }
-                """)
+        .body("""
+					{
+					  "body": "This is a test comment"
+					}
+					""")
         .when()
         .post("/articles/{slug}/comments", article.getSlug())
 
@@ -75,12 +78,11 @@ public class CommentsApiTest {
     // when - 요청
     given()
         .contentType("application/json")
-        .body(
-            """
-                {
-                  "body": "Updated comment content"
-                }
-                """)
+        .body("""
+					{
+					  "body": "Updated comment content"
+					}
+					""")
         .when()
         .patch("/articles/{slug}/comments/{id}", article.getSlug(), comment.getId())
 

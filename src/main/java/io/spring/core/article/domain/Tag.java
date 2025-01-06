@@ -1,4 +1,4 @@
-package io.spring.core.article;
+package io.spring.core.article.domain;
 
 import io.spring.core.BaseTimeEntity;
 import jakarta.persistence.*;

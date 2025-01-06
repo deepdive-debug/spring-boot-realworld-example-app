@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import io.spring.api.comment.request.NewCommentParam;
 import io.spring.api.comment.response.CommentPersistResponse;
 import io.spring.application.comment.CommentService;
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

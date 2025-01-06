@@ -1,6 +1,6 @@
 package io.spring.api.user.validation;
 
-import io.spring.core.user.UserRepository;
+import io.spring.core.user.domain.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -12,7 +12,7 @@ import io.spring.api.common.response.PaginatedListResponse;
 import io.spring.api.user.response.UserResponse;
 import io.spring.application.article.ArticleService;
 import io.spring.config.TestSecurityConfig;
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

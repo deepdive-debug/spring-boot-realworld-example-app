@@ -1,12 +1,12 @@
-package io.spring.core.article;
+package io.spring.core.article.domain;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 import io.spring.core.BaseTimeEntity;
-import io.spring.core.comment.Comment;
-import io.spring.core.user.User;
+import io.spring.core.comment.domain.Comment;
+import io.spring.core.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

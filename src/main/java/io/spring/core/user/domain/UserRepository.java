@@ -1,14 +1,17 @@
-package io.spring.core.user;
+package io.spring.core.user.domain;
 
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository {
   Optional<User> findByUsername(String username);
 
   Optional<User> findByEmail(String email);
+
+  Optional<User> findById(String id);
+
+  User save(User user);
 
   // void saveRelation(FollowRelation followRelation);
   //

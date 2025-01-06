@@ -1,11 +1,11 @@
-package io.spring.core.comment;
+package io.spring.core.comment.domain;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 import io.spring.core.BaseTimeEntity;
-import io.spring.core.article.Article;
-import io.spring.core.user.User;
+import io.spring.core.article.domain.Article;
+import io.spring.core.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;

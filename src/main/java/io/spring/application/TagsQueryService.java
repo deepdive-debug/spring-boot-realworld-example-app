@@ -1,7 +1,7 @@
 package io.spring.application;
 
 import io.spring.api.article.response.tag.TagResponse;
-import io.spring.core.article.TagRepository;
+import io.spring.core.article.domain.TagRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

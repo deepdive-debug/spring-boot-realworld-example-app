@@ -1,9 +1,15 @@
 package io.spring.application.article;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.spring.api.article.request.NewArticleParam;
 import io.spring.api.article.request.UpdateArticleParam;
@@ -12,10 +18,10 @@ import io.spring.api.article.response.ArticleSummaryResponse;
 import io.spring.api.common.response.PaginatedListResponse;
 import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
-import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
-import io.spring.core.article.TagRepository;
-import io.spring.core.user.User;
+import io.spring.core.article.domain.Article;
+import io.spring.core.article.domain.ArticleRepository;
+import io.spring.core.article.domain.TagRepository;
+import io.spring.core.user.domain.User;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

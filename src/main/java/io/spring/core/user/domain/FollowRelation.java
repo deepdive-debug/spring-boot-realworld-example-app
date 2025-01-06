@@ -1,4 +1,4 @@
-package io.spring.core.user;
+package io.spring.core.user.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

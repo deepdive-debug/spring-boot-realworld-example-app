@@ -1,7 +1,7 @@
 package io.spring.api.article.response;
 
 import io.spring.api.user.response.UserResponse;
-import io.spring.core.article.Article;
+import io.spring.core.article.domain.Article;
 import java.time.LocalDateTime;
 
 public record ArticleSummaryResponse(

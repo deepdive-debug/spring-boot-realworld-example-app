@@ -3,6 +3,7 @@ package io.spring.core.article;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import io.spring.core.article.domain.Article;
 import org.junit.jupiter.api.Test;
 
 public class ArticleTest {
