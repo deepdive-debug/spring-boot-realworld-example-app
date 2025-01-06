@@ -1,17 +1,15 @@
 package io.spring.core.article;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.spring.core.article.domain.Article;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ArticleTest {
 	@Test
-	public void articleCreateTest_success() {
+	public void articleCreate_success() {
 		//given
 		Article article = Article.create("a new title", "desc", "body", null);
 
@@ -21,14 +19,14 @@ public class ArticleTest {
 	}
 
 	@Test
-	public void articleCreateTest_fail() {
+	public void articleCreate_fail() {
 		assertThrows(NullPointerException.class,
 			() -> Article.create(null, "desc", "body", null)
 		);
 	}
 
 	@Test
-	public void articleUpdateTest() {
+	public void articleUpdate_success() {
 		//given
 		Article article = Article.create("a new title", "desc", "body", null);
 
