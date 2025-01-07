@@ -8,20 +8,20 @@ import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.Tag;
 import io.spring.core.article.domain.TagRepository;
 import java.util.List;
+
+import io.spring.core.article.infrastructure.FakeTagRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 class TagsQueryServiceTest {
-
-  @Mock private TagRepository tagRepository;
-
+  private TagRepository tagRepository;
   private TagsQueryService tagsQueryService;
 
   @BeforeEach
   void setUp() {
-    MockitoAnnotations.openMocks(this);
+    this.tagRepository = new FakeTagRepository();
     tagsQueryService = new TagsQueryService(tagRepository);
   }
 
@@ -33,9 +33,8 @@ class TagsQueryServiceTest {
     Tag tag2 = Tag.create("Tag2", article);
     List<Tag> tags = List.of(tag1, tag2);
 
-    when(tagRepository.findAll()).thenReturn(tags);
-
     // When
+    tagRepository.saveAll(tags);
     List<TagResponse> tagResponses = tagsQueryService.allTags();
 
     // Then
