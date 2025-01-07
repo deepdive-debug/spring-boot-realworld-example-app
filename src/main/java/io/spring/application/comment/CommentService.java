@@ -9,6 +9,7 @@ import io.spring.core.article.domain.ArticleRepository;
 import io.spring.core.comment.domain.Comment;
 import io.spring.core.comment.domain.CommentRepository;
 import io.spring.core.user.domain.User;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,20 +35,20 @@ public class CommentService {
   }
 
   @Transactional
-  public void delete(User user, String commentId) {
+  public void delete(User user, UUID commentId) {
     Comment comment = findComment(commentId);
     isAuthor(user, comment);
     commentRepository.delete(comment);
   }
 
   @Transactional
-  public void update(String commentId, User user, NewCommentParam newCommentParam) {
+  public void update(UUID commentId, User user, NewCommentParam newCommentParam) {
     Comment comment = findComment(commentId);
     isAuthor(user, comment);
     comment.update(newCommentParam.body());
   }
 
-  private Comment findComment(String commentId) {
+  private Comment findComment(UUID commentId) {
     return commentRepository.findById(commentId).orElseThrow(ResourceNotFoundException::new);
   }
 

@@ -13,7 +13,9 @@ import io.spring.core.user.domain.User;
 import io.spring.core.user.domain.UserRepository;
 import io.spring.infrastructure.service.JwtService;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -100,7 +103,7 @@ public class UserService {
   //   userRepository.removeRelation(relation);
   // }
 
-  public UserResponse getUserInfo(String id) {
+  public UserResponse getUserInfo(UUID id) {
     User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     return UserResponse.of(user);
   }

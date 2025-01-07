@@ -9,8 +9,8 @@ public record ArticleSummaryResponse(
     String title,
     LocalDateTime createdAt,
     UserResponse author,
-    int tagCount,
-    int commentCount) {
+    long tagCount,
+    long commentCount) {
   public static ArticleSummaryResponse from(Article article) {
     return new ArticleSummaryResponse(
         article.getSlug(),

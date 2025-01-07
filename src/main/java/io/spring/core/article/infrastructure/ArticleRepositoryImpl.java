@@ -1,11 +1,13 @@
 package io.spring.core.article.infrastructure;
 
+import io.spring.api.article.response.ArticleSummaryResponse;
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.ArticleRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -31,5 +33,10 @@ public class ArticleRepositoryImpl implements ArticleRepository {
   @Override
   public Article save(Article article) {
     return jpaArticleRepository.save(article);
+  }
+
+  @Override
+  public Page<ArticleSummaryResponse> findAllArticleSummary(Pageable pageable) {
+    return jpaArticleRepository.findAllArticleSummary(pageable);
   }
 }

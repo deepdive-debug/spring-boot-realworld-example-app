@@ -37,16 +37,12 @@ public class ArticleService {
 
   @Transactional(readOnly = true)
   public PaginatedListResponse<ArticleSummaryResponse> getArticles(int page, int size) {
-    Page<Article> articlePage =
-        articleRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
-
-    List<ArticleSummaryResponse> articleSummaryResponses =
-        articlePage.getContent().stream().map(ArticleSummaryResponse::from).toList();
-
-    PageableResponse<ArticleSummaryResponse> pageableResponse =
-        PageableResponse.of(articlePage.getPageable(), articleSummaryResponses);
-
-    return PaginatedListResponse.of(articleSummaryResponses, pageableResponse);
+    Page<ArticleSummaryResponse> articlePage =
+        articleRepository.findAllArticleSummary(
+            PageRequest.of(page, size, Sort.by("createdAt").descending()));
+    return PaginatedListResponse.of(
+        articlePage.getContent(),
+        PageableResponse.of(articlePage.getPageable(), articlePage.getContent()));
   }
 
   @Transactional

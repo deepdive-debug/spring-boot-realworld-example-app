@@ -3,6 +3,7 @@ package io.spring.core.comment.infrastructure;
 import io.spring.core.comment.domain.Comment;
 import io.spring.core.comment.domain.CommentRepository;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +23,7 @@ public class CommentRepositoryImpl implements CommentRepository {
   }
 
   @Override
-  public Optional<Comment> findById(String commentId) {
+  public Optional<Comment> findById(UUID commentId) {
     return jpaCommentRepository.findById(commentId);
   }
 }

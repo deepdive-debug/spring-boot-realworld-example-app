@@ -1,11 +1,10 @@
 package io.spring.api.comment.response;
 
 import io.spring.core.comment.domain.Comment;
-import lombok.Builder;
+import java.util.UUID;
 
-@Builder
-public record CommentPersistResponse(String id) {
+public record CommentPersistResponse(UUID id) {
   public static CommentPersistResponse from(Comment comment) {
-    return CommentPersistResponse.builder().id(comment.getId()).build();
+    return new CommentPersistResponse(comment.getId());
   }
 }

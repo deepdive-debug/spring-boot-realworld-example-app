@@ -51,9 +51,10 @@ public class ArticleApiTest {
             new ArticleSummaryResponse(
                 "slug2", "Title2", LocalDateTime.now(), UserResponse.of(user), 2, 1));
 
+    PageRequest pageable = PageRequest.of(page, size);
+
     PaginatedListResponse<ArticleSummaryResponse> paginatedResponse =
-        PaginatedListResponse.of(
-            articles, PageableResponse.of(PageRequest.of(page, size), articles));
+        PaginatedListResponse.of(articles, PageableResponse.of(pageable, articles));
 
     when(articleService.getArticles(page, size)).thenReturn(paginatedResponse);
 

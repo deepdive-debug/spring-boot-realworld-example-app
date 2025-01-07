@@ -3,6 +3,7 @@ package io.spring.core.user.infrastructure;
 import io.spring.core.user.domain.User;
 import io.spring.core.user.domain.UserRepository;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public Optional<User> findById(String id) {
+  public Optional<User> findById(UUID id) {
     return jpaUserRepository.findById(id);
   }
 

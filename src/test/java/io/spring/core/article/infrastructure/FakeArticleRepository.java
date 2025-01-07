@@ -1,5 +1,6 @@
 package io.spring.core.article.infrastructure;
 
+import io.spring.api.article.response.ArticleSummaryResponse;
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.ArticleRepository;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 public class FakeArticleRepository implements ArticleRepository {
   private final List<Article> data = Collections.synchronizedList(new ArrayList<>());
@@ -55,5 +57,22 @@ public class FakeArticleRepository implements ArticleRepository {
 
     data.add(newArticle);
     return newArticle;
+  }
+
+  @Override
+  public Page<ArticleSummaryResponse> findAllArticleSummary(Pageable pageable) {
+    synchronized (data) {
+      int start = (int) pageable.getOffset();
+      int end = Math.min(start + pageable.getPageSize(), data.size());
+
+      if (start > end) {
+        return new PageImpl<>(Collections.emptyList(), pageable, data.size());
+      }
+
+      List<ArticleSummaryResponse> pageContent =
+          data.subList(start, end).stream().map(ArticleSummaryResponse::from).toList();
+
+      return new PageImpl<>(pageContent, pageable, data.size());
+    }
   }
 }

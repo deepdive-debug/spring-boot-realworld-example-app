@@ -17,6 +17,7 @@ import io.spring.application.comment.CommentService;
 import io.spring.core.article.domain.Article;
 import io.spring.core.comment.domain.Comment;
 import io.spring.core.user.domain.User;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -73,7 +74,7 @@ public class CommentsApiTest {
   @WithMockUser
   public void should_update_comment_successfully() {
     // given - 준비
-    doNothing().when(commentService).update(anyString(), any(User.class), any());
+    doNothing().when(commentService).update(UUID.fromString(anyString()), any(User.class), any());
 
     // when - 요청
     given()
@@ -97,7 +98,7 @@ public class CommentsApiTest {
   @WithMockUser
   public void should_delete_comment_successfully() {
     // given - 준비
-    doNothing().when(commentService).delete(any(User.class), anyString());
+    doNothing().when(commentService).delete(any(User.class), UUID.fromString(anyString()));
 
     // when - 요청
     given()
@@ -118,7 +119,7 @@ public class CommentsApiTest {
     // given - 준비
     doThrow(new IllegalStateException("You are not authorized to delete this comment"))
         .when(commentService)
-        .delete(any(User.class), anyString());
+        .delete(any(User.class), UUID.fromString(anyString()));
 
     // when - 요청
     given()

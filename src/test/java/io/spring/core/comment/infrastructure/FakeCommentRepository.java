@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class FakeCommentRepository implements CommentRepository {
   private final List<Comment> data = Collections.synchronizedList(new ArrayList<>());
@@ -25,13 +26,13 @@ public class FakeCommentRepository implements CommentRepository {
 
   @Override
   public void delete(Comment comment) {
-    String id = comment.getId();
+    UUID id = comment.getId();
     Optional<Comment> foundComment = data.stream().filter(c -> c.getId().equals(id)).findFirst();
     foundComment.ifPresent(data::remove);
   }
 
   @Override
-  public Optional<Comment> findById(String commentId) {
+  public Optional<Comment> findById(UUID commentId) {
     return data.stream().filter(c -> c.getId().equals(commentId)).findFirst();
   }
 }

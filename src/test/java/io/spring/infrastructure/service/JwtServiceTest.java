@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import io.spring.core.user.domain.User;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,7 +27,8 @@ class JwtServiceTest {
   void shouldGenerateTokenForUser() {
     // Given
     User user = mock(User.class);
-    when(user.getId()).thenReturn("user-id");
+    UUID userId = UUID.nameUUIDFromBytes("user-id".getBytes());
+    when(user.getId()).thenReturn(userId);
     when(defaultJwtService.toToken(user)).thenReturn("mocked-token");
 
     // When
@@ -41,14 +43,15 @@ class JwtServiceTest {
   void shouldExtractSubjectFromToken() {
     // Given
     String token = "mocked-token";
-    when(defaultJwtService.getSubFromToken(token)).thenReturn(Optional.of("user-id"));
+    UUID userId = UUID.nameUUIDFromBytes("user-id".getBytes());
+    when(defaultJwtService.getSubFromToken(token)).thenReturn(Optional.of(userId.toString()));
 
     // When
-    Optional<String> userId = jwtService.getSubFromToken(token);
+    Optional<String> extractedUserId = jwtService.getSubFromToken(token);
 
     // Then
-    assertThat(userId).isPresent();
-    assertThat(userId.get()).isEqualTo("user-id");
+    assertThat(extractedUserId).isPresent();
+    assertThat(extractedUserId.get()).isEqualTo(userId.toString());
     verify(defaultJwtService).getSubFromToken(token);
   }
 

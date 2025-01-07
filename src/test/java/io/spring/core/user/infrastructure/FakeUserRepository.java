@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class FakeUserRepository implements UserRepository {
   private final List<User> data = Collections.synchronizedList(new ArrayList<>());
@@ -21,7 +22,7 @@ public class FakeUserRepository implements UserRepository {
   }
 
   @Override
-  public Optional<User> findById(String id) {
+  public Optional<User> findById(UUID id) {
     return data.stream().filter(user -> user.getId().equals(id)).findFirst();
   }
 

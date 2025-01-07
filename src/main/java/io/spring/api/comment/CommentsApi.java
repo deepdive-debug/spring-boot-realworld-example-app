@@ -7,6 +7,7 @@ import io.spring.api.comment.response.CommentPersistResponse;
 import io.spring.application.comment.CommentService;
 import io.spring.core.user.domain.User;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +37,7 @@ public class CommentsApi {
 
   @PatchMapping("/{id}")
   public ResponseEntity<Void> updateComment(
-      @PathVariable("id") String commentId,
+      @PathVariable("id") UUID commentId,
       @AuthenticationPrincipal User user,
       @Valid @RequestBody NewCommentParam newCommentParam) {
     commentService.update(commentId, user, newCommentParam);
@@ -45,7 +46,7 @@ public class CommentsApi {
 
   @DeleteMapping("/{id}")
   public ResponseEntity deleteComment(
-      @PathVariable("id") String commentId, @AuthenticationPrincipal User user) {
+      @PathVariable("id") UUID commentId, @AuthenticationPrincipal User user) {
     commentService.delete(user, commentId);
     return ResponseEntity.noContent().build();
   }

@@ -8,7 +8,7 @@ import lombok.Builder;
 import org.springframework.data.domain.Pageable;
 
 @Builder
-public record PageableResponse<T>(
+public record PageableResponse(
     @Schema(
             defaultValue = "0",
             description = "페이지 인덱스로, 0부터 시작합니다. 별도의 값 없이 요청 시, 0으로 설정됩니다.",
@@ -29,10 +29,10 @@ public record PageableResponse<T>(
             requiredMode = REQUIRED)
         boolean isEnd) {
 
-  public static <T> PageableResponse<T> of(Pageable pageable, List<T> totalElements) {
+  public static <T> PageableResponse of(Pageable pageable, List<T> totalElements) {
     int totalPageSize = (int) Math.ceil((double) totalElements.size() / pageable.getPageSize());
     boolean isEnd = pageable.getPageNumber() + 1 >= totalPageSize;
-    return PageableResponse.<T>builder()
+    return PageableResponse.builder()
         .page(pageable.getPageNumber())
         .size(pageable.getPageSize())
         .totalPages(totalPageSize)

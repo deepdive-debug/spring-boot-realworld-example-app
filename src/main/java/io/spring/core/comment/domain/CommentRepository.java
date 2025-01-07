@@ -1,6 +1,7 @@
 package io.spring.core.comment.domain;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface CommentRepository {
 
@@ -8,5 +9,5 @@ public interface CommentRepository {
 
   void delete(Comment comment);
 
-  Optional<Comment> findById(String commentId);
+  Optional<Comment> findById(UUID commentId);
 }
