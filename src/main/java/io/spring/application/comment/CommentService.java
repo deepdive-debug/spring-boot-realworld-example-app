@@ -6,7 +6,7 @@ import io.spring.api.exception.NoAuthorizationException;
 import io.spring.api.exception.ResourceNotFoundException;
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.ArticleRepository;
-import io.spring.core.comment.CommentRepository;
+import io.spring.core.comment.domain.CommentRepository;
 import io.spring.core.comment.domain.Comment;
 import io.spring.core.user.domain.User;
 import java.util.UUID;
