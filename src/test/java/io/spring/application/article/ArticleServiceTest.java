@@ -15,9 +15,8 @@ import io.spring.core.article.domain.Article;
 import io.spring.core.article.infrastructure.FakeArticleRepository;
 import io.spring.core.article.infrastructure.FakeTagRepository;
 import io.spring.core.user.domain.User;
-import java.util.List;
-
 import io.spring.core.user.infrastructure.FakeUserRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -75,7 +74,7 @@ public class ArticleServiceTest {
     assertThrows(ResourceNotFoundException.class, () -> articleService.getArticle("invalid-slug"));
   }
 
-//  @Test
+  //  @Test
   public void should_update_article_successfully() {
     // given
     UpdateArticleParam param =
@@ -88,7 +87,7 @@ public class ArticleServiceTest {
     assertEquals("Updated Title", article.getTitle());
   }
 
-//  	@Test
+  //  	@Test
   public void should_throw_exception_when_user_not_author_of_article() {
     // given
     User anotherUser = User.of("another@test.com", "anotherUser", "password", "bio", "image");
@@ -101,7 +100,7 @@ public class ArticleServiceTest {
         () -> articleService.updateArticle("test-title", anotherUser, param));
   }
 
-  //	@Test
+  @Test
   public void should_delete_article_successfully() {
     // when
     articleService.deleteArticle("test-title", user);
@@ -110,7 +109,7 @@ public class ArticleServiceTest {
     assertThrows(ResourceNotFoundException.class, () -> articleService.getArticle("test-title"));
   }
 
-  //	@Test
+  //  	@Test
   public void should_throw_exception_when_deleting_article_with_unauthorized_user() {
     // given
     User anotherUser = User.of("another@test.com", "anotherUser", "password", "bio", "image");

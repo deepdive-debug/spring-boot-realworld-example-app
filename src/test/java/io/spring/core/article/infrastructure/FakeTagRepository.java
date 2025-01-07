@@ -13,9 +13,7 @@ public class FakeTagRepository implements TagRepository {
   @Override
   public void saveAll(List<Tag> tags) {
     for (Tag tag : tags) {
-      Tag newTag = Tag.builder()
-          .name(tag.getName()).article(tag.getArticle())
-          .build();
+      Tag newTag = Tag.builder().name(tag.getName()).article(tag.getArticle()).build();
       newTag.initId();
       data.add(newTag);
     }
