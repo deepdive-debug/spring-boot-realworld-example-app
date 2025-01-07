@@ -38,4 +38,8 @@ public abstract class BaseTimeEntity {
   public void delete() {
     deletedAt = LocalDateTime.now();
   }
+
+  public void initId(){
+    this.id = UUID.randomUUID();
+  }
 }

@@ -55,6 +55,7 @@ public class FakeArticleRepository implements ArticleRepository {
             .body(article.getBody())
             .build();
 
+    newArticle.initId();
     data.add(newArticle);
     return newArticle;
   }
