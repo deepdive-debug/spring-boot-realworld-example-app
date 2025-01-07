@@ -1,6 +1,6 @@
 package io.spring.api.security;
 
-import io.spring.core.user.UserRepository;
+import io.spring.core.user.domain.UserRepository;
 import io.spring.infrastructure.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

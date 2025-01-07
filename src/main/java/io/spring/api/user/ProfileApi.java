@@ -2,7 +2,7 @@
 //
 // import io.spring.api.user.response.ProfileData;
 // import io.spring.application.ProfileQueryService;
-// import io.spring.core.user.User;
+// import io.spring.core.user.domain.User;
 // import java.util.HashMap;
 // import lombok.AllArgsConstructor;
 // import org.springframework.http.ResponseEntity;

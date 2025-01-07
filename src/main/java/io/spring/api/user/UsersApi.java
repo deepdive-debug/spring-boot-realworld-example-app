@@ -10,7 +10,7 @@ import io.spring.api.user.response.UserPersistResponse;
 import io.spring.api.user.response.UserResponse;
 import io.spring.api.user.response.UserWithToken;
 import io.spring.application.user.UserService;
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

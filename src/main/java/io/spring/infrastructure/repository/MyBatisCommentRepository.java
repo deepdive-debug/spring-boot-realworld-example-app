@@ -1,7 +1,7 @@
 // package io.spring.infrastructure.repository;
 //
-// import io.spring.core.comment.Comment;
-// import io.spring.core.comment.CommentRepository;
+// import io.spring.core.comment.domain.Comment;
+// import io.spring.core.comment.domain.CommentRepository;
 // import io.spring.infrastructure.mybatis.mapper.CommentMapper;
 // import java.util.Optional;
 // import org.springframework.beans.factory.annotation.Autowired;

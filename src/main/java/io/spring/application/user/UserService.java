@@ -9,8 +9,8 @@ import io.spring.api.user.request.UpdateUserParam;
 import io.spring.api.user.response.UserPersistResponse;
 import io.spring.api.user.response.UserResponse;
 import io.spring.api.user.response.UserWithToken;
-import io.spring.core.user.User;
-import io.spring.core.user.UserRepository;
+import io.spring.core.user.domain.User;
+import io.spring.core.user.domain.UserRepository;
 import io.spring.infrastructure.service.JwtService;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -30,12 +30,15 @@ public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
+  private final UserValidator userValidator;
 
   @Value("${image.default}")
   private String defaultImage;
 
   @Transactional
   public UserPersistResponse createUser(@Valid RegisterParam registerParam) {
+    userValidator.validateRegistration(registerParam.email(), registerParam.username());
+
     User user =
         User.of(
             registerParam.email(),
@@ -63,12 +66,17 @@ public class UserService {
   public void updateUser(@Valid UpdateUserCommand command) {
     User user = command.targetUser();
     UpdateUserParam updateUserParam = command.param();
+
+    userValidator.validateEmailAvailability(updateUserParam.email(), user);
+    userValidator.validateUsernameAvailability(updateUserParam.username(), user);
+
     user.update(
         updateUserParam.email(),
         updateUserParam.username(),
         updateUserParam.password(),
         updateUserParam.bio(),
         updateUserParam.image());
+
     userRepository.save(user);
   }
 
@@ -97,7 +105,6 @@ public class UserService {
 
   public UserResponse getUserInfo(UUID id) {
     User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-
     return UserResponse.of(user);
   }
 }

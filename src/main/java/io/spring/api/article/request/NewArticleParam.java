@@ -1,6 +1,6 @@
 package io.spring.api.article.request;
 
-import io.spring.application.article.DuplicatedArticleConstraint;
+import io.spring.api.article.validation.DuplicatedArticleConstraint;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 

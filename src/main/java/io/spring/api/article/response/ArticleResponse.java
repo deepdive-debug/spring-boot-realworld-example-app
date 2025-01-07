@@ -3,7 +3,7 @@ package io.spring.api.article.response;
 import io.spring.api.article.response.tag.TagResponse;
 import io.spring.api.comment.response.CommentResponse;
 import io.spring.api.user.response.UserResponse;
-import io.spring.core.article.Article;
+import io.spring.core.article.domain.Article;
 import java.time.LocalDateTime;
 import java.util.List;
 
