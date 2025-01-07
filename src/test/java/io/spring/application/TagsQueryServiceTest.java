@@ -1,19 +1,15 @@
 package io.spring.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 import io.spring.api.article.response.tag.TagResponse;
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.Tag;
 import io.spring.core.article.domain.TagRepository;
-import java.util.List;
-
 import io.spring.core.article.infrastructure.FakeTagRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 class TagsQueryServiceTest {
   private TagRepository tagRepository;
