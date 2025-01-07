@@ -14,23 +14,25 @@ import io.spring.api.user.response.UserWithToken;
 import io.spring.core.user.domain.User;
 import io.spring.core.user.domain.UserRepository;
 import io.spring.core.user.infrastructure.FakeUserRepository;
+import io.spring.infrastructure.service.DefaultJwtService;
 import io.spring.infrastructure.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserServiceTest {
-  @Mock private JwtService jwtService;
-  private PasswordEncoder passwordEncoder;
   private UserService userService;
   private User user;
 
   @BeforeEach
   void setUp() {
-    this.passwordEncoder = new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    JwtService jwtService =
+        new DefaultJwtService(
+            "nRvyYC4soFxBdZ-F-5Nnzz5USXstR1YylsTd-mA0aKtI9HUlriGrtkf-TiuDapkLiUCogO3JOK7kwZisrHp6wA",
+            86400);
     UserRepository userRepository = new FakeUserRepository();
     UserValidator userValidator = new UserValidator(userRepository);
     MockitoAnnotations.openMocks(this);
