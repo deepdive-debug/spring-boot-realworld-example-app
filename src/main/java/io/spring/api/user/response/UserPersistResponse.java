@@ -1,6 +1,6 @@
 package io.spring.api.user.response;
 
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import java.util.UUID;
 import lombok.Builder;
 

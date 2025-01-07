@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public non-sealed class DefaultJwtService implements JwtService {
+public class DefaultJwtService implements JwtService {
   private final SecretKey signingKey;
   private final SignatureAlgorithm signatureAlgorithm;
   private int sessionTime;
