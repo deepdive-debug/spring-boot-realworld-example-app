@@ -28,6 +28,7 @@ public class ArticleServiceTest {
   private ArticleService articleService;
 
   private User user;
+  private User anotherUser;
   private Article article;
 
   @BeforeEach
@@ -39,6 +40,10 @@ public class ArticleServiceTest {
 
     user = User.of("test@test.com", "testUser", "password", "bio", "image");
     user = fakeUserRepository.save(user);
+
+    anotherUser =
+        fakeUserRepository.save(
+            User.of("another@test.com", "anotherUser", "password", "bio", "image"));
 
     article = Article.create("Test Title", "Test Description", "Test Body", user);
     fakeArticleRepository.save(article);
@@ -77,20 +82,22 @@ public class ArticleServiceTest {
   //  @Test
   public void should_update_article_successfully() {
     // given
-    UpdateArticleParam param =
-        new UpdateArticleParam("Updated Title", "Updated Description", "Updated Body");
+    String newTitle = "New Title";
+    String newDescription = "New Description";
+    String newBody = "New Body";
+
+    UpdateArticleParam param = new UpdateArticleParam(newTitle, newDescription, newBody);
 
     // when
     articleService.updateArticle("test-title", user, param);
 
     // then
-    assertEquals("Updated Title", article.getTitle());
+    assertEquals(newTitle, article.getTitle());
   }
 
-  //  	@Test
+  @Test
   public void should_throw_exception_when_user_not_author_of_article() {
     // given
-    User anotherUser = User.of("another@test.com", "anotherUser", "password", "bio", "image");
     UpdateArticleParam param =
         new UpdateArticleParam("Updated Title", "Updated Description", "Updated Body");
 
@@ -109,11 +116,8 @@ public class ArticleServiceTest {
     assertThrows(ResourceNotFoundException.class, () -> articleService.getArticle("test-title"));
   }
 
-  //  	@Test
+  @Test
   public void should_throw_exception_when_deleting_article_with_unauthorized_user() {
-    // given
-    User anotherUser = User.of("another@test.com", "anotherUser", "password", "bio", "image");
-
     // when & then
     assertThrows(
         NoAuthorizationException.class,

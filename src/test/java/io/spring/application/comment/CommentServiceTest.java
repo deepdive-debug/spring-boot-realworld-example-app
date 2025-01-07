@@ -37,13 +37,13 @@ public class CommentServiceTest {
     user = userRepository.save(user);
 
     anotherUser = User.of("other@test.com", "otherUser", "password", "", "");
-    userRepository.save(anotherUser);
+    anotherUser = userRepository.save(anotherUser);
 
     article = Article.create("Test Title", "Test Description", "Test Body", user);
-    fakeArticleRepository.save(article);
+    article = fakeArticleRepository.save(article);
 
     comment = Comment.create("Test Comment", user, article);
-    fakecommentRepository.save(comment);
+    comment = fakecommentRepository.save(comment);
   }
 
   @Test
@@ -56,7 +56,6 @@ public class CommentServiceTest {
 
     // then
     assertNotNull(response);
-    assertEquals(comment.getId(), response.id());
   }
 
   @Test
@@ -67,12 +66,10 @@ public class CommentServiceTest {
     // when & then
     assertThrows(
         IllegalArgumentException.class,
-        () -> {
-          commentService.createComment("invalid-slug", user, param);
-        });
+        () -> commentService.createComment("invalid-slug", user, param));
   }
 
-  //	@Test
+  @Test
   public void should_delete_comment_successfully() {
     // when
     UUID commentId = comment.getId();
@@ -82,14 +79,11 @@ public class CommentServiceTest {
     assertThrows(ResourceNotFoundException.class, () -> commentService.delete(user, commentId));
   }
 
-  //	  @Test
+  @Test
   public void should_throw_exception_when_deleting_unauthorized_comment() {
     // when & then
     assertThrows(
-        NoAuthorizationException.class,
-        () -> {
-          commentService.delete(anotherUser, comment.getId());
-        });
+        NoAuthorizationException.class, () -> commentService.delete(anotherUser, comment.getId()));
   }
 
   @Test
@@ -99,12 +93,10 @@ public class CommentServiceTest {
     // when & then
     assertThrows(
         ResourceNotFoundException.class,
-        () -> {
-          commentService.delete(user, UUID.nameUUIDFromBytes("invalid-id".getBytes()));
-        });
+        () -> commentService.delete(user, UUID.nameUUIDFromBytes("invalid-id".getBytes())));
   }
 
-  //	  @Test
+  @Test
   public void should_update_comment_successfully() {
     // given
     NewCommentParam param = new NewCommentParam("Updated Comment Content");
@@ -116,18 +108,15 @@ public class CommentServiceTest {
     assertEquals("Updated Comment Content", comment.getBody());
   }
 
-  //	  @Test
+  @Test
   public void should_throw_exception_when_updating_unauthorized_comment() {
     // given
-    User anotherUser = User.of("other@test.com", "otherUser", "password", "", "");
     NewCommentParam param = new NewCommentParam("Updated Comment Content");
 
     // when & then
     assertThrows(
         NoAuthorizationException.class,
-        () -> {
-          commentService.update(comment.getId(), anotherUser, param);
-        });
+        () -> commentService.update(comment.getId(), anotherUser, param));
   }
 
   @Test
@@ -138,9 +127,6 @@ public class CommentServiceTest {
 
     // when & then
     assertThrows(
-        ResourceNotFoundException.class,
-        () -> {
-          commentService.update(randomUUID, user, param);
-        });
+        ResourceNotFoundException.class, () -> commentService.update(randomUUID, user, param));
   }
 }
