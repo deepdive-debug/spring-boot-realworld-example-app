@@ -69,5 +69,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            docker-compose -f ${{ secrets.DOCKER_COMPOSE_YAML_PATH }} down
             docker-compose -f ${{ secrets.DOCKER_COMPOSE_YAML_PATH }} pull
             docker-compose -f ${{ secrets.DOCKER_COMPOSE_YAML_PATH }} up -d
