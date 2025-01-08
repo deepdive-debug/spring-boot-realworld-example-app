@@ -20,6 +20,7 @@ public class FakeCommentRepository implements CommentRepository {
             .article(comment.getArticle())
             .build();
 
+    newComment.initId();
     data.add(newComment);
     return newComment;
   }

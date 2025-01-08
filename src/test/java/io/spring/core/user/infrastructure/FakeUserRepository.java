@@ -37,6 +37,7 @@ public class FakeUserRepository implements UserRepository {
             .image(user.getImage())
             .build();
 
+    newUser.initId();
     data.add(newUser);
     return newUser;
   }
