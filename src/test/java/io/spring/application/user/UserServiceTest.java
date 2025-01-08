@@ -18,7 +18,6 @@ import io.spring.infrastructure.service.DefaultJwtService;
 import io.spring.infrastructure.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -35,7 +34,6 @@ class UserServiceTest {
             86400);
     UserRepository userRepository = new FakeUserRepository();
     UserValidator userValidator = new UserValidator(userRepository);
-    MockitoAnnotations.openMocks(this);
     userService = new UserService(userRepository, passwordEncoder, jwtService, userValidator);
 
     user = User.of("test@test.com", "testUser", "password", "bio", "image");
