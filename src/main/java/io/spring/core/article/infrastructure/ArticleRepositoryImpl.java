@@ -3,6 +3,7 @@ package io.spring.core.article.infrastructure;
 import io.spring.api.article.response.ArticleSummaryResponse;
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.ArticleRepository;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,5 +39,11 @@ public class ArticleRepositoryImpl implements ArticleRepository {
   @Override
   public Page<ArticleSummaryResponse> findAllArticleSummary(Pageable pageable) {
     return jpaArticleRepository.findAllArticleSummary(pageable);
+  }
+
+  @Override
+  public Page<ArticleSummaryResponse> findAllByCreatedAtBetween(
+      LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+    return jpaArticleRepository.findAllByCreatedAtBetween(startDate, endDate, pageable);
   }
 }
