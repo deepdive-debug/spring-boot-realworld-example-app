@@ -22,9 +22,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # gradle 빌드
-      - name: Setup Gradle
-        run: chmod +x gradlew
+      # gradle 패키지 캐싱
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build with Gradle Wrapper
         run: |
@@ -62,5 +69,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            docker-compose -f ${{ secrets.DOCKER_COMPOSE_YAML_PATH }} down
             docker-compose -f ${{ secrets.DOCKER_COMPOSE_YAML_PATH }} pull
             docker-compose -f ${{ secrets.DOCKER_COMPOSE_YAML_PATH }} up -d
