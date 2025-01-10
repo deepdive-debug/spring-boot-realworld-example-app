@@ -4,8 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.spring.core.service.JwtService;
-import io.spring.core.user.User;
+import io.spring.core.user.domain.User;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;
@@ -31,7 +30,7 @@ public class DefaultJwtService implements JwtService {
   @Override
   public String toToken(User user) {
     return Jwts.builder()
-        .setSubject(user.getId())
+        .setSubject(String.valueOf(user.getId()))
         .setExpiration(expireTimeFromNow())
         .signWith(signingKey)
         .compact();

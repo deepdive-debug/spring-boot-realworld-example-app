@@ -1,106 +1,110 @@
 package io.spring.application.user;
 
-import io.spring.core.user.User;
-import io.spring.core.user.UserRepository;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.spring.api.exception.InvalidAuthenticationException;
+import io.spring.api.exception.ResourceNotFoundException;
+import io.spring.api.user.request.LoginParam;
+import io.spring.api.user.request.RegisterParam;
+import io.spring.api.user.request.UpdateUserCommand;
+import io.spring.api.user.request.UpdateUserParam;
+import io.spring.api.user.response.UserPersistResponse;
+import io.spring.api.user.response.UserResponse;
+import io.spring.api.user.response.UserWithToken;
+import io.spring.core.user.domain.User;
+import io.spring.core.user.domain.UserRepository;
+import io.spring.infrastructure.service.JwtService;
+import jakarta.validation.Valid;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Service
 @Validated
+@RequiredArgsConstructor
+@Slf4j
 public class UserService {
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
+  private final UserValidator userValidator;
+
+  @Value("${image.default}")
   private String defaultImage;
-  private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  public UserService(
-      UserRepository userRepository,
-      @Value("${image.default}") String defaultImage,
-      PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
-    this.defaultImage = defaultImage;
-    this.passwordEncoder = passwordEncoder;
-  }
+  @Transactional
+  public UserPersistResponse createUser(@Valid RegisterParam registerParam) {
+    userValidator.validateRegistration(registerParam.email(), registerParam.username());
 
-  public User createUser(@Valid RegisterParam registerParam) {
     User user =
-        new User(
-            registerParam.getEmail(),
-            registerParam.getUsername(),
-            passwordEncoder.encode(registerParam.getPassword()),
+        User.of(
+            registerParam.email(),
+            registerParam.username(),
+            passwordEncoder.encode(registerParam.password()),
             "",
             defaultImage);
     userRepository.save(user);
-    return user;
+    return UserPersistResponse.from(user);
   }
 
+  public UserWithToken login(LoginParam loginParam) {
+    User user =
+        userRepository.findByEmail(loginParam.email()).orElseThrow(ResourceNotFoundException::new);
+
+    if (passwordEncoder.matches(loginParam.password(), user.getPassword())) {
+      return UserWithToken.of(user, jwtService.toToken(user));
+
+    } else {
+      throw new InvalidAuthenticationException();
+    }
+  }
+
+  @Transactional
   public void updateUser(@Valid UpdateUserCommand command) {
-    User user = command.getTargetUser();
-    UpdateUserParam updateUserParam = command.getParam();
+    User user = command.targetUser();
+    UpdateUserParam updateUserParam = command.param();
+
+    userValidator.validateEmailAvailability(updateUserParam.email(), user);
+    userValidator.validateUsernameAvailability(updateUserParam.username(), user);
+
     user.update(
-        updateUserParam.getEmail(),
-        updateUserParam.getUsername(),
-        updateUserParam.getPassword(),
-        updateUserParam.getBio(),
-        updateUserParam.getImage());
+        updateUserParam.email(),
+        updateUserParam.username(),
+        updateUserParam.password(),
+        updateUserParam.bio(),
+        updateUserParam.image());
+
     userRepository.save(user);
   }
-}
 
-@Constraint(validatedBy = UpdateUserValidator.class)
-@Retention(RetentionPolicy.RUNTIME)
-@interface UpdateUserConstraint {
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(ResourceNotFoundException::new);
+  }
 
-  String message() default "invalid update param";
+  public User findByUsername(String username) {
+    return userRepository.findByUsername(username).orElseThrow(ResourceNotFoundException::new);
+  }
 
-  Class[] groups() default {};
+  // public void saveRelation(FollowRelation followRelation) {
+  //   userRepository.saveRelation(followRelation);
+  // }
+  //
+  // public FollowRelation findRelation(String userId, String targetId) {
+  //   Object ResourceNotFoundException;
+  //   return userRepository
+  //       .findRelation(userId, targetId)
+  //       .orElseThrow(ResourceNotFoundException::new);
+  // }
+  //
+  // public void removeRelation(FollowRelation relation) {
+  //   userRepository.removeRelation(relation);
+  // }
 
-  Class[] payload() default {};
-}
-
-class UpdateUserValidator implements ConstraintValidator<UpdateUserConstraint, UpdateUserCommand> {
-
-  @Autowired private UserRepository userRepository;
-
-  @Override
-  public boolean isValid(UpdateUserCommand value, ConstraintValidatorContext context) {
-    String inputEmail = value.getParam().getEmail();
-    String inputUsername = value.getParam().getUsername();
-    final User targetUser = value.getTargetUser();
-
-    boolean isEmailValid =
-        userRepository.findByEmail(inputEmail).map(user -> user.equals(targetUser)).orElse(true);
-    boolean isUsernameValid =
-        userRepository
-            .findByUsername(inputUsername)
-            .map(user -> user.equals(targetUser))
-            .orElse(true);
-    if (isEmailValid && isUsernameValid) {
-      return true;
-    } else {
-      context.disableDefaultConstraintViolation();
-      if (!isEmailValid) {
-        context
-            .buildConstraintViolationWithTemplate("email already exist")
-            .addPropertyNode("email")
-            .addConstraintViolation();
-      }
-      if (!isUsernameValid) {
-        context
-            .buildConstraintViolationWithTemplate("username already exist")
-            .addPropertyNode("username")
-            .addConstraintViolation();
-      }
-      return false;
-    }
+  public UserResponse getUserInfo(UUID id) {
+    User user = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+    return UserResponse.of(user);
   }
 }

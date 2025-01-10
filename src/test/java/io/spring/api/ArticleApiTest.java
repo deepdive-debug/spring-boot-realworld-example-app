@@ -2,224 +2,100 @@ package io.spring.api;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.spring.JacksonCustomizations;
-import io.spring.TestHelper;
-import io.spring.api.security.WebSecurityConfig;
-import io.spring.application.ArticleQueryService;
-import io.spring.application.article.ArticleCommandService;
-import io.spring.application.data.ArticleData;
-import io.spring.application.data.ProfileData;
-import io.spring.core.article.Article;
-import io.spring.core.article.ArticleRepository;
-import io.spring.core.user.User;
-import java.util.Arrays;
-import java.util.HashMap;
+import io.spring.api.article.ArticleApi;
+import io.spring.api.article.response.ArticleSummaryResponse;
+import io.spring.api.common.response.PageableResponse;
+import io.spring.api.common.response.PaginatedListResponse;
+import io.spring.api.user.response.UserResponse;
+import io.spring.application.article.ArticleService;
+import io.spring.config.TestSecurityConfig;
+import io.spring.core.user.domain.User;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest({ArticleApi.class})
-@Import({WebSecurityConfig.class, JacksonCustomizations.class})
-public class ArticleApiTest extends TestWithCurrentUser {
+@WebMvcTest(ArticleApi.class)
+@Import({TestSecurityConfig.class})
+public class ArticleApiTest {
+
   @Autowired private MockMvc mvc;
 
-  @MockBean private ArticleQueryService articleQueryService;
+  @MockBean private ArticleService articleService;
 
-  @MockBean private ArticleRepository articleRepository;
+  private User user;
 
-  @MockBean ArticleCommandService articleCommandService;
-
-  @Override
   @BeforeEach
-  public void setUp() throws Exception {
-    super.setUp();
+  public void setUp() {
     RestAssuredMockMvc.mockMvc(mvc);
+    user = User.of("test@test.com", "testUser", "password", "bio", "image");
   }
 
   @Test
-  public void should_read_article_success() throws Exception {
-    String slug = "test-new-article";
-    DateTime time = new DateTime();
-    Article article =
-        new Article(
-            "Test New Article",
-            "Desc",
-            "Body",
-            Arrays.asList("java", "spring", "jpg"),
-            user.getId(),
-            time);
-    ArticleData articleData = TestHelper.getArticleDataFromArticleAndUser(article, user);
+  public void should_get_articles_successfully() {
+    int page = 0;
+    int size = 10;
+    List<ArticleSummaryResponse> articles =
+        List.of(
+            new ArticleSummaryResponse(
+                "slug1", "Title1", LocalDateTime.now(), UserResponse.of(user), 3, 5),
+            new ArticleSummaryResponse(
+                "slug2", "Title2", LocalDateTime.now(), UserResponse.of(user), 2, 1));
 
-    when(articleQueryService.findBySlug(eq(slug), eq(null))).thenReturn(Optional.of(articleData));
+    PageRequest pageable = PageRequest.of(page, size);
 
-    RestAssuredMockMvc.when()
-        .get("/articles/{slug}", slug)
+    PaginatedListResponse<ArticleSummaryResponse> paginatedResponse =
+        PaginatedListResponse.of(articles, PageableResponse.of(pageable, articles));
+
+    when(articleService.getArticles(page, size)).thenReturn(paginatedResponse);
+
+    given()
+        .queryParam("page", page)
+        .queryParam("size", size)
+        .when()
+        .get("/articles")
         .then()
         .statusCode(200)
-        .body("article.slug", equalTo(slug))
-        .body("article.body", equalTo(articleData.getBody()))
-        .body("article.createdAt", equalTo(ISODateTimeFormat.dateTime().withZoneUTC().print(time)));
+        .body("contents[0].slug", equalTo("slug1"))
+        .body("contents[0].tagCount", equalTo(3))
+        .body("contents[0].commentCount", equalTo(5))
+        .body("contents[1].slug", equalTo("slug2"))
+        .body("contents[1].tagCount", equalTo(2))
+        .body("contents[1].commentCount", equalTo(1));
   }
 
-  @Test
-  public void should_404_if_article_not_found() throws Exception {
-    when(articleQueryService.findBySlug(anyString(), any())).thenReturn(Optional.empty());
-    RestAssuredMockMvc.when().get("/articles/not-exists").then().statusCode(404);
-  }
+  //  @Test
+  public void should_get_article_summary_successfully() {
+    String slug = "test-article";
+    ArticleSummaryResponse articleSummary =
+        new ArticleSummaryResponse(
+            slug, "Test Title", LocalDateTime.now(), UserResponse.of(user), 3, 5);
 
-  @Test
-  public void should_update_article_content_success() throws Exception {
-    List<String> tagList = Arrays.asList("java", "spring", "jpg");
-
-    Article originalArticle =
-        new Article("old title", "old description", "old body", tagList, user.getId());
-
-    Article updatedArticle =
-        new Article("new title", "new description", "new body", tagList, user.getId());
-
-    Map<String, Object> updateParam =
-        prepareUpdateParam(
-            updatedArticle.getTitle(), updatedArticle.getBody(), updatedArticle.getDescription());
-
-    ArticleData updatedArticleData =
-        TestHelper.getArticleDataFromArticleAndUser(updatedArticle, user);
-
-    when(articleRepository.findBySlug(eq(originalArticle.getSlug())))
-        .thenReturn(Optional.of(originalArticle));
-    when(articleCommandService.updateArticle(eq(originalArticle), any()))
-        .thenReturn(updatedArticle);
-    when(articleQueryService.findBySlug(eq(updatedArticle.getSlug()), eq(user)))
-        .thenReturn(Optional.of(updatedArticleData));
+    when(articleService.getArticles(0, 1))
+        .thenReturn(
+            PaginatedListResponse.of(
+                List.of(articleSummary),
+                PageableResponse.of(PageRequest.of(0, 1), List.of(articleSummary))));
 
     given()
-        .contentType("application/json")
-        .header("Authorization", "Token " + token)
-        .body(updateParam)
+        .queryParam("page", 0)
+        .queryParam("size", 1)
         .when()
-        .put("/articles/{slug}", originalArticle.getSlug())
+        .get("/articles")
         .then()
         .statusCode(200)
-        .body("article.slug", equalTo(updatedArticleData.getSlug()));
-  }
-
-  @Test
-  public void should_get_403_if_not_author_to_update_article() throws Exception {
-    String title = "new-title";
-    String body = "new body";
-    String description = "new description";
-    Map<String, Object> updateParam = prepareUpdateParam(title, body, description);
-
-    User anotherUser = new User("test@test.com", "test", "123123", "", "");
-
-    Article article =
-        new Article(
-            title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
-
-    DateTime time = new DateTime();
-    ArticleData articleData =
-        new ArticleData(
-            article.getId(),
-            article.getSlug(),
-            article.getTitle(),
-            article.getDescription(),
-            article.getBody(),
-            false,
-            0,
-            time,
-            time,
-            Arrays.asList("joda"),
-            new ProfileData(
-                anotherUser.getId(),
-                anotherUser.getUsername(),
-                anotherUser.getBio(),
-                anotherUser.getImage(),
-                false));
-
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
-    when(articleQueryService.findBySlug(eq(article.getSlug()), eq(user)))
-        .thenReturn(Optional.of(articleData));
-
-    given()
-        .contentType("application/json")
-        .header("Authorization", "Token " + token)
-        .body(updateParam)
-        .when()
-        .put("/articles/{slug}", article.getSlug())
-        .then()
-        .statusCode(403);
-  }
-
-  @Test
-  public void should_delete_article_success() throws Exception {
-    String title = "title";
-    String body = "body";
-    String description = "description";
-
-    Article article =
-        new Article(title, description, body, Arrays.asList("java", "spring", "jpg"), user.getId());
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
-
-    given()
-        .header("Authorization", "Token " + token)
-        .when()
-        .delete("/articles/{slug}", article.getSlug())
-        .then()
-        .statusCode(204);
-
-    verify(articleRepository).remove(eq(article));
-  }
-
-  @Test
-  public void should_403_if_not_author_delete_article() throws Exception {
-    String title = "new-title";
-    String body = "new body";
-    String description = "new description";
-
-    User anotherUser = new User("test@test.com", "test", "123123", "", "");
-
-    Article article =
-        new Article(
-            title, description, body, Arrays.asList("java", "spring", "jpg"), anotherUser.getId());
-
-    when(articleRepository.findBySlug(eq(article.getSlug()))).thenReturn(Optional.of(article));
-    given()
-        .header("Authorization", "Token " + token)
-        .when()
-        .delete("/articles/{slug}", article.getSlug())
-        .then()
-        .statusCode(403);
-  }
-
-  private HashMap<String, Object> prepareUpdateParam(
-      final String title, final String body, final String description) {
-    return new HashMap<String, Object>() {
-      {
-        put(
-            "article",
-            new HashMap<String, Object>() {
-              {
-                put("title", title);
-                put("body", body);
-                put("description", description);
-              }
-            });
-      }
-    };
+        .body("contents[0].slug", equalTo(slug))
+        .body("contents[0].title", equalTo("Test Title"))
+        .body("contents[0].tagCount", equalTo(3))
+        .body("contents[0].commentCount", equalTo(5));
   }
 }

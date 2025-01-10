@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.spring.infrastructure.mybatis.readservice.CommentReadService">
-    <sql id="selectCommentData">
-        SELECT
-        C.id commentId,
-        C.body commentBody,
-        C.created_at commentCreatedAt,
-        C.article_id commentArticleId,
-        <include refid="io.spring.infrastructure.mybatis.readservice.ArticleReadService.profileColumns"/>
-        from comments C
-        left join users U
-        on C.user_id = U.id
-    </sql>
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >-->
+<!--<mapper namespace="io.spring.infrastructure.mybatis.readservice.CommentReadService">-->
+<!--    <sql id="selectCommentData">-->
+<!--        SELECT-->
+<!--        C.id commentId,-->
+<!--        C.body commentBody,-->
+<!--        C.created_at commentCreatedAt,-->
+<!--        C.article_id commentArticleId,-->
+<!--        <include refid="io.spring.infrastructure.mybatis.readservice.ArticleReadService.profileColumns"/>-->
+<!--        from comments C-->
+<!--        left join users U-->
+<!--        on C.user_id = U.id-->
+<!--    </sql>-->
 
-    <select id="findById" resultMap="transfer.data.commentData">
-        <include refid="selectCommentData"/>
-        where C.id = #{id}
-    </select>
-    <select id="findByArticleId" resultMap="transfer.data.commentData">
-        <include refid="selectCommentData"/>
-        where C.article_id = #{articleId}
-    </select>
-    <select id="findByArticleIdWithCursor" resultMap="transfer.data.commentData">
-        <include refid="selectCommentData"/>
-        <where>
-        C.article_id = #{articleId}
-        <if test='page.cursor != null and page.direction.name() == "NEXT"'>
-            AND C.created_at &lt; #{page.cursor}
-        </if>
-        <if test='page.cursor != null and page.direction.name() == "PREV"'>
-            AND C.created_at > #{page.cursor}
-        </if>
-        </where>
-        <if test='page.direction.name() == "NEXT"'>
-            order by C.created_at desc
-        </if>
-        <if test='page.direction.name() == "PREV"'>
-            order by C.created_at asc
-        </if>
-    </select>
-</mapper>
+<!--    <select id="findById" resultMap="transfer.data.commentData">-->
+<!--        <include refid="selectCommentData"/>-->
+<!--        where C.id = #{id}-->
+<!--    </select>-->
+<!--    <select id="findByArticleId" resultMap="transfer.data.commentData">-->
+<!--        <include refid="selectCommentData"/>-->
+<!--        where C.article_id = #{articleId}-->
+<!--    </select>-->
+<!--    <select id="findByArticleIdWithCursor" resultMap="transfer.data.commentData">-->
+<!--        <include refid="selectCommentData"/>-->
+<!--        <where>-->
+<!--        C.article_id = #{articleId}-->
+<!--        <if test='page.cursor != null and page.direction.name() == "NEXT"'>-->
+<!--            AND C.created_at &lt; #{page.cursor}-->
+<!--        </if>-->
+<!--        <if test='page.cursor != null and page.direction.name() == "PREV"'>-->
+<!--            AND C.created_at > #{page.cursor}-->
+<!--        </if>-->
+<!--        </where>-->
+<!--        <if test='page.direction.name() == "NEXT"'>-->
+<!--            order by C.created_at desc-->
+<!--        </if>-->
+<!--        <if test='page.direction.name() == "PREV"'>-->
+<!--            order by C.created_at asc-->
+<!--        </if>-->
+<!--    </select>-->
+<!--</mapper>-->
