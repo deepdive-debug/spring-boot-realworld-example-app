@@ -1,6 +1,7 @@
 package io.spring.core.article.domain;
 
 import io.spring.api.article.response.ArticleSummaryResponse;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,4 +17,7 @@ public interface ArticleRepository {
   Article save(Article article);
 
   Page<ArticleSummaryResponse> findAllArticleSummary(Pageable pageable);
+
+  Page<ArticleSummaryResponse> findAllByCreatedAtBetween(
+      LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 }

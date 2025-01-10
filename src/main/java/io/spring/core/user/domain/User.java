@@ -8,7 +8,9 @@ import io.spring.core.article.domain.Article;
 import io.spring.core.comment.domain.Comment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
+@Table(
+    name = "user",
+    indexes = {@Index(name = "idx_username", columnList = "username")})
 public class User extends BaseTimeEntity {
 
   @Column(nullable = false, unique = true)

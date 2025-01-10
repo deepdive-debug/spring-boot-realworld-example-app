@@ -9,9 +9,11 @@ import io.spring.core.comment.domain.Comment;
 import io.spring.core.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
+@Table(
+    name = "article",
+    indexes = {@Index(name = "idx_article_created_at", columnList = "created_at")})
 public class Article extends BaseTimeEntity {
 
   @JoinColumn(name = "author_id", nullable = false)
@@ -61,14 +66,14 @@ public class Article extends BaseTimeEntity {
   }
 
   public void update(String title, String description, String body) {
-    if (!title.isEmpty()) {
+    if (title != null && !title.isEmpty()) {
       this.title = title;
       this.slug = toSlug(title);
     }
-    if (!title.isEmpty()) {
+    if (description != null && !description.isEmpty()) {
       this.description = description;
     }
-    if (!title.isEmpty()) {
+    if (body != null && !body.isEmpty()) {
       this.body = body;
     }
   }

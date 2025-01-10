@@ -3,6 +3,7 @@ package io.spring.core.article.infrastructure;
 import io.spring.api.article.response.ArticleSummaryResponse;
 import io.spring.core.article.domain.Article;
 import io.spring.core.article.domain.ArticleRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +63,24 @@ public class FakeArticleRepository implements ArticleRepository {
 
   @Override
   public Page<ArticleSummaryResponse> findAllArticleSummary(Pageable pageable) {
+    synchronized (data) {
+      int start = (int) pageable.getOffset();
+      int end = Math.min(start + pageable.getPageSize(), data.size());
+
+      if (start > end) {
+        return new PageImpl<>(Collections.emptyList(), pageable, data.size());
+      }
+
+      List<ArticleSummaryResponse> pageContent =
+          data.subList(start, end).stream().map(ArticleSummaryResponse::from).toList();
+
+      return new PageImpl<>(pageContent, pageable, data.size());
+    }
+  }
+
+  @Override
+  public Page<ArticleSummaryResponse> findAllByCreatedAtBetween(
+      LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
     synchronized (data) {
       int start = (int) pageable.getOffset();
       int end = Math.min(start + pageable.getPageSize(), data.size());

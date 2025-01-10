@@ -14,6 +14,7 @@ import io.spring.core.article.domain.Tag;
 import io.spring.core.article.domain.TagRepository;
 import io.spring.core.user.domain.User;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -87,5 +88,16 @@ public class ArticleService {
     tagRepository.saveAll(tags);
 
     return article;
+  }
+
+  @Transactional(readOnly = true)
+  public PaginatedListResponse<ArticleSummaryResponse> findArticlesByDateRange(
+      int page, int size, LocalDateTime startDate, LocalDateTime endDate) {
+    Page<ArticleSummaryResponse> articlePage =
+        articleRepository.findAllByCreatedAtBetween(
+            startDate, endDate, PageRequest.of(page, size, Sort.by("createdAt").descending()));
+    return PaginatedListResponse.of(
+        articlePage.getContent(),
+        PageableResponse.of(articlePage.getPageable(), articlePage.getContent()));
   }
 }

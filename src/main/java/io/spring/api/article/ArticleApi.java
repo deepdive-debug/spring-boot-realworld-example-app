@@ -15,7 +15,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,6 +47,24 @@ public class ArticleApi {
           @Positive
           int size) {
     return ResponseEntity.ok(articleService.getArticles(page, size));
+  }
+
+  @GetMapping("/range")
+  public ResponseEntity<PaginatedListResponse<ArticleSummaryResponse>> getArticlesByDateRange(
+      @Parameter(description = "페이지 인덱스", example = "0", required = true)
+          @RequestParam(defaultValue = "0")
+          @PositiveOrZero
+          int page,
+      @Parameter(description = "응답 개수", example = "10", required = true)
+          @RequestParam(defaultValue = "10")
+          @Positive
+          int size,
+      @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+          LocalDateTime startDate,
+      @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+          LocalDateTime endDate) {
+    return ResponseEntity.ok(
+        articleService.findArticlesByDateRange(page, size, startDate, endDate));
   }
 
   @PostMapping
